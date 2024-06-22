@@ -1,18 +1,18 @@
-<aside id="sidebar">
+<aside id="sidebar" style="height:730px;">
     <div class="d-flex">
                 <button class="toggle-btn" type="button">
                     <img src="assets-icon/icon-menu-white.png" alt="Icon" class="icon" />
                     <!-- <i class="lni lni-menu" style="font-size:1.8em; align:center;margin-left:-3px"></i> -->
                 </button>
                 <div class="sidebar-logo">
-                    <a href="http://ccs-report-development.test:8080/dash">CCS</a>
+                    <a href="/admin-dash">CCS</a>
                     <img src="assets-image/ccs-logo.jpg" alt="Icon" class="logo" />
                 </div>
             </div>
             <ul class="sidebar-nav">
                 
                 <li class="sidebar-item">
-                    <a href="http://ccs-report-development.test:8080/dash" class="sidebar-link">
+                    <a href="/admin-dash" class="sidebar-link">
                     <img src="assets-icon/icon-dash-white.png" alt="Icon" class="icon" />
 
                         <!-- <i class="lni lni-grid-alt"></i> -->

@@ -37,7 +37,6 @@ body {
 }
 
 #sidebar {
-    height: 100%;
     width: 70px;
     min-width: 70px;
     z-index: 1000;
@@ -49,7 +48,6 @@ body {
 }
 
 #sidebar.expand {
-    height: 100%;
     width: 260px;
     min-width: 260px;
 }

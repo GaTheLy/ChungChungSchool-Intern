@@ -17,7 +17,7 @@
   <body>
 
     <div class="wrapper">
-        @include('includes.sidenav0')
+        @include('includes.sidenav-pyp')
         <div class="main p-3">
             @yield('content')
         </div>

@@ -32,6 +32,32 @@ Route::get('/homeroom-teacher-report-preview-myp', function () {
 });
 
 
+// myp route
+Route::get('/dash-pyp', function () {
+    return view('dash-teacher-pyp');
+});
+
+Route::get('/subject-teacher-pyp', function () {
+    return view('sub-teach-pyp');
+});
+Route::get('/subject-teacher-detail-pyp', function () {
+    return view('sub-detail-pyp');
+});
+Route::get('/subject-teacher-detail-grade-pyp', function () {
+    return view('sub-detail-pyp-grade');
+});
+Route::get('/homeroom-teacher-pyp', function () {
+    return view('homeroom-teach-pyp');
+});
+
+Route::get('/homeroom-teacher-report-preview-pyp', function () {
+    return view('ht-pyp-report');
+});
+
+
+
+
+
 // admin route
 Route::get('/admin', function () {
     return view('login-admin');

@@ -14,6 +14,47 @@
             font-weight: 400;
             font-size: 25px;
         }
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            color: #fff;
+            background-color: #28a745;
+            border-radius: 12px;
+        }
+
+        .main-content {
+            margin-top: 30px;
+        }
+
+        .main-content h2 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .programs {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+            gap: 40px;
+            font-family:'Space Grotesk';
+        }
+
+        .program {
+            background-color: #d0ebff;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            width: 250px;
+            height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 2.1rem;
+            font-weight: 600;
+        }
     </style>
     
         <h1>Dashboard</h1>
@@ -27,25 +68,15 @@
         </div>
 
     <br>
-    <h5 style="font-size:25px;text-align:center;" >Report Customization</h5>
 
-    <div class="row">
-        <div class="col" id="homeroom-list" style="text-align:center;">
-            <div class="card text-center mb-3" style="width: 18rem;height:24rem;">
-            <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
+    <div class="main-content">
+            <h2>Report Customization</h2>
+            <div class="programs">
+                <div class="program">Primary Year Program</div>
+                <div class="program">Middle Year Program</div>
             </div>
-            </div>
-        </div>
-
-        <div class="col" id="homeroom-list" style="text-align:center;">
-            <div class="card text-center mb-3" style="width: 18rem;height:24rem;">
-            <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-            </div>
-            </div>
-        </div>
     </div>
+
         
 
         
