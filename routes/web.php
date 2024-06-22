@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TeachController;
 
 
 // teacher route
@@ -13,6 +14,9 @@ Route::get('/', function () {
 Route::get('/dash', function () {
     return view('dash-teacher');
 });
+
+
+Route::get('/dash', [TeachController::class, 'index']);
 
 Route::get('/subject-teacher', function () {
     return view('subject-teacher');
