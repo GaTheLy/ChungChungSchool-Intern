@@ -18,6 +18,12 @@ Route::get('/dash', function () {
 
 Route::get('/dash', [TeachController::class, 'index']);
 
+
+
+
+
+
+
 Route::get('/subject-teacher', function () {
     return view('subject-teacher');
 });

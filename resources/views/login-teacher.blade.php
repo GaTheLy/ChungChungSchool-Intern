@@ -69,7 +69,8 @@
 
             
 
-            <form method="post">
+            <form method="post" action='/login'>
+            @csrf
                 <div class="mb-4">
                     <!-- <label for="exampleInputEmail1" class="form-label">Username</label> -->
                     <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Username" name="username">
@@ -81,8 +82,10 @@
                 </div>
 
                 <div class="d-grid gap-2">
-                    <button class="btn-navy" name="login">
-                        <a href="/dash" style="text-decoration: none; color: white;">Login</a></button>
+                    <button class="btn-navy" name="login" type='submit' style="text-decoration: none; color: white;">
+                        <!-- <a href="/dash" style="text-decoration: none; color: white;">Login</a> -->
+                         Login
+                    </button>
 
                         <a href="#" class="forgot-pass">Forgot your password?</a>
 
