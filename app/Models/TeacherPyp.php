@@ -12,11 +12,16 @@ class TeacherPyp extends Model
     protected $primaryKey = 'teacher_pyp_id';
 
     // Define the fillable fields
-    protected $fillable = ['first_name', 'last_name', 'subject'];
+    protected $fillable = ['first_name', 'last_name', 'user_id'];
 
     // Define the relationship with Homeroom
     public function homerooms()
     {
         return $this->hasMany(Homeroom::class, 'teacher_pyp_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

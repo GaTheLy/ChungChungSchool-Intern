@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\TeachController;
 
 
 // teacher route
@@ -99,9 +100,8 @@ Route::get('/year-program-admin-add', function () {
 });
 
 
-Route::get('/dashboard', function () {
-    return view('dash-teacher');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard/{userId}', [TeachController::class, 'show'])
+->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

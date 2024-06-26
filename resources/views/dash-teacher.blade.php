@@ -19,7 +19,7 @@
         <h1>Dashboard</h1>
         <div class="row">
             <div class="col-3">
-                <h5>Hi, [First Name]</h5>
+                <h5>Hi, {{ $teacher->first_name }}</h5>
                 {{--<!-- @php
                     $firstHomeroom = $homerooms->first();
                 @endphp
@@ -34,23 +34,25 @@
     <br>
     <h5 style="font-weight:200; font-size:25px" >Homeroom</h5>
         <div class="row" id="homeroom-list" style="margin-left:10px">
-            {{--<!-- @foreach($homerooms as $homeroom) -->--}}
+             @foreach($homerooms as $homeroom)
                 <div class="card text-center mb-3" style="width: 18rem;">
                 <div class="card-body">
-                    <h5 class="card-title">Kelas 1A</h5>
+                    <h5 class="card-title">{{ $homeroom->class->class_name }}</h5>
                 </div>
                 </div>
-            {{--<!-- @endforeach -->--}}
+            @endforeach
         </div>
 
         <br>
     <h5 style="font-weight:200; font-size:25px" >Teaching</h5>
         <div class="row" id="homeroom-list" style="margin-left:10px">
-            <div class="card text-center mb-3" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-            </div>
-            </div>
+            @foreach($subjects as $subject)
+                <div class="card text-center mb-3" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ $subject->subject->subject_name }}</h5>
+                </div>
+                </div>
+            @endforeach
         </div>
     
     @endsection 

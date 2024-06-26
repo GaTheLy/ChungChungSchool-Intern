@@ -76,7 +76,7 @@
         <div class='mb-4'>
             <label class='form-label'>Email</label>
             <input class='form-control'id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
         <!-- Password -->
