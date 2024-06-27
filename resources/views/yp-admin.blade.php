@@ -24,7 +24,7 @@
         <h1>Year Program</h1>
         <div class="row">
             <div class="col-6" style="text-align:left;">
-                <h5>[full name]</h5>
+                <h5>{{ $teacher->first_name }}</h5>
             </div>
         </div>
         <div class="row" style="text-align:right;margin-right:50px;">

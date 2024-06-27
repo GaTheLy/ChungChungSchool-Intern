@@ -19,4 +19,8 @@ class StudentPyp extends Model
     { 
         return $this->belongsToMany(ClassModel::class, 'student_class', 'student_id', 'class_id');
     }
+
+    
+
+
 }

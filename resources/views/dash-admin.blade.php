@@ -60,10 +60,10 @@
         <h1>Dashboard</h1>
         <div class="row">
             <div class="col-3">
-                <h5>Hi, [first name]!</h5>
+                <h5>Hi, {{ $teacher->first_name }}!</h5>
             </div>
             <div class="col">
-                <span>role</span>
+                <span>role {{$role}}</span>
             </div>
         </div>
 

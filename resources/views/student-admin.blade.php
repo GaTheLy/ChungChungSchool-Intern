@@ -38,7 +38,7 @@
         <h1>Student </h1>
         <div class="row">
             <div class="col-6" style="text-align:left;">
-                <h5>[full name]</h5>
+                <h5>{{ $teacher->first_name }}</h5>
             </div>
         </div>
 
@@ -63,6 +63,15 @@
             </tr>
         </thead>
         <tbody>
+            @foreach($students as $student)
+                <tr>
+                    <td>{{ $student->first_name }}</td>
+                    <td>{{ $student->dob }}</td>
+                    <td>MYP</td>
+                    <td>7</td>
+                    <td>Detail &nbsp &nbsp {{--  --}}/a> }}"></a>}} Edit &nbsp &nbsp Delete</td>
+                </tr>
+            @endforeach
             <tr>
                 <td>Mathematic</td>
                 <td>January 1, 2024</td>

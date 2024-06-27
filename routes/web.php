@@ -4,15 +4,13 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeachController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\SubjectController;
 
 
-
-Route::get('/subject-teacher', function () {
-    return view('subject-teacher');
-});
+// teacher route
 Route::get('/subject-teacher-detail', function () {
     return view('subject-detail');
 });
@@ -28,14 +26,8 @@ Route::get('/homeroom-teacher-report-preview-myp', function () {
 });
 
 
-// myp route
-Route::get('/dash-pyp', function () {
-    return view('dash-teacher-pyp');
-});
 
-Route::get('/subject-teacher-pyp', function () {
-    return view('sub-teach-pyp');
-});
+// pyp
 Route::get('/subject-teacher-detail-pyp', function () {
     return view('sub-detail-pyp');
 });
@@ -55,22 +47,12 @@ Route::get('/homeroom-teacher-report-preview-pyp', function () {
 
 
 // admin route
-Route::get('/admin', function () {
-    return view('login-admin');
-});
-Route::get('/admin-dash', function () {
-    return view('dash-admin');
-});
-
 Route::get('/custom-report-pyp', function () {
     return view('admin-custom-report/custom-pyp');
 });
 
 Route::get('/custom-report-myp', function () {
     return view('admin-custom-report/custom-myp');
-});
-Route::get('/subject-admin', function () {
-    return view('subject-admin');
 });
 Route::get('/subject-admin-add', function () {
     return view('subject-admin-add');
@@ -97,9 +79,31 @@ Route::get('/year-program-admin-add', function () {
     return view('yp-admin-add');
 });
 
-
+//dashroute all
 Route::get('/dashboard/{userId}', [TeachController::class, 'show'])
 ->middleware(['auth', 'verified'])->name('dashboard');
+
+// subject route pyp done || soon myp n admin
+Route::get('/subject/{userId}', [TeachController::class, 'subjects'])
+->middleware(['auth', 'verified'])->name('subject');
+
+// homeroom route pyp done || soon myp n admin
+Route::get('/homeroom/{userId}', [TeachController::class, 'homeroom'])
+->middleware(['auth', 'verified'])->name('homeroom');
+
+
+// admin route || teacher crud
+Route::get('/teacher/{userId}', [TeachController::class, 'teacher'])
+->middleware(['auth', 'verified'])->name('teacher');
+
+// admin route || student crud
+Route::get('/student/{userId}', [StudentController::class, 'student'])
+->middleware(['auth', 'verified'])->name('student');
+
+// admin route || year program crud
+Route::get('/year-program/{userId}', [TeachController::class, 'yearProgram'])
+->middleware(['auth', 'verified'])->name('yearProgram');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

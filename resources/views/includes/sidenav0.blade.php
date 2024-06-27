@@ -5,14 +5,14 @@
                     <!-- <i class="lni lni-menu" style="font-size:1.8em; align:center;margin-left:-3px"></i> -->
                 </button>
                 <div class="sidebar-logo">
-                    <a href="http://ccs-report-development.test:8080/dash">CCS</a>
+                    <a href="{{ route('dashboard', ['userId' => $teacher->user_id]) }}">CCS</a>
                     <img src="{{ asset('assets-image/ccs-logo.jpg') }}" alt="Icon" class="logo" />
                 </div>
             </div>
             <ul class="sidebar-nav">
                 
                 <li class="sidebar-item">
-                    <a href="http://ccs-report-development.test:8080/dash" class="sidebar-link">
+                    <a href="{{ route('dashboard', ['userId' => $teacher->user_id]) }}" class="sidebar-link">
                     <img src="{{ asset('assets-icon/icon-dash-white.png') }}" alt="Icon" class="icon" />
 
                         <!-- <i class="lni lni-grid-alt"></i> -->
@@ -22,7 +22,7 @@
 
                 
                 <li class="sidebar-item">
-                    <a href="http://ccs-report-development.test:8080/subject-teacher" class="sidebar-link">
+                    <a href="{{ route('subject', ['userId' => $teacher->user_id]) }}" class="sidebar-link">
                     <img src="{{ asset('assets-icon/icon-listsubject-white.png') }}" alt="Icon" class="icon" />
 
                         <!-- <i class="lni lni-book"></i> -->
@@ -31,7 +31,7 @@
                 </li>
 
                 <li class="sidebar-item">
-                    <a href="http://ccs-report-development.test:8080/homeroom-teacher" class="sidebar-link">
+                    <a href="{{ route('homeroom', ['userId' => $teacher->user_id]) }}" class="sidebar-link">
                     <img src="{{ asset('assets-icon/icon-homeroom-white.png') }}" alt="Icon" class="icon" />
 
                         <!-- <i class="lni lni-classroom"></i> -->

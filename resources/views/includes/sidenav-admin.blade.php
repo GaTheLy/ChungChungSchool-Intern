@@ -1,19 +1,19 @@
 <aside id="sidebar" style="height:730px;">
     <div class="d-flex">
                 <button class="toggle-btn" type="button">
-                    <img src="assets-icon/icon-menu-white.png" alt="Icon" class="icon" />
+                    <img src="{{ asset('assets-icon/icon-menu-white.png')}}" alt="Icon" class="icon" />
                     <!-- <i class="lni lni-menu" style="font-size:1.8em; align:center;margin-left:-3px"></i> -->
                 </button>
                 <div class="sidebar-logo">
-                    <a href="/admin-dash">CCS</a>
-                    <img src="assets-image/ccs-logo.jpg" alt="Icon" class="logo" />
+                    <a href="{{ route('dashboard', ['userId' => $teacher->user_id]) }}">CCS</a>
+                    <img src="{{ asset('assets-image/ccs-logo.jpg')}}" alt="Icon" class="logo" />
                 </div>
             </div>
             <ul class="sidebar-nav">
                 
                 <li class="sidebar-item">
-                    <a href="{{ route('/dashboard/{userId}') }}" class="sidebar-link">
-                    <img src="assets-icon/icon-dash-white.png" alt="Icon" class="icon" />
+                    <a href="{{ route('dashboard', ['userId' => $teacher->user_id]) }}" class="sidebar-link">
+                    <img src="{{ asset('assets-image/icon-dash-white.png')}}" alt="Icon" class="icon" />
 
                         <!-- <i class="lni lni-grid-alt"></i> -->
                         <span>Dashboard</span>
@@ -22,8 +22,8 @@
 
                 
                 <li class="sidebar-item">
-                    <a href="http://ccs-report-development.test:8080/subject-admin" class="sidebar-link">
-                    <img src="assets-icon/icon-listsubject-white.png" alt="Icon" class="icon" />
+                    <a href="{{ route('subject', ['userId' => $teacher->user_id]) }}" class="sidebar-link">
+                    <img src="{{ asset('assets-image/icon-listsubject-white.png')}}" alt="Icon" class="icon" />
 
                         <!-- <i class="lni lni-book"></i> -->
                         <span>Subject</span>
@@ -31,7 +31,7 @@
                 </li>
 
                 <li class="sidebar-item">
-                    <a href="http://ccs-report-development.test:8080/teacher-admin" class="sidebar-link">
+                    <a href="{{ route('teacher', ['userId' => $teacher->user_id]) }}" class="sidebar-link">
                     <!-- <img src="assets-icon/icon-homeroom-white.png" alt="Icon" class="icon" /> -->
                         <i class="lni lni-book"></i>
                         <span>Teacher</span>
@@ -39,7 +39,7 @@
                 </li>
 
                 <li class="sidebar-item">
-                    <a href="http://ccs-report-development.test:8080/student-admin" class="sidebar-link">
+                    <a href="{{ route('student', ['userId' => $teacher->user_id]) }}" class="sidebar-link">
                     <!-- <img src="assets-icon/icon-homeroom-white.png" alt="Icon" class="icon" /> -->
                     <i class="lni lni-grid-alt"></i>
                         <span>Student</span>
@@ -47,8 +47,8 @@
                 </li>
 
                 <li class="sidebar-item">
-                    <a href="http://ccs-report-development.test:8080/year-program" class="sidebar-link">
-                    <img src="assets-icon/icon-homeroom-white.png" alt="Icon" class="icon" />
+                    <a href="{{ route('yearProgram', ['userId' => $teacher->user_id]) }}" class="sidebar-link">
+                    <img src="{{ asset('assets-image/icon-homeroom-white.png')}}" alt="Icon" class="icon" />
 
                         <span>Year Program</span>
                     </a>

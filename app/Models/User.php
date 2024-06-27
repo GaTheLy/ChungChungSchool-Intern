@@ -20,6 +20,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role'
     ];
 
     /**
@@ -49,4 +50,11 @@ class User extends Authenticatable
     {
         return $this->hasOne(TeacherPyp::class, 'user_id');
     }
+
+
+    public function role()
+    {
+        return $this->attributes['role'];
+    }
+
 }

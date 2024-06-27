@@ -46,31 +46,151 @@ class TeachController extends Controller
         ->where('teacher_id', $teacher->nip_pyp)
         ->get();
 
-        return view('dash-teacher', compact('teacher', 'homerooms', 'subjects'));
+        $role = User::find($authUserId)->role;
+
+        if ($role == 0){  //admin
+            return view('dash-admin', compact('teacher','homerooms', 'subjects','role'));
+        // }else if ($role == 1){ //myp
+        //     return view('dash-teacher', compact('teacher', 'homerooms', 'subjects'));
+        }else if ($role == 2){  //pyp
+            return view('dash-teacher', compact('teacher', 'homerooms', 'subjects','role'));
+        }
     }
 
-    public function showSubjectClasses($userId, $subjectId)
+    public function subjects($userId)
     {
+        $authUserId = Auth::id();
+
+        // Check if the authenticated user's ID matches the requested user ID
+        if ($authUserId != $userId) {
+            // Redirect to the authenticated user's dashboard
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+
         // Fetch the authenticated user
         $user = Auth::user();
 
-        // Fetch the teacher data associated with the user ID
-        $teacher = TeacherPyp::where('nip_pyp', $userId)->first();
+        $teacher = $user->teacher;
 
-        // if (!$teacher) {
-        //     return redirect()->route('dashboard')->withErrors('Teacher not found.');
-        // }
+        $homerooms = Homeroom::with(['teacher', 'class'])->get();
 
-        // Fetch the classes for the specific subject taught by the teacher
-        $subjectClasses = SubjectTeacher::with('classes')
-            ->where('teacher_id', $teacher->nip_pyp)
-            ->where('subject_pyp_id', $subjectId)
-            ->first();
+        $subjects = SubjectTeacher::with(['teacher', 'subject'])->get();
 
-        return view('sub-teach-pyp', [
-            'teacher' => $teacher,
-            'subjectClasses' => $subjectClasses,
-        ]);
+        $role = User::find($authUserId)->role;
+
+        if ($role == 0){  //admin
+            return view('subject-admin', compact('teacher','homerooms', 'subjects','role'));
+        // }else if ($role == 1){ //myp
+        //     return view('dash-teacher', compact('teacher', 'homerooms', 'subjects'));
+        }else if ($role == 2){  //pyp
+            return view('subject-teacher', compact('teacher', 'homerooms', 'subjects','role'));
+        }
+    }
+
+    public function homeroom($userId)
+    {
+        $authUserId = Auth::id();
+
+        // Check if the authenticated user's ID matches the requested user ID
+        if ($authUserId != $userId) {
+            // Redirect to the authenticated user's dashboard
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+
+        // Fetch the authenticated user
+        $user = Auth::user();
+
+        $teacher = $user->teacher;
+
+        $homerooms = Homeroom::with(['teacher', 'class'])->get();
+
+        $students = StudentPyp::with(['homeroom', 'class'])->get();
+
+
+        $role = User::find($authUserId)->role;
+
+        // if ($role == 0){  //admin
+            // return view('dash-admin', compact('teacher','homerooms', 'subjects','role'));
+        // }else if ($role == 1){ //myp
+        //     return view('dash-teacher', compact('teacher', 'homerooms', 'subjects'));
+        // }else 
+        if ($role == 2){  //pyp
+            return view('homeroom-teacher', compact('teacher', 'homerooms','role'));
+        }
+    }
+
+
+    public function teacher($userId)
+    {
+        $authUserId = Auth::id();
+
+        // Check if the authenticated user's ID matches the requested user ID
+        if ($authUserId != $userId) {
+            // Redirect to the authenticated user's dashboard
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+
+        // Fetch the authenticated user
+        $user = Auth::user();
+
+        $teacher = $user->teacher;
+
+
+        $role = User::find($authUserId)->role;
+
+        if ($role == 0){  //admin
+            return view('teacher-admin', compact('teacher'));
+        }
+        
+    }
+
+
+    public function student($userId)
+    {
+        $authUserId = Auth::id();
+
+        // Check if the authenticated user's ID matches the requested user ID
+        if ($authUserId != $userId) {
+            // Redirect to the authenticated user's dashboard
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+
+        // Fetch the authenticated user
+        $user = Auth::user();
+
+        $teacher = $user->teacher;
+
+
+        $role = User::find($authUserId)->role;
+
+        if ($role == 0){  //admin
+            return view('student-admin', compact('teacher'));
+        }
+        
+    }
+
+    public function yearProgram($userId)
+    {
+        $authUserId = Auth::id();
+
+        // Check if the authenticated user's ID matches the requested user ID
+        if ($authUserId != $userId) {
+            // Redirect to the authenticated user's dashboard
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+
+        // Fetch the authenticated user
+        $user = Auth::user();
+
+        $teacher = $user->teacher;
+
+
+        $role = User::find($authUserId)->role;
+
+        if ($role == 0){  //admin
+            return view('yp-admin', compact('teacher'));
+        }
+        
     }
 
 }

@@ -35,9 +35,12 @@
         <div class="row">
             <div class="col-6" style="text-align:left;">
                 <h5>{{ $class->class_name }}</h5>
+                {{-- <!-- @foreach($homerooms as $homeroom) -->
+                <!-- <h5>{{ $homeroom->class->class_name }}</h5> -->
+            <!-- @endforeach --> --}}
             </div>
             <div class="col-6" style="text-align:right;">
-                <h5>[full name]</h5>
+                <h5>{{ $teacher->first_name }}</h5>
             </div>
         </div>
 

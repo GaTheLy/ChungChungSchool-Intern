@@ -21,7 +21,7 @@
     </style>
     
         <h1>Subject List</h1>
-        <h5>[full name]</h5>
+        <h5>{{ $teacher->first_name }}</h5>
             
 
     <br>

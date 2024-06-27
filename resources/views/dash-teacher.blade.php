@@ -22,7 +22,7 @@
                 <h5>Hi, {{ $teacher->first_name }}</h5>
             </div>
             <div class="col">
-                <span>role</span>
+                <span>role {{$role}}</span>
             </div>
         </div>
 
