@@ -1,4 +1,4 @@
-@extends('base.base')
+@extends('base.base-pyp')
     <!-- section content -> yield content base.blade -->
     @section('content')
     <style>
@@ -20,11 +20,6 @@
         <div class="row">
             <div class="col-3">
                 <h5>Hi, {{ $teacher->first_name }}</h5>
-                {{--<!-- @php
-                    $firstHomeroom = $homerooms->first();
-                @endphp
-                <p>Test Homeroom Teacher: {{ $firstHomeroom->teacher->first_name }}</p>
-                <p>Test Homeroom Class: {{ $firstHomeroom->class->class_name }}</p> -->--}}
             </div>
             <div class="col">
                 <span>role</span>
@@ -36,9 +31,11 @@
         <div class="row" id="homeroom-list" style="margin-left:10px">
              @foreach($homerooms as $homeroom)
                 <div class="card text-center mb-3" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">{{ $homeroom->class->class_name }}</h5>
-                </div>
+                    <div class="card-body">
+                        <a href="{{ route('class.show', ['id' => $homeroom->class_id]) }}">
+                            {{ $homeroom->class->class_name }}
+                        </a>
+                    </div>
                 </div>
             @endforeach
         </div>
@@ -48,9 +45,11 @@
         <div class="row" id="homeroom-list" style="margin-left:10px">
             @foreach($subjects as $subject)
                 <div class="card text-center mb-3" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">{{ $subject->subject->subject_name }}</h5>
-                </div>
+                    <div class="card-body">
+                        <a href="{{ route('subject.show', ['id' => $teacher->nip_pyp, 'sub_id' => $subject->subject_pyp_id]) }}">
+                            {{ $subject->subject->subject_name }}
+                        </a>
+                    </div>
                 </div>
             @endforeach
         </div>

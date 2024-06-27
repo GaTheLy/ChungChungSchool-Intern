@@ -38,10 +38,39 @@ class TeachController extends Controller
 
         $teacher = $user->teacher;
 
-        $homerooms = Homeroom::with(['teacher', 'class'])->get();
+        $homerooms = Homeroom::with(['teacher', 'class'])
+        ->where('teacher_pyp_id', $teacher->nip_pyp)
+        ->get();
 
-        $subjects = SubjectTeacher::with(['teacher', 'subject'])->get();
+        $subjects = SubjectTeacher::with(['teacher', 'subject'])
+        ->where('teacher_id', $teacher->nip_pyp)
+        ->get();
 
         return view('dash-teacher', compact('teacher', 'homerooms', 'subjects'));
     }
+
+    public function showSubjectClasses($userId, $subjectId)
+    {
+        // Fetch the authenticated user
+        $user = Auth::user();
+
+        // Fetch the teacher data associated with the user ID
+        $teacher = TeacherPyp::where('nip_pyp', $userId)->first();
+
+        // if (!$teacher) {
+        //     return redirect()->route('dashboard')->withErrors('Teacher not found.');
+        // }
+
+        // Fetch the classes for the specific subject taught by the teacher
+        $subjectClasses = SubjectTeacher::with('classes')
+            ->where('teacher_id', $teacher->nip_pyp)
+            ->where('subject_pyp_id', $subjectId)
+            ->first();
+
+        return view('sub-teach-pyp', [
+            'teacher' => $teacher,
+            'subjectClasses' => $subjectClasses,
+        ]);
+    }
+
 }

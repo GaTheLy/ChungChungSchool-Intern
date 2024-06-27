@@ -21,5 +21,10 @@ class SubjectModel extends Model
     {
         return $this->hasMany(SubjectTeacher::class, 'subject_pyp_id');
     }
+
+    public function classes()
+    {
+        return $this->belongsToMany(ClassModel::class, 'subject_class', 'subject_pyp_id', 'class_id');
+    }
 }
 

@@ -12,7 +12,7 @@
             <ul class="sidebar-nav">
                 
                 <li class="sidebar-item">
-                    <a href="/admin-dash" class="sidebar-link">
+                    <a href="{{ route('/dashboard/{userId}') }}" class="sidebar-link">
                     <img src="assets-icon/icon-dash-white.png" alt="Icon" class="icon" />
 
                         <!-- <i class="lni lni-grid-alt"></i> -->
@@ -47,7 +47,7 @@
                 </li>
 
                 <li class="sidebar-item">
-                    <a href="http://ccs-report-development.test:8080/year-program-admin" class="sidebar-link">
+                    <a href="http://ccs-report-development.test:8080/year-program" class="sidebar-link">
                     <img src="assets-icon/icon-homeroom-white.png" alt="Icon" class="icon" />
 
                         <span>Year Program</span>

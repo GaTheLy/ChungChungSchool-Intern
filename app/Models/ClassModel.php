@@ -15,8 +15,18 @@ class ClassModel extends Model
     protected $fillable = ['class_name'];
 
     // Define the relationship with Homeroom
-    public function homerooms()
+    public function homeroom()
     {
-        return $this->hasMany(Homeroom::class, 'class_id');
+        return $this->hasOne(Homeroom::class, 'class_id');
+    }
+
+    public function students()
+    {
+        return $this->belongsToMany(StudentPyp::class, 'student_class', 'class_id', 'nim_pyp');
+    }
+
+    public function subjects()
+    {
+        return $this->belongsToMany(SubjectModel::class, 'subject_class', 'class_id', 'subject_pyp_id');
     }
 }

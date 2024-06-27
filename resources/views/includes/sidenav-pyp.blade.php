@@ -1,19 +1,20 @@
 <aside id="sidebar" style="height:730px;">
     <div class="d-flex" >
                 <button class="toggle-btn" type="button">
-                    <img src="assets-icon/icon-menu-white.png" alt="Icon" class="icon" />
+                    <img src="{{ asset('assets-icon/icon-menu-white.png') }}" alt="Icon" class="icon" />
                     <!-- <i class="lni lni-menu" style="font-size:1.8em; align:center;margin-left:-3px"></i> -->
                 </button>
                 <div class="sidebar-logo">
-                    <a href="/dash-pyp">CCS</a>
-                    <img src="assets-image/ccs-logo.jpg" alt="Icon" class="logo" />
+                    <a href="{{ route('dashboard', ['userId' => Auth::id()]) }}">
+                        <img src="{{ asset('assets-image/ccs-logo.jpg') }}" alt="Icon" class="logo" />
+                    </a>
                 </div>
             </div>
             <ul class="sidebar-nav">
                 
                 <li class="sidebar-item">
-                    <a href="/dash-pyp" class="sidebar-link">
-                    <img src="assets-icon/icon-dash-white.png" alt="Icon" class="icon" />
+                    <a href="{{ route('dashboard', ['userId' => Auth::id()]) }}" class="sidebar-link">
+                    <img src="{{ asset('assets-icon/icon-dash-white.png') }}" alt="Icon" class="icon" />
 
                         <!-- <i class="lni lni-grid-alt"></i> -->
                         <span>Dashboard</span>
@@ -23,7 +24,7 @@
                 
                 <li class="sidebar-item">
                     <a href="/subject-teacher-pyp" class="sidebar-link">
-                    <img src="assets-icon/icon-listsubject-white.png" alt="Icon" class="icon" />
+                    <img src="{{ asset('assets-icon/icon-listsubject-white.png') }}" alt="Icon" class="icon" />
 
                         <!-- <i class="lni lni-book"></i> -->
                         <span>Subject</span>
@@ -32,7 +33,7 @@
 
                 <li class="sidebar-item">
                     <a href="/homeroom-teacher-pyp" class="sidebar-link">
-                    <img src="assets-icon/icon-homeroom-white.png" alt="Icon" class="icon" />
+                    <img src="{{ asset('assets-icon/icon-homeroom-white.png') }}" alt="Icon" class="icon" />
 
                         <!-- <i class="lni lni-classroom"></i> -->
                         <span>Classroom</span>

@@ -5,11 +5,9 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\TeachController;
+use App\Http\Controllers\ClassController;
+use App\Http\Controllers\SubjectController;
 
-
-// teacher route
-Route::get('/login-teacher', [LoginController::class, 'index']);
-Route::post('/login-teacher', [LoginController::class, 'authenticate']);
 
 
 Route::get('/subject-teacher', function () {
@@ -108,6 +106,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get('/class/{id}', [ClassController::class, 'show'])->name('class.show');
+
+Route::get('/subject/{id}/{sub_id}', [TeachController::class, 'showSubjectClasses'])->name('subject.show');
 
 require __DIR__.'/auth.php';
 

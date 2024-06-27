@@ -34,7 +34,7 @@
         <h1>Homeroom</h1>
         <div class="row">
             <div class="col-6" style="text-align:left;">
-                <h5>[class detail]</h5>
+                <h5>{{ $class->class_name }}</h5>
             </div>
             <div class="col-6" style="text-align:right;">
                 <h5>[full name]</h5>
@@ -69,12 +69,14 @@
             </tr>
         </thead>
         <tbody>
+            @foreach($students as $student)
             <tr>
-                <td>Tiger Nixon</td>
-                <td>January 1, 2024</td>
-                <td data-bs-toggle="modal" data-bs-target="#fillAttendance" data-bs-whatever="Tiger Nixon">Fill Attendance</td>
-                <td><a href="http://ccs-report-development.test:8080/homeroom-teacher-report-preview-myp">Preview Report</a></td>
+                    <td>{{ $student->first_name }} {{ $student->last_name }}</td>
+                    <td>{{ $student->dob }}</td>
+                    <td data-bs-toggle="modal" data-bs-target="#fillAttendance" data-bs-whatever="{{ $student->first_name }} {{ $student->last_name }}">Fill Attendance</td>
+                    <td><a href="http://ccs-report-development.test:8080/homeroom-teacher-report-preview-myp">Preview Report</a></td>
             </tr>
+            @endforeach
         </tbody>
         <tfoot>
             <tr>
@@ -172,7 +174,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-            <button type="button" class="btn btn-primary">Yes</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Yes</button>
         </div>
         </div>
     </div>

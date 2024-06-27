@@ -34,10 +34,10 @@
         <h1>Homeroom</h1>
         <div class="row">
             <div class="col-6" style="text-align:left;">
-                <h5>[class detail]</h5>
+                <h5>{{ $class->class_name }}</h5>
             </div>
             <div class="col-6" style="text-align:right;">
-                <h5>[full name]</h5>
+                <h5> {{ $class->homeroom->teacher->first_name }} {{ $class->homeroom->teacher->last_name }}</h5>
             </div>
         </div>
 
@@ -70,14 +70,17 @@
             </tr>
         </thead>
         <tbody>
+            @foreach($students as $student)
             <tr>
-                <td>Tiger Nixon</td>
-                <td>January 1, 2024</td>
-                <td data-bs-toggle="modal" data-bs-target="#fillAttendance" data-bs-whatever="Tiger Nixon">Fill Attendance</td>
-                <td style="text-align: center;"><span data-bs-toggle="modal" data-bs-target="#unitProgress" data-bs-whatever="Tiger Nixon">Unit</span> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp | &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <span>ATL</span></td>
-                <td><a href="/homeroom-teacher-report-preview-pyp">Preview Report</a></td>
+                    <td>{{ $student->first_name }} {{ $student->last_name }}</td>
+                    <td>{{ $student->dob }}</td>
+                    <td data-bs-toggle="modal" data-bs-target="#fillAttendance" data-bs-whatever="{{ $student->first_name }} {{ $student->last_name }}">Fill Attendance</td>
+                    <td style="text-align: center;"><span data-bs-toggle="modal" data-bs-target="#unitProgress" data-bs-whatever="{{ $student->first_name }} {{ $student->last_name }}">Unit</span> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp | &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <span>ATL</span></td>
+                    <td><a href="/homeroom-teacher-report-preview-myp">Preview Report</a></td>
             </tr>
+            @endforeach
         </tbody>
+        
         <tfoot>
             <tr>
                 <th>Name</th>
