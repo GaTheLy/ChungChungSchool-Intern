@@ -55,6 +55,14 @@
     .crit-progress{
         height:35px;width:35px;border:1px solid black;display:inline-block;border-radius:5px;margin-top:10px;margin-left:20px;
     }
+
+    .delete-btn {
+        cursor: pointer;
+        color: red;
+        margin-top: 10px;
+        margin-left: 10px;
+    }
+
 </style>
 
 <h1>Subject</h1>
@@ -90,30 +98,41 @@
         </div>
     </div>
 
+    <div class="col-3">
+        <h5>3. Grade Input </h5>
+    </div> 
     {{-- pyp form --}}
-
+    
     <div id="PYP" style="display:none;">
         <div id="PYPContainer">
+
             <div class="form-group">
-                <label for="inputA1">Input A1</label>
-                <input type="text" name="inputA[]" id="inputA1">
-            </div>
-            <div class="form-group">
-                <label for="inputA2">Input A2</label>
-                <input type="text" name="inputA[]" id="inputA2">
-            </div>
-            <div class="form-group">
-                <label for="inputA3">Input A3</label>
-                <input type="text" name="inputA[]" id="inputA3">
+                <div class="row">
+                        <div class="col-3" style="margin-left:80px;">
+                            <span>Criteria </span>
+                                <div class="row">
+                                    <div class="col-4">
+                                    <input type="text" name="crit-name[0]" id="crit-name[0]" class="criteria-name">
+                                    </div>
+                                </div>
+                        </div> 
+                        <div class="col-4">
+                            <span>Descriptor</span>
+                                <div class="row">
+                                <input type="text" name="range-1-desc[0]" id="range-1-desc[0]" class="criteria-desc">
+                                </div>
+                        </div>
+
+                        <span class="delete-btn">Delete</span>
+
+                    </div>
             </div>
         </div>
-        <div class="row">
-        <div class="col" style="text-align:right;margin-right:100px;">
-            <a href="#" style="color:black">add more criteria</a>
-            <i class="lni lni-circle-plus"></i>
+        <div class="d-grid gap-4 d-md-flex justify-content-md-end">
+            <button class="btn me-md-2" type="button" id="addInputA">
+                add more criteria            <i class="lni lni-circle-plus"></i>
+            </button>
         </div>
-    </div>
-        <button type="button" id="addInputA">Add Input</button>
     </div>
 
     {{-- end pyp form --}}
@@ -125,25 +144,17 @@
 
     <div id="MYPContainer">
     <div class="form-group">
-        <div class="row">
-            <div class="col-3">
-                <h5>3. Grade Input </h5>
-            </div> 
-            
             <div class="row">
                 <div class="col-3" style="margin-left:80px;">
                     <span>Criteria </span>
                         <div class="row">
-                        <div class="col-2">
-                        <input type="text" name="crit-title[0]" id="crit-title[0]" class="criteria-title">
+                            <div class="col-2">
+                            <input type="text" name="crit-title[0]" id="crit-title[0]" class="criteria-title">
+                            </div>
+                            <div class="col-4">
+                            <input type="text" name="crit-name[0]" id="crit-name[0]" class="criteria-name">
+                            </div>
                         </div>
-                        <div class="col-4">
-                        <input type="text" name="crit-name[0]" id="crit-name[0]" class="criteria-name">
-                        </div>
-                </div>
-                    
-                    
-
                 </div> 
                 <div class="col-1">
                     <span>Range </span>
@@ -198,29 +209,22 @@
                         <div class="row">
                         <input type="text" name="range-8-desc[0]" id="range-8-desc[0]" class="criteria-desc">
                         </div>
+
+                        <span class="delete-btn">Delete</span>
+
                 </div> 
             </div>
         </div>
-    </div>
-        
+        </div>
         <div class="d-grid gap-4 d-md-flex justify-content-md-end">
             <button class="btn me-md-2" type="button" id="addInputB">
                 add more criteria            <i class="lni lni-circle-plus"></i>
             </button>
         </div>
-
-        </div>
     </div>
 
     {{-- end myp form --}}
 
-    <br>
-    <div class="row">
-        <div class="col" style="text-align:right;margin-right:100px;">
-            <a href="#" style="color:black">add more criteria</a>
-            <i class="lni lni-circle-plus"></i>
-        </div>
-    </div>
 
     <br>
     <div class="row">
@@ -256,17 +260,39 @@
         });
 
         $('#addInputA').click(function() {
-            var newInputNumber = $('#PYPContainer .form-group').length + 1;
-            var newInput = `<div class="form-group">
-                                <label for="inputA${newInputNumber}">Input A${newInputNumber}</label>
-                                <input type="text" name="inputA[]" id="inputA${newInputNumber}">
-                            </div>`;
+            var newInputNumber = $('#PYPContainer .form-group').length;
+            console.log(newInputNumber);
+
+            var newInput = `
+            <div class="form-group">
+                <div class="row">
+                        <div class="col-3" style="margin-left:80px;">
+                            <span>Criteria </span>
+                                <div class="row">
+                                    <div class="col-4">
+                                    <input type="text" name="crit-name[${newInputNumber}]" id="crit-name[${newInputNumber}]" class="criteria-name">
+                                    </div>
+                                </div>
+                        </div> 
+                        <div class="col-4">
+                            <span>Descriptor</span>
+                                <div class="row">
+                                <input type="text" name="range-1-desc[${newInputNumber}]" id="range-1-desc[${newInputNumber}]" class="criteria-desc">
+                                </div>
+                        </div>
+                                            <span class="delete-btn">Delete</span>
+
+                    </div>
+            </div>
+                            
+                            `;
             $('#PYPContainer').append(newInput);
         });
 
 
         $('#addInputB').click(function() {
-            var newInputNumber = $('#MYPContainer .form-group').length + 1;
+            var newInputNumber = $('#MYPContainer .form-group').length;
+console.log(newInputNumber);
             var newInput = `
             
             <div class="form-group">
@@ -340,12 +366,18 @@
                         <input type="text" name="range-8-desc[${newInputNumber}]" id="range-8-desc[${newInputNumber}]" class="criteria-desc">
                         </div>
                 </div> 
+                
+                <span class="delete-btn">Delete</span>
+
             </div>
         </div>`;
             $('#MYPContainer').append(newInput);
         });
 
-
+// Delegate click event for delete buttons
+        $(document).on('click', '.delete-btn', function() {
+            $(this).closest('.form-group').remove();
+        });
     });
 </script>
 
