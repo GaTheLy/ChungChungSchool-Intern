@@ -9,7 +9,7 @@ class TeacherPyp extends Model
     protected $table = 'teacher_pyp';
 
     // Define the primary key if it's not 'id'
-    protected $primaryKey = 'teacher_pyp_id';
+    protected $primaryKey = 'nip_pyp';
 
     // Define the fillable fields
     protected $fillable = ['first_name', 'last_name', 'user_id'];

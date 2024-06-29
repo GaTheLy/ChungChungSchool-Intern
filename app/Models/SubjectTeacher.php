@@ -25,7 +25,7 @@ class SubjectTeacher extends Model
     // Define the relationship with ClassModel
     public function classes()
     {
-        return $this->belongsToMany(ClassModel::class, 'subject_teacher_classes', 'subject_teacher_id', 'class_id');
+        return $this->belongsToMany(ClassModel::class, 'subject_class_teacher', 'subject_teacher_id', 'class_id');
     }
 
     public function subject()

@@ -43,15 +43,21 @@
         <br>
     <h5 style="font-weight:200; font-size:25px" >Teaching</h5>
         <div class="row" id="homeroom-list" style="margin-left:10px">
-            @foreach($subjects as $subject)
+        @foreach($subjects as $subject)
+            @foreach($subject->classes as $class)
                 <div class="card text-center mb-3" style="width: 18rem;">
                     <div class="card-body">
-                        <a href="{{ route('subject.show', ['id' => $teacher->nip_pyp, 'sub_id' => $subject->subject_pyp_id]) }}">
-                            {{ $subject->subject->subject_name }}
+                    <a href="{{ route('subject.show', [
+                        'teacher_id' => $teacher->nip_pyp,
+                        'sub_id' => $subject->subject->subject_pyp_id,
+                        'class_id' => $class->class_id
+                    ]) }}">
+                            {{ $subject->subject->subject_name }} ({{ $class->class_name }})
                         </a>
                     </div>
                 </div>
             @endforeach
+        @endforeach
         </div>
     
     @endsection 

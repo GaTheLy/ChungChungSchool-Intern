@@ -119,7 +119,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/class/{id}', [ClassController::class, 'show'])->name('class.show');
 
-Route::get('/subject/{id}/{sub_id}', [TeachController::class, 'showSubjectClasses'])->name('subject.show');
+Route::get('/subject/{teacher_id}/{sub_id}/{class_id}', [TeachController::class, 'subjectDetail'])->name('subject.show');
 
 require __DIR__.'/auth.php';
 

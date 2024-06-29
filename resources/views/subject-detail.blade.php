@@ -33,8 +33,8 @@
         }
     </style>
     
-        <h1>Subject List</h1>
-        <h5>[full name]</h5>
+        <h1>{{ $subject->subject_name }} ({{ $class->class_name }})</h1>
+        <h5>{{ $teacher->first_name }} {{ $teacher->last_name }}</h5>
         <br>
             <div class="col" style="text-align:right;margin-right:50px;">
             <button type="button" class="btn btn-primary" id="liveAlertBtn">Save</button>
@@ -50,11 +50,15 @@
             </tr>
         </thead>
         <tbody>
+            
+            @foreach($students as $student)
             <tr>
-                <td>Tiger Nixon</td>
+                <td>{{ $student->first_name}} {{ $student->last_name}}</td>
                 <td>January 1, 2024</td>
                 <td><a href="http://ccs-report-development.test:8080/subject-teacher-detail-grade">Grade</a></td>
             </tr>
+            @endforeach
+            
         </tbody>
         <tfoot>
             <tr>
