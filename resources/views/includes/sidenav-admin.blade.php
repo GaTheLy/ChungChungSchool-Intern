@@ -13,7 +13,7 @@
                 
                 <li class="sidebar-item">
                     <a href="{{ route('dashboard', ['userId' => $teacher->user_id]) }}" class="sidebar-link">
-                    <img src="{{ asset('assets-image/icon-dash-white.png')}}" alt="Icon" class="icon" />
+                    <img src="{{ asset('assets-icon/icon-dash-white.png')}}" alt="Icon" class="icon" />
 
                         <!-- <i class="lni lni-grid-alt"></i> -->
                         <span>Dashboard</span>
@@ -23,7 +23,7 @@
                 
                 <li class="sidebar-item">
                     <a href="{{ route('subject', ['userId' => $teacher->user_id]) }}" class="sidebar-link">
-                    <img src="{{ asset('assets-image/icon-listsubject-white.png')}}" alt="Icon" class="icon" />
+                    <img src="{{ asset('assets-icon/icon-listsubject-white.png')}}" alt="Icon" class="icon" />
 
                         <!-- <i class="lni lni-book"></i> -->
                         <span>Subject</span>
@@ -48,7 +48,7 @@
 
                 <li class="sidebar-item">
                     <a href="{{ route('yearProgram', ['userId' => $teacher->user_id]) }}" class="sidebar-link">
-                    <img src="{{ asset('assets-image/icon-homeroom-white.png')}}" alt="Icon" class="icon" />
+                    <img src="{{ asset('assets-icon/icon-homeroom-white.png')}}" alt="Icon" class="icon" />
 
                         <span>Year Program</span>
                     </a>

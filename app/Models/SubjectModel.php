@@ -14,7 +14,7 @@ class SubjectModel extends Model
     protected $primaryKey = 'subject_pyp_id';
 
     // Define the fillable fields
-    protected $fillable = ['subject_name'];
+    protected $fillable = ['subject_name, subject_level'];
 
     // Define the relationship with Homeroom
     public function sub_teacher()

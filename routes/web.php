@@ -84,8 +84,14 @@ Route::get('/dashboard/{userId}', [TeachController::class, 'show'])
 ->middleware(['auth', 'verified'])->name('dashboard');
 
 // subject route pyp done || soon myp n admin
-Route::get('/subject/{userId}', [TeachController::class, 'subjects'])
+Route::get('/subject/{userId}', [SubjectController::class, 'subjects'])
 ->middleware(['auth', 'verified'])->name('subject');
+
+// subject add
+Route::get('/subject-add/{userId}', [SubjectController::class, 'subjectAdd'])
+->middleware(['auth', 'verified'])->name('subject-add');
+
+
 
 // homeroom route pyp done || soon myp n admin
 Route::get('/homeroom/{userId}', [TeachController::class, 'homeroom'])
@@ -97,7 +103,7 @@ Route::get('/teacher/{userId}', [TeachController::class, 'teacher'])
 ->middleware(['auth', 'verified'])->name('teacher');
 
 // admin route || student crud
-Route::get('/student/{userId}', [StudentController::class, 'student'])
+Route::get('/student/{userId}', [TeachController::class, 'student'])
 ->middleware(['auth', 'verified'])->name('student');
 
 // admin route || year program crud

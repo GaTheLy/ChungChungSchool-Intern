@@ -46,7 +46,7 @@
         <div id="liveAlertPlaceholder"></div>
         <div class="row">
             <div class="col" style="text-align:right;margin-right:100px;">
-            <button type="button" class="btn btn-primary" ><a href="http://ccs-report-development.test:8080/subject-admin-add">Add</a></button>
+            <button type="button" class="btn btn-primary" ><a href="{{ route('subject-add', ['userId' => $teacher->user_id]) }}">Add</a></button>
             </div>
         </div>
 
@@ -60,16 +60,37 @@
                 <th>Level</th>
                 <th>Criteria</th>
                 <th>Action</th>
+                <th>Updated At</th>
+
             </tr>
         </thead>
         <tbody>
+            @foreach($subjects as $subject)
+                <tr>
+                    <td>{{ $subject->subject_name }}</td>
+                    <td>dummy</td>
+                    <td>{{ $subject->subject_level }}</td>
+
+                    <td>A</td>
+
+                    <td>Detail</td>
+
+                    <td>dummy</td>
+
+                </tr>
+            @endforeach
             <tr>
                 <td>Mathematic</td>
                 <td>January 1, 2024 09:00 WIB</td>
                 <td>MYP</td>
-                <td>A &nbsp &nbsp B &nbsp &nbsp C &nbsp &nbsp D</td>
-                <td>Detail &nbsp &nbsp Edit &nbsp &nbsp Delete</td>
+                
+                <td>A</td>
+                    
+                <td>Detail</td>
+
+                <td>dummy</td>
             </tr>
+            
         </tbody>
         <tfoot>
             <tr>
@@ -78,6 +99,8 @@
                 <th>Level</th>
                 <th>Criteria</th>
                 <th>Action</th>
+                <th>Updated At</th>
+
             </tr>
         </tfoot>
     </table>
