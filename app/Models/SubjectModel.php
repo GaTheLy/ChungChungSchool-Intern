@@ -26,5 +26,10 @@ class SubjectModel extends Model
     {
         return $this->belongsToMany(ClassModel::class, 'subject_class', 'subject_pyp_id', 'class_id');
     }
+
+    public function criteria()
+    {
+        return $this->hasMany(Criteria::class, 'subject_pyp_id');
+    }
 }
 

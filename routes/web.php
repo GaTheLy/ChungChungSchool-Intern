@@ -121,5 +121,9 @@ Route::get('/class/{id}', [ClassController::class, 'show'])->name('class.show');
 
 Route::get('/subject/{teacher_id}/{sub_id}/{class_id}', [TeachController::class, 'subjectDetail'])->name('subject.show');
 
+Route::get('/subject-teacher/{teacherId}/{subjectId}/{classId}/{studentId}/grade', [TeachController::class, 'gradeStudent'])->name('subject.grade');
+
+Route::post('/subject/grade/save', [TeachController::class, 'saveGrade'])->name('subject.grade.save');
+
 require __DIR__.'/auth.php';
 

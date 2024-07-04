@@ -16,13 +16,16 @@
         }
     </style>
     
-        <h1>Dashboard</h1>
+        <h1> 
+            @if ($role==1)
+                MYP
+            @elseif ($role==2)
+                PYP 
+            @endif
+            Dashboard</h1>
         <div class="row">
             <div class="col-3">
                 <h5>Hi, {{ $teacher->first_name }}</h5>
-            </div>
-            <div class="col">
-                <span>role {{$role}}</span>
             </div>
         </div>
 
@@ -31,11 +34,11 @@
         <div class="row" id="homeroom-list" style="margin-left:10px">
              @foreach($homerooms as $homeroom)
                 <div class="card text-center mb-3" style="width: 18rem;">
-                    <div class="card-body">
-                        <a href="{{ route('class.show', ['id' => $homeroom->class_id]) }}">
+                    <a href="{{ route('class.show', ['id' => $homeroom->class_id]) }}">
+                        <div class="card-body">
                             {{ $homeroom->class->class_name }}
-                        </a>
-                    </div>
+                        </div>
+                    </a>
                 </div>
             @endforeach
         </div>
@@ -46,15 +49,15 @@
         @foreach($subjects as $subject)
             @foreach($subject->classes as $class)
                 <div class="card text-center mb-3" style="width: 18rem;">
-                    <div class="card-body">
                     <a href="{{ route('subject.show', [
                         'teacher_id' => $teacher->nip_pyp,
                         'sub_id' => $subject->subject->subject_pyp_id,
                         'class_id' => $class->class_id
                     ]) }}">
+                            <div class="card-body">
                             {{ $subject->subject->subject_name }} ({{ $class->class_name }})
-                        </a>
-                    </div>
+                            </div>
+                    </a>
                 </div>
             @endforeach
         @endforeach

@@ -12,6 +12,8 @@ use App\Models\ClassModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+
 
 
 class TeachController extends Controller
@@ -220,5 +222,62 @@ class TeachController extends Controller
             'students' => $class->students,
         ]);
     }
+
+    public function gradeStudent($teacherId, $subjectId, $classId, $studentId)
+    {
+        $teacher = TeacherPyp::findOrFail($teacherId);
+        $subjectTeacher = SubjectTeacher::where('sub_teacher_id', $subjectId)
+            ->where('teacher_id', $teacher->nip_pyp)
+            ->firstOrFail();
+        $class = ClassModel::where('class_id', $classId)->firstOrFail();
+        $student = StudentPyp::findOrFail($studentId);
+
+        // Fetch the criteria for the subject
+        $criteria = $subjectTeacher->subject->criteria;
+
+        return view('sub-detail-pyp-grade', [
+            'teacher' => $teacher,
+            'subject' => $subjectTeacher->subject,
+            'class' => $class,
+            'student' => $student,
+            'criteria' => $criteria,
+        ]);
+    }
+
+    public function saveGrade(Request $request)
+    {
+        // $subjectId = $request->input('subject_id');
+        $studentId = $request->input('student_id');
+        
+        $sc_pyp_id = $request->input('sc_pyp_id');
+
+        $criteria = $request->input('criteria');
+
+
+        foreach ($criteria as $criterionId => $grade) {
+
+            if (is_array($grade)) {
+                $description = $grade['description'] ?? '';
+            } else {
+                $description = $grade;
+            }
+            // Save each criterion grade
+            DB::table('subject_crit_progress_pyp')->updateOrInsert(
+                [
+                    'student_id' => $studentId,
+                    'sc_pyp_id' => $sc_pyp_id,
+                ]
+                ,
+                [
+                    
+                    'description' => $description,
+                ]
+            );
+        }
+
+        return redirect()->back()->with('success', 'Grades saved successfully.');
+    }
+
+
 
 }
