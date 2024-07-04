@@ -75,7 +75,9 @@
 <br><br>
 
 {{-- form --}}
-<form method="POST" action="">
+
+{{-- form --}}
+<form method="POST" action="{{route('subject-add.submit',['userId' => $teacher->user_id])}}">
     @csrf
 
     <div class="row">
@@ -92,34 +94,36 @@
             <h5>2. Level</h5>
         </div>
         <div class="col-3">
-            <div class="btn-option" id="btnA">PYP</div>
-            <div class="btn-option" id="btnB">MYP</div>
-            <input type="hidden" name="level" id="level" value="">
+        <select name="option" id="option">
+            <option value="">--Select--</option>
+            <option value="PYP" name="PYP">PYP</option>
+            <option value="MYP" name="MYP">MYP</option>
+        </select>
         </div>
     </div>
 
     <div class="col-3">
         <h5>3. Grade Input </h5>
     </div> 
-    {{-- pyp form --}}
-    
-    <div id="PYP" style="display:none;">
-        <div id="PYPContainer">
 
+    {{-- pyp form --}}
+    <div id="PYP" style="display:none;">
+        <div id="PYPContainer" class="PYPCriteria">
+{{--  
             <div class="form-group">
                 <div class="row">
                         <div class="col-3" style="margin-left:80px;">
                             <span>Criteria </span>
                                 <div class="row">
                                     <div class="col-4">
-                                    <input type="text" name="crit-name[0]" id="crit-name[0]" class="criteria-name">
+                                    <input type="text" name="criteria[0][name]" id="criteria[0][name]" class="criteria-name">
                                     </div>
                                 </div>
                         </div> 
                         <div class="col-4">
                             <span>Descriptor</span>
                                 <div class="row">
-                                <input type="text" name="range-1-desc[0]" id="range-1-desc[0]" class="criteria-desc">
+                                <input type="text" name="criteria[0][description]" id="criteria[0][description]" class="criteria-desc">
                                 </div>
                         </div>
 
@@ -127,6 +131,8 @@
 
                     </div>
             </div>
+
+             --}}
         </div>
         <div class="d-grid gap-4 d-md-flex justify-content-md-end">
             <button class="btn me-md-2" type="button" id="addInputA">
@@ -137,102 +143,66 @@
 
     {{-- end pyp form --}}
 
-
     {{-- myp form --}}
 
     <div id="MYP" style="display:none;">
 
-    <div id="MYPContainer">
+    <div id="MYPContainer" class="MYPCriteria">
+            {{-- 
     <div class="form-group">
             <div class="row">
                 <div class="col-3" style="margin-left:80px;">
                     <span>Criteria </span>
                         <div class="row">
                             <div class="col-2">
-                            <input type="text" name="crit-title[0]" id="crit-title[0]" class="criteria-title">
+                            <input type="text" name="criteria[0][title]" id="criteria[0][title]" class="criteria-title">
                             </div>
                             <div class="col-4">
-                            <input type="text" name="crit-name[0]" id="crit-name[0]" class="criteria-name">
+                            <input type="text" name="criteria[0][name]" id="criteria[0][name]" class="criteria-name">
                             </div>
                         </div>
                 </div> 
                 <div class="col-1">
                     <span>Range </span>
-                        <div class="row">
-                        <input type="text" value="1" class="crit-progress" name="range-1[0]" id="range-1[0]">
-                        </div>
-                        <div class="row">
-                        <input type="text" value="2" class="crit-progress" name="range-2[0]" id="range-2[0]">
-                        </div>
-                        <div class="row">
-                        <input type="text" value="3" class="crit-progress" name="range-3[0]" id="range-3[0]">
-                        </div>
-                        <div class="row">
-                        <input type="text" value="4" class="crit-progress" name="range-4[0]" id="range-4[0]">
-                        </div>
-                        <div class="row">
-                        <input type="text" value="5" class="crit-progress" name="range-5[0]" id="range-5[0]">
-                        </div>
-                        <div class="row">
-                        <input type="text" value="6" class="crit-progress" name="range-6[0]" id="range-6[0]">
-                        </div>
-                        <div class="row">
-                        <input type="text" value="7" class="crit-progress" name="range-7[0]" id="range-7[0]">
-                        </div>
-                        <div class="row">
-                        <input type="text" value="8" class="crit-progress" name="range-8[0]" id="range-8[0]">
-                        </div>
+                        @for ($i=0;$i<8;$i++)
+                            <div class="row">
+                            <input type="text" value="{{$i+1}}" class="crit-progress" name="criteria[0][ranges][{{ $i }}]" id="criteria[0][ranges][{{ $i }}]">
+                            </div>
+                        @endfor
+                        
                 </div> 
                 <div class="col-4">
                     <span>Descriptor</span>
-                        <div class="row">
-                        <input type="text" name="range-1-desc[0]" id="range-1-desc[0]" class="criteria-desc">
-                        </div>
-                        <div class="row">
-                        <input type="text" name="range-2-desc[0]" id="range-2-desc[0]" class="criteria-desc">
-                        </div>
-                        <div class="row">
-                        <input type="text" name="range-3-desc[0]" id="range-3-desc[0]" class="criteria-desc">
-                        </div>
-                        <div class="row">
-                        <input type="text" name="range-4-desc[0]" id="range-4-desc[0]" class="criteria-desc">
-                        </div>
-                        <div class="row">
-                        <input type="text" name="range-5-desc[0]" id="range-5-desc[0]" class="criteria-desc">
-                        </div>
-                        <div class="row">
-                        <input type="text" name="range-6-desc[0]" id="range-6-desc[0]" class="criteria-desc">
-                        </div>
-                        <div class="row">
-                        <input type="text" name="range-7-desc[0]" id="range-7-desc[0]" class="criteria-desc">
-                        </div>
-                        <div class="row">
-                        <input type="text" name="range-8-desc[0]" id="range-8-desc[0]" class="criteria-desc">
-                        </div>
+                        @for ($i=0;$i<8;$i++)
+                            <div class="row">
+                            <input type="text" name="criteria[0][ranges][{{ $i }}][description]" id="criteria[0][ranges][{{ $i }}][description]" placeholder="descriptor {{$i+1}}" class="criteria-desc">
+                            </div>
+                        @endfor
+                        
 
                         <span class="delete-btn">Delete</span>
 
                 </div> 
             </div>
         </div>
+                --}}
+
         </div>
         <div class="d-grid gap-4 d-md-flex justify-content-md-end">
             <button class="btn me-md-2" type="button" id="addInputB">
                 add more criteria            <i class="lni lni-circle-plus"></i>
             </button>
         </div>
+        
     </div>
 
     {{-- end myp form --}}
 
 
-    <br>
-    <div class="row">
-        <div class="col" style="text-align:right;margin-right:100px;">
-            <button type="submit" class="btn btn-primary">Save</button>
-        </div>
-    </div>
+
+    <button class="btn btn-primary">Save</button>
 </form>
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -245,39 +215,39 @@
             $('#level').val('');
         }
 
-        $('#btnA').click(function() {
+        $('#option').change(function() {
             resetForms();
-            $('#PYP').show();
-            $(this).addClass('active');
-            $('#level').val('A');
+            var selectedOption = $(this).val();
+            if (selectedOption === 'PYP') {
+                $('#PYP').show();
+                // $('#btnA').addClass('active');
+            } else if (selectedOption === 'MYP') {
+                $('#MYP').show();
+                // $('#btnB').addClass('active');
+            }
         });
 
-        $('#btnB').click(function() {
-            resetForms();
-            $('#MYP').show();
-            $(this).addClass('active');
-            $('#level').val('B');
-        });
 
         $('#addInputA').click(function() {
             var newInputNumber = $('#PYPContainer .form-group').length;
             console.log(newInputNumber);
 
+
             var newInput = `
             <div class="form-group">
                 <div class="row">
                         <div class="col-3" style="margin-left:80px;">
-                            <span>Criteria </span>
+                            <span>Criteria ${newInputNumber}</span>
                                 <div class="row">
                                     <div class="col-4">
-                                    <input type="text" name="crit-name[${newInputNumber}]" id="crit-name[${newInputNumber}]" class="criteria-name">
+                                    <input type="text" name="criteria[${newInputNumber}][name]" id="criteria[${newInputNumber}][name]" class="criteria-name">
                                     </div>
                                 </div>
                         </div> 
                         <div class="col-4">
                             <span>Descriptor</span>
                                 <div class="row">
-                                <input type="text" name="range-1-desc[${newInputNumber}]" id="range-1-desc[${newInputNumber}]" class="criteria-desc">
+                                <input type="text" name="criteria[${newInputNumber}][description]" id="criteria[${newInputNumber}][description]" class="criteria-desc">
                                 </div>
                         </div>
                                             <span class="delete-btn">Delete</span>
@@ -296,79 +266,39 @@ console.log(newInputNumber);
             var newInput = `
             
             <div class="form-group">
-        <div class="row">
-            <div class="row">
+       <div class="row">
                 <div class="col-3" style="margin-left:80px;">
-                    <span>Criteria </span>
+                    <span>Criteria ${newInputNumber}  </span>
                         <div class="row">
-                        <div class="col-2">
-                        <input type="text" name="crit-title[${newInputNumber}]" id="crit-title[${newInputNumber}]" class="criteria-title">
+                            <div class="col-2">
+                            <input type="text" name="criteria[${newInputNumber}][title]" id="criteria[${newInputNumber}][title]" class="criteria-title">
+                            </div>
+                            <div class="col-4">
+                            <input type="text" name="criteria[${newInputNumber}][name]" id="criteria[${newInputNumber}][name]" class="criteria-name">
+                            </div>
                         </div>
-                        <div class="col-4">
-                        <input type="text" name="crit-name[${newInputNumber}]" id="crit-name[${newInputNumber}]" class="criteria-name">
-                        </div>
-                </div>
-                    
-                    
-
                 </div> 
                 <div class="col-1">
                     <span>Range </span>
-                        <div class="row">
-                        <input type="text" value="1" class="crit-progress" name="range-1[${newInputNumber}]" id="range-1[${newInputNumber}]">
-                        </div>
-                        <div class="row">
-                        <input type="text" value="2" class="crit-progress" name="range-2[${newInputNumber}]" id="range-2[${newInputNumber}]">
-                        </div>
-                        <div class="row">
-                        <input type="text" value="3" class="crit-progress" name="range-3[${newInputNumber}]" id="range-3[${newInputNumber}]">
-                        </div>
-                        <div class="row">
-                        <input type="text" value="4" class="crit-progress" name="range-4[${newInputNumber}]" id="range-4[0]">
-                        </div>
-                        <div class="row">
-                        <input type="text" value="5" class="crit-progress" name="range-5[${newInputNumber}]" id="range-5[${newInputNumber}]">
-                        </div>
-                        <div class="row">
-                        <input type="text" value="6" class="crit-progress" name="range-6[${newInputNumber}]" id="range-6[${newInputNumber}]">
-                        </div>
-                        <div class="row">
-                        <input type="text" value="7" class="crit-progress" name="range-7[${newInputNumber}]" id="range-7[${newInputNumber}]">
-                        </div>
-                        <div class="row">
-                        <input type="text" value="8" class="crit-progress" name="range-8[${newInputNumber}]" id="range-8[${newInputNumber}]">
-                        </div>
+                        @for ($i=0;$i<8;$i++)
+                            <div class="row">
+                            <input type="text" value="{{$i+1}}" class="crit-progress" name="criteria[${newInputNumber}][ranges][{{ $i }}][range]" id="criteria[${newInputNumber}][ranges][{{ $i }}][range]">
+                            </div>
+                        @endfor
+                        
                 </div> 
                 <div class="col-4">
                     <span>Descriptor</span>
-                        <div class="row">
-                        <input type="text" name="range-1-desc[${newInputNumber}]" id="range-1-desc[${newInputNumber}]" class="criteria-desc">
-                        </div>
-                        <div class="row">
-                        <input type="text" name="range-2-desc[${newInputNumber}]" id="range-2-desc[${newInputNumber}]" class="criteria-desc">
-                        </div>
-                        <div class="row">
-                        <input type="text" name="range-3-desc[${newInputNumber}]" id="range-3-desc[${newInputNumber}]" class="criteria-desc">
-                        </div>
-                        <div class="row">
-                        <input type="text" name="range-4-desc[${newInputNumber}]" id="range-4-desc[${newInputNumber}]" class="criteria-desc">
-                        </div>
-                        <div class="row">
-                        <input type="text" name="range-5-desc[${newInputNumber}]" id="range-5-desc[${newInputNumber}]" class="criteria-desc">
-                        </div>
-                        <div class="row">
-                        <input type="text" name="range-6-desc[${newInputNumber}]" id="range-6-desc[${newInputNumber}]" class="criteria-desc">
-                        </div>
-                        <div class="row">
-                        <input type="text" name="range-7-desc[${newInputNumber}]" id="range-7-desc[${newInputNumber}]" class="criteria-desc">
-                        </div>
-                        <div class="row">
-                        <input type="text" name="range-8-desc[${newInputNumber}]" id="range-8-desc[${newInputNumber}]" class="criteria-desc">
-                        </div>
-                </div> 
-                
-                <span class="delete-btn">Delete</span>
+                        @for ($i=0;$i<8;$i++)
+                            <div class="row">
+                            <input type="text" name="criteria[${newInputNumber}][ranges][{{ $i }}][description]" id="criteria[${newInputNumber}][ranges][{{ $i }}][description]" placeholder="descriptor {{$i+1}}" class="criteria-desc">
+                            </div>
+                        @endfor
+                        
 
+                        <span class="delete-btn">Delete</span>
+
+                </div> 
             </div>
         </div>`;
             $('#MYPContainer').append(newInput);

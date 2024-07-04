@@ -46,7 +46,7 @@
         <div id="liveAlertPlaceholder"></div>
         <div class="row">
             <div class="col" style="text-align:right;margin-right:100px;">
-            <button type="button" class="btn btn-primary" ><a href="http://ccs-report-development.test:8080/teacher-admin-add">Add</a></button>
+            <button type="button" class="btn btn-primary" ><a href="{{ route('teacher-add.index', ['userId' => $teacher->user_id]) }}">Add</a></button>
             </div>
         </div>
 

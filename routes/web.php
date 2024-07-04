@@ -87,10 +87,24 @@ Route::get('/dashboard/{userId}', [TeachController::class, 'show'])
 Route::get('/subject/{userId}', [SubjectController::class, 'subjects'])
 ->middleware(['auth', 'verified'])->name('subject');
 
-// subject add
-Route::get('/subject-add/{userId}', [SubjectController::class, 'subjectAdd'])
-->middleware(['auth', 'verified'])->name('subject-add');
-
+// subject route admin
+// show form
+Route::get('/subject-add/{userId}', [SubjectController::class, 'subjectAddPage'])
+->middleware(['auth', 'verified'])->name('subject-add.index');
+// submit form
+Route::post('/subject-submit/{userId}', [SubjectController::class, 'submit'])
+->middleware(['auth', 'verified'])->name('subject-add.submit');
+//detail subject
+Route::get('/subject/{userId}/{subjectId}', [SubjectController::class, 'detail'])
+->middleware(['auth', 'verified'])->name('subject.detail');
+//edit subject
+Route::get('/subject-edit/{userId}/{subjectId}', [SubjectController::class, 'edit'])
+->middleware(['auth', 'verified'])->name('subject.edit');
+Route::post('/subject-edit-submit/{userId}/{subjectId}', [SubjectController::class, 'editSubmit'])
+->middleware(['auth', 'verified'])->name('subject-edit.submit');
+// delete subject
+// Route::post('/subject-delete/{userId}/{subjectId}', [SubjectController::class, 'delete'])
+// ->middleware(['auth', 'verified'])->name('subject.delete');
 
 
 // homeroom route pyp done || soon myp n admin
@@ -101,10 +115,21 @@ Route::get('/homeroom/{userId}', [TeachController::class, 'homeroom'])
 // admin route || teacher crud
 Route::get('/teacher/{userId}', [TeachController::class, 'teacher'])
 ->middleware(['auth', 'verified'])->name('teacher');
+// show form
+Route::get('/teacher-add/{userId}', [TeachController::class, 'add'])
+->middleware(['auth', 'verified'])->name('teacher-add.index');
+
+// submit form
+Route::post('/teacher-submit/{userId}', [SubjectController::class, 'submit'])
+->middleware(['auth', 'verified'])->name('teacher-add.submit');
+
 
 // admin route || student crud
-Route::get('/student/{userId}', [TeachController::class, 'student'])
+Route::get('/student/{userId}', [StudentController::class, 'student'])
 ->middleware(['auth', 'verified'])->name('student');
+
+// Route::get('/student-add/{userId}', [SubjectController::class, 'studentAddPage'])
+// ->middleware(['auth', 'verified'])->name('student-add.index');
 
 // admin route || year program crud
 Route::get('/year-program/{userId}', [TeachController::class, 'yearProgram'])

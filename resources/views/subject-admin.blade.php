@@ -46,7 +46,8 @@
         <div id="liveAlertPlaceholder"></div>
         <div class="row">
             <div class="col" style="text-align:right;margin-right:100px;">
-            <button type="button" class="btn btn-primary" ><a href="{{ route('subject-add', ['userId' => $teacher->user_id]) }}">Add</a></button>
+            <button type="button" class="btn btn-primary" ><a href="
+            {{ route('subject-add.index', ['userId' => $teacher->user_id]) }}">Add</a></button>
             </div>
         </div>
 
@@ -58,7 +59,6 @@
                 <th>Subject</th>
                 <th>Created At</th>
                 <th>Level</th>
-                <th>Criteria</th>
                 <th>Action</th>
                 <th>Updated At</th>
 
@@ -68,28 +68,22 @@
             @foreach($subjects as $subject)
                 <tr>
                     <td>{{ $subject->subject_name }}</td>
-                    <td>dummy</td>
+                    <td>{{ $subject->created_at }}</td>
                     <td>{{ $subject->subject_level }}</td>
 
-                    <td>A</td>
 
-                    <td>Detail</td>
+                    <td>
+                        <a href="{{ route('subject.detail', ['userId' => $teacher->user_id, 'subjectId' => $subject->id]) }}" style="color:black;">Detail</a>
+                        <a href="{{ route('subject.edit', ['userId' => $teacher->user_id, 'subjectId' => $subject->id]) }}" style="color:black;">Edit</a>
+                        <form action="{{ route('subject.edit', ['userId' => $teacher->user_id, 'subjectId' => $subject->id]) }}" method="post">
+                           <button class="btn btn-se btn-danger">Delete</button>
+                        </form>
+                    </td>
 
-                    <td>dummy</td>
+                    <td>{{ $subject->updated_at }}</td>
 
                 </tr>
             @endforeach
-            <tr>
-                <td>Mathematic</td>
-                <td>January 1, 2024 09:00 WIB</td>
-                <td>MYP</td>
-                
-                <td>A</td>
-                    
-                <td>Detail</td>
-
-                <td>dummy</td>
-            </tr>
             
         </tbody>
         <tfoot>
@@ -97,7 +91,6 @@
                 <th>Subject</th>
                 <th>Created At</th>
                 <th>Level</th>
-                <th>Criteria</th>
                 <th>Action</th>
                 <th>Updated At</th>
 

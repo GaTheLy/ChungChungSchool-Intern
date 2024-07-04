@@ -46,7 +46,9 @@
         <div id="liveAlertPlaceholder"></div>
         <div class="row">
             <div class="col" style="text-align:right;margin-right:100px;">
-            <button type="button" class="btn btn-primary" ><a href="http://ccs-report-development.test:8080/student-admin-add">Add</a></button>
+            <button type="button" class="btn btn-primary" ><a href="
+            {{--  --}}
+            ">Add</a></button>
             </div>
         </div>
 
@@ -69,7 +71,7 @@
                     <td>{{ $student->dob }}</td>
                     <td>MYP</td>
                     <td>7</td>
-                    <td>Detail &nbsp &nbsp {{--  --}}/a> }}"></a>}} Edit &nbsp &nbsp Delete</td>
+                    <td>Detail &nbsp &nbsp Edit &nbsp &nbsp Delete</td>
                 </tr>
             @endforeach
             <tr>

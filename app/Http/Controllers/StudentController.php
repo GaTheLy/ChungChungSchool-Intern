@@ -38,5 +38,30 @@ class StudentController extends Controller
         
     }
 
+    public function studentAddPage($userId)
+    {
+        $authUserId = Auth::id();
+
+        // Check if the authenticated user's ID matches the requested user ID
+        if ($authUserId != $userId) {
+            // Redirect to the authenticated user's dashboard
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+
+        // Fetch the authenticated user
+        $user = Auth::user();
+
+        $teacher = $user->teacher;
+        $students = StudentPyp::all();
+
+
+        $role = User::find($authUserId)->role;
+
+        if ($role == 0){  //admin
+            return view('student-admin-add', compact('teacher','students'));
+        }
+        
+    }
+
 
 }

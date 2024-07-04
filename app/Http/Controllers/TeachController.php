@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Hash;
 
 
 class TeachController extends Controller
@@ -198,30 +199,26 @@ class TeachController extends Controller
         
     }
 
-    public function subjectDetail($id, $sub_id, $class_id)
-    {
-        $user = Auth::user();
+    // public function subjectDetail($id, $sub_id, $class_id)
+    // {
+    //     $role = $user->role;
 
-        $teacher = $user->teacher;
+    //     // Fetch the subject teacher record
+    //     $subjectTeacher = SubjectTeacher::where('sub_teacher_id', $sub_id)
+    //         ->where('teacher_id', $teacher->nip_pyp)
+    //         ->firstOrFail();
 
-        $role = $user->role;
-
-        // Fetch the subject teacher record
-        $subjectTeacher = SubjectTeacher::where('sub_teacher_id', $sub_id)
-            ->where('teacher_id', $teacher->nip_pyp)
-            ->firstOrFail();
-
-        // Fetch the classes taught by this subject teacher
-        $class = ClassModel::where('class_id', $class_id)->firstOrFail();
+    //     // Fetch the classes taught by this subject teacher
+    //     $class = ClassModel::where('class_id', $class_id)->firstOrFail();
 
 
-        return view('subject-detail', [
-            'teacher' => $teacher,
-            'subject' => $subjectTeacher->subject,
-            'class' => $class,
-            'students' => $class->students,
-        ]);
-    }
+    //     return view('subject-detail', [
+    //         'teacher' => $teacher,
+    //         'subject' => $subjectTeacher->subject,
+    //         'class' => $class,
+    //         'students' => $class->students,
+    //     ]);
+    // }
 
     public function gradeStudent($teacherId, $subjectId, $classId, $studentId)
     {
@@ -279,5 +276,68 @@ class TeachController extends Controller
     }
 
 
+
+
+  // form
+    
+  public function add($userId)
+  {
+      $authUserId = Auth::id();
+
+      // Check if the authenticated user's ID matches the requested user ID
+      if ($authUserId != $userId) {
+          // Redirect to the authenticated user's dashboard
+          return redirect()->route('dashboard', ['userId' => $authUserId]);
+      }
+
+      // Fetch the authenticated user
+      $user = Auth::user();
+
+      $teacher = $user->teacher;
+        $role = User::find($authUserId)->role;
+
+        if ($role == 0){  //admin
+            return view('teacher-admin-add', compact('teacher'));
+        }
+        
+    }
+
+    public function submit(Request $request, $userId)
+    {
+        $authUserId = Auth::id();
+
+        // Check if the authenticated user's ID matches the requested user ID
+        if ($authUserId != $userId) {
+            // Redirect to the authenticated user's dashboard
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+
+        // Fetch the authenticated user
+        $user = Auth::user();
+
+        $teacher = $user->teacher;
+        
+        $role = User::find($authUserId)->role;
+
+
+        $newUser = new User();
+        $newUser->name = $request->first_name;
+        $newUser->email = $request->email;
+        $newUser->password = Hash::make($request->nip);
+        $newUser->save();
+
+        $newTeacher = new TeacherPyp();
+        $newTeacher->nip_pyp = $request->nip;
+        $newTeacher->first_name = $request->first_name;
+        $newTeacher->last_name = $request->last_name;     
+        $newTeacher->save();
+
+        
+
+            if ($role == 0) { // admin
+                return redirect()->route('teacher', ['userId' => $teacher->user_id])->with('status', 'Subject added successfully!');
+            }
+        
+    }
 
 }
