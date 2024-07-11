@@ -18,6 +18,21 @@
   
 </head>
 
+<style>
+        h1{
+            font-family:'Space Grotesk';
+            /* font-weight: bold; */
+            font-size: 40px;
+        }
+        h5{
+            padding-left: 10px;
+            padding-top: -20px;
+            font-family:'Lexend Deca';
+            font-weight: 400;
+            font-size: 25px;
+        }
+    </style>
+
 <body>
 
     <div class="wrapper">

@@ -56,7 +56,7 @@
                 <td>{{ $student->first_name}} {{ $student->last_name}}</td>
                 <td>January 1, 2024</td>
                 <td>
-                    <a href="{{ route('subject.grade', ['teacherId' => $teacher->nip_pyp, 'subjectId' => $subject->subject_pyp_id, 'classId' => $class->class_id, 'studentId' => $student->nim_pyp]) }}">Grade</a>
+                    <a href="{{ route('subject.grade', ['teacherId' => $teacher->nip_pyp, 'subjectId' => $subject->id, 'classId' => $class->class_id, 'studentId' => $student->nim_pyp]) }}">Grade</a>
                 </td>
 
             </tr>
