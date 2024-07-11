@@ -59,8 +59,8 @@
                 <th>Subject</th>
                 <th>Created At</th>
                 <th>Level</th>
-                <th>Action</th>
                 <th>Updated At</th>
+                <th>Action</th>
 
             </tr>
         </thead>
@@ -71,16 +71,16 @@
                     <td>{{ $subject->created_at }}</td>
                     <td>{{ $subject->subject_level }}</td>
 
-
+                    <td>{{ $subject->updated_at }}</td>
                     <td>
                         <a href="{{ route('subject.detail', ['userId' => $teacher->user_id, 'subjectId' => $subject->id]) }}" style="color:black;">Detail</a>
                         <a href="{{ route('subject.edit', ['userId' => $teacher->user_id, 'subjectId' => $subject->id]) }}" style="color:black;">Edit</a>
-                        <form action="{{ route('subject.edit', ['userId' => $teacher->user_id, 'subjectId' => $subject->id]) }}" method="post">
-                           <button class="btn btn-se btn-danger">Delete</button>
+                        <form action="{{ route('subject.delete', ['userId' => $teacher->user_id, 'subjectId' => $subject->id]) }}" method="post">
+                            @csrf
+                           <button style="text-decoration:none;border:0px;background:none;">Delete</button>
                         </form>
                     </td>
 
-                    <td>{{ $subject->updated_at }}</td>
 
                 </tr>
             @endforeach
@@ -91,8 +91,8 @@
                 <th>Subject</th>
                 <th>Created At</th>
                 <th>Level</th>
-                <th>Action</th>
                 <th>Updated At</th>
+                <th>Action</th>
 
             </tr>
         </tfoot>

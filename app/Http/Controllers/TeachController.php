@@ -141,11 +141,11 @@ class TeachController extends Controller
 
         $teacher = $user->teacher;
 
-
+        $teachers = TeacherPyp::get();
         $role = User::find($authUserId)->role;
 
         if ($role == 0){  //admin
-            return view('teacher-admin', compact('teacher'));
+            return view('teacher-admin', compact('teacher','teachers'));
         }
         
     }
@@ -324,20 +324,173 @@ class TeachController extends Controller
         $newUser->name = $request->first_name;
         $newUser->email = $request->email;
         $newUser->password = Hash::make($request->nip);
-        $newUser->save();
-
-        $newTeacher = new TeacherPyp();
-        $newTeacher->nip_pyp = $request->nip;
-        $newTeacher->first_name = $request->first_name;
-        $newTeacher->last_name = $request->last_name;     
-        $newTeacher->save();
-
         
 
-            if ($role == 0) { // admin
+        $newTeacher = new TeacherPyp();
+        if ($request->input('option') == 'PYP') {
+            $newTeacher->is_myp = 0; 
+            $newTeacher->is_pyp = 1;
+            $newUser->role=2;
+        } else if ($request->input('option') == 'MYP') {
+            $newTeacher->is_myp = 1; 
+            $newTeacher->is_pyp = 0;
+            $newUser->role=1;
+        } else if ($request->input('option') == 'ALL'){
+            $newTeacher->is_myp = 1; 
+            $newTeacher->is_pyp = 1;
+            $newUser->role=0;
+        }
+        $newUser->save();
+
+        $newTeacher->nip_pyp = $request->nip;
+        $newTeacher->first_name = $request->first_name;
+        $newTeacher->last_name = $request->last_name; 
+        $newTeacher->phone = $request->phone; 
+        $newTeacher->address = $request->address; 
+        $newTeacher->joined_at = $request->joined_at; 
+        $newTeacher->user_id = $newUser->id;
+
+        
+        
+            if ($role == 0 && $newTeacher->save()) { // admin
                 return redirect()->route('teacher', ['userId' => $teacher->user_id])->with('status', 'Subject added successfully!');
             }
         
+    }
+
+
+    public function detail($userId, $teacherId)
+    {
+        $authUserId = Auth::id();
+
+        // Check if the authenticated user's ID matches the requested user ID
+        if ($authUserId != $userId) {
+            // Redirect to the authenticated user's dashboard
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+
+        // Fetch the authenticated user
+        $user = Auth::user();
+
+        // Get the teacher associated with the user
+        $teacher = $user->teacher;
+
+        // Get the subject with its criteria
+        $selectedTeacher = TeacherPyp::find($teacherId);
+
+        $role = User::find($authUserId)->role;
+
+        if ($role == 0) {  // admin
+            return view('teacher-admin-detail', compact('teacher', 'selectedTeacher'));
+        }
+    }
+
+    public function edit($userId, $teacherId)
+    {
+        $authUserId = Auth::id();
+
+        // Check if the authenticated user's ID matches the requested user ID
+        if ($authUserId != $userId) {
+            // Redirect to the authenticated user's dashboard
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+
+        // Fetch the authenticated user
+        $user = Auth::user();
+
+        $teacher = $user->teacher;
+        $selectedTeacher = TeacherPyp::find($teacherId);
+
+        $role = User::find($authUserId)->role;
+
+        if ($role == 0){  //admin
+            return view('teacher-admin-edit', compact('teacher' ,'selectedTeacher'));
+        }
+        
+    }
+
+    public function editSubmit(Request $request, $userId, $teacherId)
+    {
+        $authUserId = Auth::id();
+
+        // Check if the authenticated user's ID matches the requested user ID
+        if ($authUserId != $userId) {
+            // Redirect to the authenticated user's dashboard
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+
+        // Fetch the authenticated user
+        $user = Auth::user();
+
+        $teacher = $user->teacher;
+        
+        $role = User::find($authUserId)->role;
+
+
+        // $newUser = TeacherPyp::find($teacherId)->user();
+        // $newUser->name = $request->first_name;
+        // $newUser->email = $request->email;
+        // $newUser->password = Hash::make($request->nip);
+        
+
+        $newTeacher = TeacherPyp::find($teacherId);
+        if ($request->input('option') == 'PYP') {
+            $newTeacher->is_myp = 0; 
+            $newTeacher->is_pyp = 1;
+            // $newUser->role=2;
+        } else if ($request->input('option') == 'MYP') {
+            $newTeacher->is_myp = 1; 
+            $newTeacher->is_pyp = 0;
+            // $newUser->role=1;
+        } else if ($request->input('option') == 'ALL'){
+            $newTeacher->is_myp = 1; 
+            $newTeacher->is_pyp = 1;
+            // $newUser->role=0;
+        }
+        // $newUser->save();
+
+        $newTeacher->nip_pyp = $request->nip;
+        $newTeacher->first_name = $request->first_name;
+        $newTeacher->last_name = $request->last_name; 
+        $newTeacher->phone = $request->phone; 
+        $newTeacher->address = $request->address; 
+        $newTeacher->joined_at = $request->joined_at; 
+
+        
+        
+            if ($role == 0 && $newTeacher->save()) { // admin
+                return redirect()->route('teacher', ['userId' => $teacher->user_id])->with('status', 'Subject added successfully!');
+            }
+        
+    }
+    public function delete($userId, $teacherId)
+    {
+        $authUserId = Auth::id();
+
+        // Check if the authenticated user's ID matches the requested user ID
+        if ($authUserId != $userId) {
+            // Redirect to the authenticated user's dashboard
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+
+        // Fetch the authenticated user
+        $user = Auth::user();
+
+        // Get the teacher associated with the user
+        $teacher = $user->teacher;
+        $delTeach = TeacherPyp::find($teacherId); 
+
+        // $delSub = SubjectModel::find($subjectId);
+
+        $delTeach->delete();
+
+        $role = User::find($authUserId)->role;
+
+        if ($role == 0) {  // admin
+            return redirect()->route('teacher', ['userId' => $teacher->user_id])->with('status', 'Subject deleted successfully!');
+
+            // return view('subject-admin', compact('teacher', 'subjects'));
+        }
     }
 
 }

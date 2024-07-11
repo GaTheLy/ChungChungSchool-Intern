@@ -28,97 +28,98 @@
             </div>
         </div>
 
-<form method="POST" action="{{route('subject-add.submit',['userId' => $teacher->user_id])}}">
-    @csrf
-    <div class="form-group">
-        <div class="row">
-            <div class="col-3">
-                <h5>1. First Name</h5>
-            </div> 
+        <br><br>
 
-            <div class="col-6" style="text-align:left;margin-left:-55px;">
-            <input type="text" name="first_name" id="first_name" style="height:40px;width:500px;"></input>
-            </div>
-        </div>
-        <br>
-        <div class="row">
+<form method="POST" action="{{route('teacher-add.submit',['userId' => $teacher->user_id])}}">
+    @csrf
+                <div class="row">
+                    <div class="col-3">
+                        <h5>1. First Name</h5>
+                    </div> 
+
+                    <div class="col-6">
+                    <input type="text" name="first_name" id="first_name" style="height:40px;width:500px;"></input>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
                     <div class="col-3">
                         <h5>2. Last Name</h5>
                     </div> 
 
-                    <div class="col-6" style="text-align:left;margin-left:-55px;">
+                    <div class="col-6" >
                     <input type="text" name="last_name" id="last_name" style="height:40px;width:500px;"></input>
                     </div>
                 </div>
-        <br>
-        <div class="row">
+                <br>
+                <div class="row">
                     <div class="col-3">
                         <h5>3. Email</h5>
                     </div> 
 
-                    <div class="col-6" style="text-align:left;margin-left:-55px;">
+                    <div class="col-6" >
                     <input type="text" name="email" id="email" style="height:40px;width:500px;"></input>
                     </div>
                 </div>
-        <br>
-        <div class="row">
+
+                <br>
+                <div class="row">
                     <div class="col-3">
-                        <h5>4. NIP</h5>
+                        <h5>4. Teacher's ID</h5>
                     </div> 
 
-                    <div class="col-6" style="text-align:left;margin-left:-55px;">
+                    <div class="col-6">
                     <input type="text" name="nip" id="nip" style="height:40px;width:500px;"></input>
                     </div>
                 </div>
-        {{-- <div class="row">
+                <br>
+               <div class="row">
                     <div class="col-3">
-                        <h5>4. Phone</h5>
+                        <h5>5. Phone</h5>
                     </div> 
 
-                    <div class="col-6" style="text-align:left;margin-left:-55px;">
+                    <div class="col-6">
                     <input type="text" name="phone" id="phone" style="height:40px;width:500px;"></input>
                     </div>
                 </div>
         <br>
-        <div class="row">
+                <div class="row">
                     <div class="col-3">
-                        <h5>5. Address</h5>
+                        <h5>6. Address</h5>
                     </div> 
 
-                    <div class="col-6" style="text-align:left;margin-left:-55px;">
+                    <div class="col-6">
                     <textarea name="address" id="address" style="height:80px;width:500px;"></textarea>
                     </div>
-                </div> --}}
-        
-        <br>
-        <div class="row">
-            <div class="col-3">
-                <h5>5. Level </h5>
-            </div> 
-            
-            <div class="col-2" style="text-align:left;margin-left:-55px;">
-                <select name="option" id="option">
-                <option value="">--Select--</option>
-                <option value="PYP" name="PYP">PYP</option>
-                <option value="MYP" name="MYP">MYP</option>
-                </select>
-            </div>
-        </div>
-
-            <button type="button" class="btn btn-primary" >Save</button>
-
-        <br>
-        {{--  <div class="row">
+                </div>
+                <br>
+                <div class="row">
                     <div class="col-3">
-                        <h5>4. Homeroom</h5>
+                        <h5>7. Joined At</h5>
                     </div> 
 
-                    <div class="col-6" style="text-align:left;margin-left:-55px;">
-                    <input type="text" name="" id="" style="height:40px;width:500px;"></input>
+                    <div class="col-6">
+                    <input type="date" name="joined_at" id="joined_at" ></input>
                     </div>
-                </div> --}}
-        
-    </div>
+                </div>
+                <br>
+                <div class="row">
+                <div class="col-3">
+                    <h5>8. Level </h5>
+                </div> 
+                
+                <div class="col-2">
+                    <select name="option" id="option">
+                    <option value="">--Select--</option>
+                    <option value="PYP" name="PYP">PYP</option>
+                    <option value="MYP" name="MYP">MYP</option>
+                    <option value="ALL" name="ALL">PYP & MYP</option>
+                    </select>
+                </div>
+                </div>
+
+            <button  class="btn btn-primary" >Save</button>
+
         
     </form>
 

@@ -277,17 +277,18 @@ class SubjectController extends Controller
 
         // Get the teacher associated with the user
         $teacher = $user->teacher;
+        $delSub = SubjectModel::with(['pypCriteria', 'mypCriteria.mypCriteriaDetail'])->find($subjectId); 
 
-        // Get the subject with its criteria
-        $subject = SubjectModel::get()
-        ;
-        $delSub = SubjectModel::find($subjectId);
+        // $delSub = SubjectModel::find($subjectId);
+
         $delSub->delete();
 
         $role = User::find($authUserId)->role;
 
         if ($role == 0) {  // admin
-            return view('subject-admin', compact('teacher', 'subject'));
+            return redirect()->route('subject', ['userId' => $teacher->user_id])->with('status', 'Subject deleted successfully!');
+
+            // return view('subject-admin', compact('teacher', 'subjects'));
         }
     }
 

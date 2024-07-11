@@ -58,25 +58,52 @@
                 <th>Name</th>
                 <th>Joined At</th>
                 <th>Teaching</th>
-                <th>Homeroom</th>
+                <th>Phone</th>
+                <th>Address</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>Mathematic</td>
-                <td>January 1, 2024 09:00 WIB</td>
-                <td>MYP</td>
-                <td>7</td>
-                <td>Detail &nbsp &nbsp Edit &nbsp &nbsp Delete</td>
-            </tr>
+            @foreach($teachers as $teach)
+                <tr>
+                    <td>{{ $teach->first_name }} {{ $teach->last_name }}</td>
+                    <td>{{ $teach->joined_at}} </td>
+                    <td>
+                    @if($teach->is_myp == 0 && $teach->is_pyp == 1)
+                        PYP
+                    @elseif($teach->is_myp == 1 && $teach->is_pyp == 0)
+                        MYP
+                    @elseif($teach->is_myp == 1 && $teach->is_pyp == 1)
+                        PYP & MYP
+                    @endif
+                    </td>
+                    <td>{{ $teach->phone }}</td>
+                    <td>{{ $teach->address }}</td>
+
+
+                    <td>
+                        
+                        <a href="{{ route('teacher.detail', ['userId' => $teacher->user_id, 'teacherId' => $teach->nip_pyp]) }}" style="color:black;">Detail</a>
+                        
+                        <a href="{{ route('teacher.edit', ['userId' => $teacher->user_id, 'teacherId' => $teach->nip_pyp]) }}" style="color:black;">Edit</a>
+                     
+                        <form action="{{ route('teacher.delete', ['userId' => $teacher->user_id, 'teacherId' => $teach->nip_pyp]) }}" method="post">
+                            @csrf
+                           <button style="text-decoration:none;border:0px;background:none;">Delete</button>
+                        </form>
+                    </td>
+
+
+                </tr>
+            @endforeach
         </tbody>
         <tfoot>
             <tr>
                 <th>Name</th>
                 <th>Joined At</th>
                 <th>Teaching</th>
-                <th>Homeroom</th>
+                <th>Phone</th>
+                <th>Address</th>
                 <th>Action</th>
             </tr>
         </tfoot>

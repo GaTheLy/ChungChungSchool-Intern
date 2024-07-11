@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class TeacherPyp extends Model
 {
+    public $timestamps = false;
+
     protected $table = 'teacher_pyp';
 
     // Define the primary key if it's not 'id'
