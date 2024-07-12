@@ -14,7 +14,7 @@ class TeacherPyp extends Model
     protected $primaryKey = 'nip_pyp';
 
     // Define the fillable fields
-    protected $fillable = ['nip_pyp','first_name', 'last_name', 'user_id'];
+    protected $fillable = ['nip_pyp','first_name', 'last_name', 'user_id', 'phone', 'address', 'joined_at'];
 
     // Define the relationship with Homeroom
     public function homerooms()

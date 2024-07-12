@@ -8,11 +8,22 @@
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
 
     <script>
         $(document).ready(function() {
             $('#example').DataTable();
         });
+
+        function showModal(subjectId) {
+        $('#confirmDeleteModal').data('subject-id', subjectId).modal('show');
+        }
+
+        function confirmDelete() {
+            var subjectId = $('#confirmDeleteModal').data('subject-id');
+            $('#delete-form-' + subjectId).submit();
+        }
+
     </script>
 
     
@@ -75,9 +86,9 @@
                     <td>
                         <a href="{{ route('subject.detail', ['userId' => $teacher->user_id, 'subjectId' => $subject->id]) }}" style="color:black;">Detail</a>
                         <a href="{{ route('subject.edit', ['userId' => $teacher->user_id, 'subjectId' => $subject->id]) }}" style="color:black;">Edit</a>
-                        <form action="{{ route('subject.delete', ['userId' => $teacher->user_id, 'subjectId' => $subject->id]) }}" method="post">
+                        <button onclick="showModal({{$subject->id}})" style="text-decoration:none;border:0px;background:none;">Delete</button>
+                        <form id="delete-form-{{ $subject->id }}" action="{{ route('subject.delete', ['userId' => $teacher->user_id, 'subjectId' => $subject->id]) }}" method="post" style="display:none;">
                             @csrf
-                           <button style="text-decoration:none;border:0px;background:none;">Delete</button>
                         </form>
                     </td>
 
@@ -97,6 +108,23 @@
             </tr>
         </tfoot>
     </table>
+{{-- delete confirmation modal --}}
+    <div class="modal fade" id="confirmDeleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="confirmDeleteModalLabel">Confirm Delete</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            Are you sure want to delete this subject?
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+            <button type="button" class="btn btn-danger" onclick="confirmDelete()">Yes</button>
+        </div>
+        </div>
+    </div>
+    </div>
 
-    
+
     @endsection 

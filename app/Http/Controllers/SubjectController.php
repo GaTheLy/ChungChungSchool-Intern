@@ -36,7 +36,7 @@ class SubjectController extends Controller
         $role = User::find($authUserId)->role;
 
         if ($role == 0){  //admin
-            return view('subject-admin', compact('teacher' ,'subjects'));
+            return view('admin/subject/subject-admin', compact('teacher' ,'subjects'));
         }
         
     }
@@ -61,7 +61,7 @@ class SubjectController extends Controller
         $role = User::find($authUserId)->role;
 
         if ($role == 0){  //admin
-            return view('subject-admin-add', compact('teacher','subjects'));
+            return view('admin/subject/subject-admin-add', compact('teacher','subjects'));
         }
         
     }
@@ -81,12 +81,12 @@ class SubjectController extends Controller
 
         $teacher = $user->teacher;
         
-        $lastSubject = SubjectModel::orderBy('id', 'desc')->first();
-        if($lastSubject->id == null){
-            $index = 1;
-        }else{
-            $index = $lastSubject->id + 1;
-        }
+        // $lastSubject = SubjectModel::orderBy('id', 'desc')->first();
+        // if($lastSubject->id == null){
+        //     $index = 1;
+        // }else{
+        //     $index = $lastSubject->id + 1;
+        // }
         
 
 
@@ -96,7 +96,7 @@ class SubjectController extends Controller
         $subject = new SubjectModel();
         $subject->subject_name = $request->subject_name;
         $subject->subject_level = $request->option;
-        $subject->id = $index;     
+        // $subject->id = $index;     
 
 
         
@@ -174,7 +174,7 @@ class SubjectController extends Controller
         $role = User::find($authUserId)->role;
 
         if ($role == 0) {  // admin
-            return view('subject-admin-detail', compact('teacher', 'subject'));
+            return view('admin/subject/subject-admin-detail', compact('teacher', 'subject'));
         }
     }
 
@@ -197,7 +197,7 @@ class SubjectController extends Controller
         $role = User::find($authUserId)->role;
 
         if ($role == 0){  //admin
-            return view('subject-admin-edit', compact('teacher' ,'subject'));
+            return view('admin/subject/subject-admin-edit', compact('teacher' ,'subject'));
         }
         
     }

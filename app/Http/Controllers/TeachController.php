@@ -145,7 +145,7 @@ class TeachController extends Controller
         $role = User::find($authUserId)->role;
 
         if ($role == 0){  //admin
-            return view('teacher-admin', compact('teacher','teachers'));
+            return view('admin/teacher/teacher-admin', compact('teacher','teachers'));
         }
         
     }
@@ -297,7 +297,7 @@ class TeachController extends Controller
         $role = User::find($authUserId)->role;
 
         if ($role == 0){  //admin
-            return view('teacher-admin-add', compact('teacher'));
+            return view('admin/teacher/teacher-admin-add', compact('teacher'));
         }
         
     }
@@ -379,9 +379,10 @@ class TeachController extends Controller
         $selectedTeacher = TeacherPyp::find($teacherId);
 
         $role = User::find($authUserId)->role;
+        $infoEmail = User::find($selectedTeacher->user_id)->email;
 
         if ($role == 0) {  // admin
-            return view('teacher-admin-detail', compact('teacher', 'selectedTeacher'));
+            return view('admin/teacher/teacher-admin-detail', compact('teacher', 'selectedTeacher','infoEmail'));
         }
     }
 
@@ -400,11 +401,13 @@ class TeachController extends Controller
 
         $teacher = $user->teacher;
         $selectedTeacher = TeacherPyp::find($teacherId);
+        $infoEmail = User::find($selectedTeacher->user_id)->email;
+
 
         $role = User::find($authUserId)->role;
 
         if ($role == 0){  //admin
-            return view('teacher-admin-edit', compact('teacher' ,'selectedTeacher'));
+            return view('admin/teacher/teacher-admin-edit', compact('teacher' ,'selectedTeacher','infoEmail'));
         }
         
     }
@@ -427,27 +430,25 @@ class TeachController extends Controller
         $role = User::find($authUserId)->role;
 
 
-        // $newUser = TeacherPyp::find($teacherId)->user();
-        // $newUser->name = $request->first_name;
-        // $newUser->email = $request->email;
-        // $newUser->password = Hash::make($request->nip);
-        
-
         $newTeacher = TeacherPyp::find($teacherId);
+        $newUser = User::find($newTeacher->user_id);
+        $newUser->name = $request->first_name;
+        $newUser->email = $request->email;
+        // $newUser->password = Hash::make($request->password);
         if ($request->input('option') == 'PYP') {
             $newTeacher->is_myp = 0; 
             $newTeacher->is_pyp = 1;
-            // $newUser->role=2;
+            $newUser->role=2;
         } else if ($request->input('option') == 'MYP') {
             $newTeacher->is_myp = 1; 
             $newTeacher->is_pyp = 0;
-            // $newUser->role=1;
+            $newUser->role=1;
         } else if ($request->input('option') == 'ALL'){
             $newTeacher->is_myp = 1; 
             $newTeacher->is_pyp = 1;
-            // $newUser->role=0;
+            $newUser->role=0;
         }
-        // $newUser->save();
+        $newUser->save();
 
         $newTeacher->nip_pyp = $request->nip;
         $newTeacher->first_name = $request->first_name;
@@ -479,10 +480,12 @@ class TeachController extends Controller
         // Get the teacher associated with the user
         $teacher = $user->teacher;
         $delTeach = TeacherPyp::find($teacherId); 
+        $delUser = User::find($delTeach->user_id); 
 
         // $delSub = SubjectModel::find($subjectId);
 
         $delTeach->delete();
+        $delUser->delete();
 
         $role = User::find($authUserId)->role;
 

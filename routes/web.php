@@ -111,9 +111,26 @@ Route::post('/teacher-delete/{userId}/{teacherId}', [TeachController::class, 'de
 // admin route || student crud
 Route::get('/student/{userId}', [StudentController::class, 'student'])
 ->middleware(['auth', 'verified'])->name('student');
+// show form
+Route::get('/student-add/{userId}', [StudentController::class, 'add'])
+->middleware(['auth', 'verified'])->name('student-add.index');
+// submit form
+Route::post('/student-submit/{userId}', [StudentController::class, 'submit'])
+->middleware(['auth', 'verified'])->name('student-add.submit');
+//detail student
+Route::get('/student/{userId}/{studentId}', [StudentController::class, 'detail'])
+->middleware(['auth', 'verified'])->name('student.detail');
+//edit student
+Route::get('/student-edit/{userId}/{studentId}', [StudentController::class, 'edit'])
+->middleware(['auth', 'verified'])->name('student.edit');
+Route::post('/student-edit-submit/{userId}/{studentId}', [StudentController::class, 'editSubmit'])
+->middleware(['auth', 'verified'])->name('student-edit.submit');
+// delete subject
+Route::post('/student-delete/{userId}/{studentId}', [StudentController::class, 'delete'])
+->middleware(['auth', 'verified'])->name('student.delete');
 
-// Route::get('/student-add/{userId}', [SubjectController::class, 'studentAddPage'])
-// ->middleware(['auth', 'verified'])->name('student-add.index');
+
+
 
 // admin route || year program crud
 Route::get('/year-program/{userId}', [TeachController::class, 'yearProgram'])

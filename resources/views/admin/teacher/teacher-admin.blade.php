@@ -13,6 +13,17 @@
         $(document).ready(function() {
             $('#example').DataTable();
         });
+
+        function showModal(subjectId) {
+        $('#confirmDeleteModal').data('subject-id', subjectId).modal('show');
+        }
+
+        function confirmDelete() {
+            var subjectId = $('#confirmDeleteModal').data('subject-id');
+            $('#delete-form-' + subjectId).submit();
+        }
+
+
     </script>
 
     
@@ -86,10 +97,10 @@
                         <a href="{{ route('teacher.detail', ['userId' => $teacher->user_id, 'teacherId' => $teach->nip_pyp]) }}" style="color:black;">Detail</a>
                         
                         <a href="{{ route('teacher.edit', ['userId' => $teacher->user_id, 'teacherId' => $teach->nip_pyp]) }}" style="color:black;">Edit</a>
-                     
-                        <form action="{{ route('teacher.delete', ['userId' => $teacher->user_id, 'teacherId' => $teach->nip_pyp]) }}" method="post">
+                        
+                        <button onclick="showModal({{$teach->nip_pyp}})" style="text-decoration:none;border:0px;background:none;">Delete</button>
+                        <form id="delete-form-{{ $teach->nip_pyp }}" action="{{ route('teacher.delete', ['userId' => $teacher->user_id, 'teacherId' => $teach->nip_pyp]) }}" method="post">
                             @csrf
-                           <button style="text-decoration:none;border:0px;background:none;">Delete</button>
                         </form>
                     </td>
 
@@ -109,5 +120,21 @@
         </tfoot>
     </table>
 
-    
+    {{-- delete confirmation modal --}}
+    <div class="modal fade" id="confirmDeleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="confirmDeleteModalLabel">Confirm Delete</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            Are you sure want to delete this teacher?
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+            <button type="button" class="btn btn-danger" onclick="confirmDelete()">Yes</button>
+        </div>
+        </div>
+    </div>
+    </div>
     @endsection 
