@@ -119,12 +119,6 @@
                                     <input type="text" name="criteria[0][name]" id="criteria[0][name]" class="criteria-name">
                                     </div>
                                 </div>
-                        </div> 
-                        <div class="col-4">
-                            <span>Descriptor</span>
-                                <div class="row">
-                                <input type="text" name="criteria[0][description]" id="criteria[0][description]" class="criteria-desc">
-                                </div>
                         </div>
 
                         <span class="delete-btn">Delete</span>
@@ -244,12 +238,6 @@
                                     </div>
                                 </div>
                         </div> 
-                        <div class="col-4">
-                            <span>Descriptor</span>
-                                <div class="row">
-                                <input type="text" name="criteria[${newInputNumber}][description]" id="criteria[${newInputNumber}][description]" class="criteria-desc">
-                                </div>
-                        </div>
                                             <span class="delete-btn">Delete</span>
 
                     </div>

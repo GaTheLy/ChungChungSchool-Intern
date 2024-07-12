@@ -89,8 +89,6 @@ class SubjectController extends Controller
         // }
         
 
-
-
         $role = User::find($authUserId)->role;
 
         $subject = new SubjectModel();
@@ -100,6 +98,10 @@ class SubjectController extends Controller
 
 
         
+        // $subject = new SubjectModel();
+        // $subject->subject_name = $request->subject_name;
+        // $subject->subject_level = $request->option;
+        // $subject->save(); // Let MySQL handle the ID generation
         
         if ($subject->save()) {
 
@@ -126,7 +128,7 @@ class SubjectController extends Controller
             $pypCriteria = new PYPCriteria();
             $pypCriteria->crit_name = $criteria['name'] ?? null;
             $pypCriteria->subject_pyp_id = $subjectId;
-            $pypCriteria->criteria_descriptor = $criteria['description'] ?? null;
+            // $pypCriteria->criteria_descriptor = $criteria['description'] ?? null;
             $pypCriteria->save();
         }
     }

@@ -17,9 +17,9 @@ class StudentPyp extends Model
     protected $fillable = ['nim_pyp','first_name', 'last_name', 'dob', 'address', 'fathers_name', 'mothers_name', 'fathers_phone', 'mothers_phone', 'parents_email', 'previous_school', 'entry_date', 'level'];
 
     // Define the relationship with ClassModel (if needed)
-    public function classes()
+    public function class()
     { 
-        return $this->belongsToMany(ClassModel::class, 'student_class', 'student_id', 'class_id');
+        return $this->belongsToMany(ClassModel::class, 'student_class', 'nim_pyp', 'class_id');
     }
 
     

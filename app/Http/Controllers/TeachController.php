@@ -8,6 +8,7 @@ use App\Models\Homeroom;
 use App\Models\User;
 use App\Models\Subject;
 use App\Models\SubjectTeacher;
+use App\Models\SubjectModel;
 use App\Models\ClassModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -190,7 +191,7 @@ class TeachController extends Controller
         
     }
 
-    public function subjectDetail($id, $sub_id, $class_id)
+    public function subjectDetail($teacher_id, $sub_id, $class_id)
     {
         $user = Auth::user();
 
@@ -199,9 +200,11 @@ class TeachController extends Controller
         $role = $user->role;
 
         // Fetch the subject teacher record
-        $subjectTeacher = SubjectTeacher::where('sub_teacher_id', $sub_id)
-            ->where('teacher_id', $teacher->nip_pyp)
+        $subjectTeacher = SubjectTeacher::where('subject_pyp_id', $sub_id)
+            ->where('teacher_id', $teacher_id)
             ->firstOrFail();
+
+        $subject = $subjectTeacher->subject;
 
         // Fetch the classes taught by this subject teacher
         $class = ClassModel::where('class_id', $class_id)->firstOrFail();
@@ -209,7 +212,7 @@ class TeachController extends Controller
 
         return view('subject-detail', [
             'teacher' => $teacher,
-            'subject' => $subjectTeacher->subject,
+            'subject' => $subject,
             'class' => $class,
             'students' => $class->students,
         ]);
@@ -218,7 +221,7 @@ class TeachController extends Controller
     public function gradeStudent($teacherId, $subjectId, $classId, $studentId)
     {
         $teacher = TeacherPyp::findOrFail($teacherId);
-        $subjectTeacher = SubjectTeacher::where('sub_teacher_id', $subjectId)
+        $subjectTeacher = SubjectTeacher::where('subject_pyp_id', $subjectId)
             ->where('teacher_id', $teacher->nip_pyp)
             ->firstOrFail();
         $class = ClassModel::where('class_id', $classId)->firstOrFail();
@@ -256,7 +259,7 @@ class TeachController extends Controller
                     $description = $criteriaData[$key + 1]['description'];
 
                     // Update or insert the grade for each criterion
-                    DB::table('subject_crit_progress_pyp')->updateOrInsert(
+                    DB::table('subject_crit_progress')->updateOrInsert(
                         [
                             'student_id' => $studentId,
                             'sc_pyp_id' => $sc_pyp_id,
@@ -270,6 +273,27 @@ class TeachController extends Controller
         }
 
         return redirect()->back()->with('success', 'Grades saved successfully.');
+    }
+
+    public function gradeStudentMyp($teacherId, $subjectId, $classId, $studentId)
+    {
+        $teacher = TeacherPyp::findOrFail($teacherId);
+        $subjectTeacher = SubjectTeacher::where('sub_teacher_id', $subjectId)
+            ->where('teacher_id', $teacher->nip_pyp)
+            ->firstOrFail();
+        $class = ClassModel::where('class_id', $classId)->firstOrFail();
+        $student = StudentPyp::findOrFail($studentId);
+
+        // Fetch the criteria for the subject
+        $criteria = $subjectTeacher->subject->mypCriteria;
+
+        return view('sub-detail-pyp-grade', [
+            'teacher' => $teacher,
+            'subject' => $subjectTeacher->subject,
+            'class' => $class,
+            'student' => $student,
+            'criteria' => $criteria,
+        ]);
     }
 
 
