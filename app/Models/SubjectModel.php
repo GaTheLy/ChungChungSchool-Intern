@@ -15,7 +15,7 @@ class SubjectModel extends Model
     protected $primaryKey = 'id';
 
     // Define the fillable fields
-    protected $fillable = [' subject_name, subject_level','created_at', 'updated_at' ];
+    protected $fillable = ['subject_name, subject_level','created_at', 'updated_at' ];
 
     public function pypCriteria()
     {

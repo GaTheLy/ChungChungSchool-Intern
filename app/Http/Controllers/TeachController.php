@@ -21,14 +21,7 @@ class TeachController extends Controller
 {
     public function show($userId)
     {
-        // Fetch the first student as an example
-        // $student = StudentPyp::first();
-        // $teacher = TeacherPyp::first();
-        // $homerooms = Homeroom::with(['teacher', 'class'])->get();
-
-        // // Pass the student data to the view
-        // return view('dash-teacher', compact('student', 'teacher', 'homerooms'));
-
+        
         $authUserId = Auth::id();
 
         // Check if the authenticated user's ID matches the requested user ID
@@ -56,10 +49,8 @@ class TeachController extends Controller
 
         if ($role == 0){  //admin
             return view('dash-admin', compact('teacher','homerooms', 'subjects','role'));
-        }else if ($role == 1){ //myp
+        }else if ($role == 1 || $role == 2) { //myp or pyp
             return view('dash-teacher', compact('teacher', 'homerooms', 'subjects', 'role'));
-        }else if ($role == 2){  //pyp
-            return view('dash-teacher', compact('teacher', 'homerooms', 'subjects','role'));
         }
     }
 
@@ -199,26 +190,30 @@ class TeachController extends Controller
         
     }
 
-    // public function subjectDetail($id, $sub_id, $class_id)
-    // {
-    //     $role = $user->role;
+    public function subjectDetail($id, $sub_id, $class_id)
+    {
+        $user = Auth::user();
 
-    //     // Fetch the subject teacher record
-    //     $subjectTeacher = SubjectTeacher::where('sub_teacher_id', $sub_id)
-    //         ->where('teacher_id', $teacher->nip_pyp)
-    //         ->firstOrFail();
+        $teacher = $user->teacher;
 
-    //     // Fetch the classes taught by this subject teacher
-    //     $class = ClassModel::where('class_id', $class_id)->firstOrFail();
+        $role = $user->role;
+
+        // Fetch the subject teacher record
+        $subjectTeacher = SubjectTeacher::where('sub_teacher_id', $sub_id)
+            ->where('teacher_id', $teacher->nip_pyp)
+            ->firstOrFail();
+
+        // Fetch the classes taught by this subject teacher
+        $class = ClassModel::where('class_id', $class_id)->firstOrFail();
 
 
-    //     return view('subject-detail', [
-    //         'teacher' => $teacher,
-    //         'subject' => $subjectTeacher->subject,
-    //         'class' => $class,
-    //         'students' => $class->students,
-    //     ]);
-    // }
+        return view('subject-detail', [
+            'teacher' => $teacher,
+            'subject' => $subjectTeacher->subject,
+            'class' => $class,
+            'students' => $class->students,
+        ]);
+    }
 
     public function gradeStudent($teacherId, $subjectId, $classId, $studentId)
     {
@@ -243,33 +238,35 @@ class TeachController extends Controller
 
     public function saveGrade(Request $request)
     {
-        // $subjectId = $request->input('subject_id');
+        $user = Auth::user();
+        $teacher = $user->teacher;
+
+
         $studentId = $request->input('student_id');
-        
-        $sc_pyp_id = $request->input('sc_pyp_id');
+        $criteriaData = $request->input('criteria');
 
-        $criteria = $request->input('criteria');
+        // Iterate through criteria data pairs
+        foreach ($criteriaData as $key => $data) {
+            // Check if current data is sc_pyp_id
+            if (isset($data['sc_pyp_id'])) {
+                $sc_pyp_id = $data['sc_pyp_id'];
 
+                // Retrieve corresponding description
+                if (isset($criteriaData[$key + 1]['description'])) {
+                    $description = $criteriaData[$key + 1]['description'];
 
-        foreach ($criteria as $criterionId => $grade) {
-
-            if (is_array($grade)) {
-                $description = $grade['description'] ?? '';
-            } else {
-                $description = $grade;
+                    // Update or insert the grade for each criterion
+                    DB::table('subject_crit_progress_pyp')->updateOrInsert(
+                        [
+                            'student_id' => $studentId,
+                            'sc_pyp_id' => $sc_pyp_id,
+                        ],
+                        [
+                            'description' => $description,
+                        ]
+                    );
+                }
             }
-            // Save each criterion grade
-            DB::table('subject_crit_progress_pyp')->updateOrInsert(
-                [
-                    'student_id' => $studentId,
-                    'sc_pyp_id' => $sc_pyp_id,
-                ]
-                ,
-                [
-                    
-                    'description' => $description,
-                ]
-            );
         }
 
         return redirect()->back()->with('success', 'Grades saved successfully.');

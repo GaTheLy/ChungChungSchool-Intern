@@ -30,6 +30,6 @@ class SubjectTeacher extends Model
 
     public function subject()
     {
-        return $this->belongsTo(SubjectModel::class, 'subject_pyp_id');
+        return $this->belongsTo(SubjectModel::class, 'subject_id', 'id');
     }
 }

@@ -51,7 +51,7 @@
                 <div class="card text-center mb-3" style="width: 18rem;">
                     <a href="{{ route('subject.show', [
                         'teacher_id' => $teacher->nip_pyp,
-                        'sub_id' => $subject->subject->subject_pyp_id,
+                        'sub_id' => $subject->subject->id,
                         'class_id' => $class->class_id
                     ]) }}">
                             <div class="card-body">

@@ -64,13 +64,13 @@
         </div>
 
         @foreach($criteria as $criterion)
-        <input type="hidden" name="sc_pyp_id" value="{{ $criterion->sc_pyp_id }}">
+        <input type="hidden" name="criteria[{{ $criterion->crit_id }}][sc_pyp_id]" value="{{ $criterion->sc_pyp_id }}">
             <div class="row" style="padding-left:50px;">
                 <div class="col-4">
                     <p style="font-size: 25px;">{{ $criterion->crit_name }}</p>
                 </div> 
                 <div class="col-2" style="text-align:left;">
-                    <select name="criteria[{{ $criterion->crit_id }}]" class="form-select">
+                    <select name="criteria[{{ $criterion->crit_id }}][description]" class="form-select">
                         <option selected><b>Select Criteria</b></option>
                         <option value="Beginning">Beginning</option>
                         <option value="Developing">Developing</option>
