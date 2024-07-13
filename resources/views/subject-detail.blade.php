@@ -56,7 +56,11 @@
                 <td>{{ $student->first_name}} {{ $student->last_name}}</td>
                 <td>January 1, 2024</td>
                 <td>
-                    <a href="{{ route('subject.grade', ['teacherId' => $teacher->nip_pyp, 'subjectId' => $subject->id, 'classId' => $class->class_id, 'studentId' => $student->nim_pyp]) }}">Grade</a>
+                    @if ($subject->subject_level == 'PYP')
+                        <a href="{{ route('subject.grade', ['teacherId' => $teacher->nip_pyp, 'subjectId' => $subject->id, 'classId' => $class->class_id, 'studentId' => $student->nim_pyp]) }}">Grade</a>
+                    @elseif ($subject->subject_level == 'MYP')
+                        <a href="{{ route('subject.grade.myp', ['teacherId' => $teacher->nip_pyp, 'subjectId' => $subject->id, 'classId' => $class->class_id, 'studentId' => $student->nim_pyp]) }}">Grade</a>
+                    @endif
                 </td>
 
             </tr>

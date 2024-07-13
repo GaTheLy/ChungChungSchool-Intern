@@ -145,11 +145,23 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/class/{id}', [ClassController::class, 'show'])->name('class.show');
 
+//Subject -> Grading
 Route::get('/subject/{teacher_id}/{sub_id}/{class_id}', [TeachController::class, 'subjectDetail'])->name('subject.show');
 
 Route::get('/subject-teacher/{teacherId}/{subjectId}/{classId}/{studentId}/grade', [TeachController::class, 'gradeStudent'])->name('subject.grade');
 
 Route::post('/subject/grade/save', [TeachController::class, 'saveGrade'])->name('subject.grade.save');
+
+//Grading (MYP)
+Route::get('/subject-teacher-myp/{teacherId}/{subjectId}/{classId}/{studentId}/grade', [TeachController::class, 'gradeStudentMyp'])->name('subject.grade.myp');
+
+Route::post('/subject-myp/grade/save', [TeachController::class, 'saveGradeMyp'])->name('subject.grade.myp.save');
+
+// Attendance
+Route::post('/attendance/save', [TeachController::class, 'saveAttendance'])->name('attendance.save');
+
+Route::get('/attendance/{studentId}', [ClassController::class, 'getAttendance']);
+
 
 require __DIR__.'/auth.php';
 

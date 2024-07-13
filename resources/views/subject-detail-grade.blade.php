@@ -33,28 +33,36 @@
         }
     </style>
     
-        <h1>[Subject Name]</h1>
+        <h1>{{ $subject->subject_name }}</h1>
         <div class="row">
             <div class="col-3" style="text-align:left;">
-                <h5>[class detail]</h5>
+                <h5>{{ $class->class_name }}</h5>
             </div>
             <div class="col-3" style="text-align:left;">
-                <h5>[full name]</h5>
+                <h5>{{ $student->first_name }} {{ $student->last_name }}</h5>
             </div>
         </div>
         <br>
+
+        <form action="{{ route('subject.grade.myp.save') }}" method="POST">
+        @csrf
+
+        <input type="hidden" name="student_id" value="{{ $student->nim_pyp }}">
+
         <div id="liveAlertPlaceholder"></div>
         <div class="row">
-            <div class="col-3" style="text-align:center;">
+            <!-- <div class="col-3" style="text-align:center;">
             <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticExport">Export</button>
             </div>
             <div class="col-3" style="text-align:center;">
             <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticConvert">Convert</button>
             </div>
             <div class="col-3" style="text-align:center;">
-            </div>
-            <div class="col-3" style="text-align:center;">
-            <button type="button" class="btn btn-primary" id="liveAlertBtn">Save</button>
+            </div> -->
+            <div class="row">
+                <div class="col" style="text-align:right;margin-right:100px;">
+                    <button type="submit" class="btn btn-primary" id="liveAlertBtn">Save</button>
+                </div>
             </div>
         </div>
 
@@ -68,95 +76,28 @@
         </div>
         </div>
 
-        <div class="row">
-            <div class="col-1"></div>
-        <div class="col-3">
+        @foreach($criteria as $criterion)
             <div class="row">
-            <h5>A: Analysing</h5>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">1</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">2</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">3</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">4</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">5</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">6</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">7</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">8</span>
-            
-        </div> 
-        </div>
-        <div class="col-6" style="text-align:left;margin-left:-55px;">
-        <textarea name="" id="" style="height:80px;width:500px;"></textarea>
-        </div>
-        </div>
+                <div class="col-1"></div>
+                <div class="col-3">
+                    <h5>{{ $criterion->criteria_title }}: {{ $criterion->criteria_name }}</h5>
+                    <div class="btn-group" role="group" aria-label="Grade Range">
+                        @for ($i=1; $i <= 8; $i++)
+                            <input type="radio" class="btn-check" name="criteria[{{ $criterion->id }}][grade]" id="grade-{{ $criterion->id }}-{{ $i }}" autocomplete="off" value="{{ $i }}"
+                                @if($studentGrade->has($criterion->id) && $studentGrade[$criterion->id]->crit_grade == $i) checked @endif>
+                            <label class="btn btn-outline-secondary" for="grade-{{ $criterion->id }}-{{ $i }}">{{ $i }}</label>
+                        @endfor
+                    </div>
+                </div>
+                <div class="col-6" style="text-align:left;margin-left:-55px;">
+                    <p style="height:80px;width:500px; border-style:ridge;"></p>
+                </div>
+            </div>
+            <br>
+        @endforeach
+        </form>
 
-        <br>
 
-        <div class="row">
-            <div class="col-1"></div>
-        <div class="col-3">
-            <div class="row">
-            <h5>B: Organizing</h5>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">1</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">2</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">3</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">4</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">5</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">6</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">7</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">8</span>
-            
-        </div> 
-        </div>
-        <div class="col-6" style="text-align:left;margin-left:-55px;">
-        <textarea name="" id="" style="height:80px;width:500px;"></textarea>
-        </div>
-        </div>
-
-        <br>
-
-        <div class="row">
-            <div class="col-1"></div>
-        <div class="col-3">
-            <div class="row">
-            <h5>C: Producing Text</h5>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">1</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">2</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">3</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">4</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">5</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">6</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">7</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">8</span>
-            
-        </div> 
-        </div>
-        <div class="col-6" style="text-align:left;margin-left:-55px;">
-        <textarea name="" id="" style="height:80px;width:500px;"></textarea>
-        </div>
-        </div>
-
-        <br>
-
-        <div class="row">
-            <div class="col-1"></div>
-        <div class="col-3">
-            <div class="row">
-            <h5>D: Using Language</h5>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">1</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">2</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">3</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">4</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">5</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">6</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">7</span>
-            <span style="margin:2px;height:30px;width:30px;border:1px solid black;display:inline-block;border-radius:5px;text-align:center;">8</span>
-            
-        </div> 
-        </div>
-        <div class="col-6" style="text-align:left;margin-left:-55px;">
-        <textarea name="" id="" style="height:80px;width:500px;"></textarea>
-        </div>
-        </div>
 
 <br>
 

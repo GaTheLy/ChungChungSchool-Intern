@@ -230,12 +230,23 @@ class TeachController extends Controller
         // Fetch the criteria for the subject
         $criteria = $subjectTeacher->subject->criteria;
 
+        $subCrit = DB::table('sub_criteria_pyp');
+
+        $studentProgress = DB::table('subject_crit_progress')
+        ->where('student_id', $student->nim_pyp)
+        // ->where('')
+        ->get()
+        ->keyBy('sc_pyp_id');
+
+        // dd($studentProgress, $criteria);
+
         return view('sub-detail-pyp-grade', [
             'teacher' => $teacher,
             'subject' => $subjectTeacher->subject,
             'class' => $class,
             'student' => $student,
             'criteria' => $criteria,
+            'studentProgress' => $studentProgress,
         ]);
     }
 
@@ -278,7 +289,7 @@ class TeachController extends Controller
     public function gradeStudentMyp($teacherId, $subjectId, $classId, $studentId)
     {
         $teacher = TeacherPyp::findOrFail($teacherId);
-        $subjectTeacher = SubjectTeacher::where('sub_teacher_id', $subjectId)
+        $subjectTeacher = SubjectTeacher::where('subject_pyp_id', $subjectId)
             ->where('teacher_id', $teacher->nip_pyp)
             ->firstOrFail();
         $class = ClassModel::where('class_id', $classId)->firstOrFail();
@@ -287,17 +298,60 @@ class TeachController extends Controller
         // Fetch the criteria for the subject
         $criteria = $subjectTeacher->subject->mypCriteria;
 
-        return view('sub-detail-pyp-grade', [
+        $subCrit = DB::table('sub_criteria_myp');
+
+        $studentGrade = DB::table('subject_crit_grade_myp')
+        ->where('student_id', $student->nim_pyp)
+        // ->where('')
+        ->get()
+        ->keyBy('sc_myp_id');
+
+        // dd($studentGrade);
+
+        return view('subject-detail-grade', [
             'teacher' => $teacher,
             'subject' => $subjectTeacher->subject,
             'class' => $class,
             'student' => $student,
             'criteria' => $criteria,
+            'studentGrade' => $studentGrade,
         ]);
+
     }
 
+    public function saveGradeMyp(Request $request)
+    {
+        \Log::debug('Request Data:', $request->all());
 
+        $user = Auth::user();
+        $teacher = $user->teacher; // Assuming you have this relationship set up in your User model
 
+        $studentId = $request->input('student_id');
+        $criteriaData = $request->input('criteria');
+
+        // Iterate through criteria data pairs
+        foreach ($criteriaData as $criterionId => $data) {
+            // Check if current data is criterion_id for MYP
+            if (isset($data['grade'])) {
+                $grade = $data['grade'];
+
+                // Update or insert the grade for each criterion
+                DB::table('subject_crit_grade_myp')->updateOrInsert(
+                    [
+                        'student_id' => $studentId,
+                        'sc_myp_id' => $criterionId,
+                    ],
+                    [
+                        'crit_grade' => $grade,
+                    ]
+                );
+            }
+        }
+
+        // Optionally, you can return a response or redirect
+        return redirect()->back()->with('success', 'Grades saved successfully!');
+    }
+    
 
   // form
     
@@ -516,5 +570,32 @@ class TeachController extends Controller
             // return view('subject-admin', compact('teacher', 'subjects'));
         }
     }
+
+    public function saveAttendance(Request $request)
+    {
+        \Log::info('Request Data: ', $request->all());
+        // Validate the incoming request
+        $validated = $request->validate([
+            'student_id' => 'required|exists:student_pyp,nim_pyp',
+            'absent' => 'required|integer|min:0',
+            'present' => 'required|integer|min:0',
+            'late' => 'required|integer|min:0',
+        ]);
+
+        // Insert or update attendance record
+        DB::table('attendance_pyp')->updateOrInsert(
+            ['student_id' => $validated['student_id']],
+            [
+                'absent' => $validated['absent'],
+                'present' => $validated['present'],
+                'late' => $validated['late'],
+            ]
+        );
+
+        // Redirect or return a response as needed
+        return redirect()->back()->with('success', 'Attendance recorded successfully.');
+    }
+
+
 
 }
