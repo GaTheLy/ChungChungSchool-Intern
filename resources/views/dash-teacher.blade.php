@@ -28,13 +28,23 @@
     <h5 style="font-weight:200; font-size:25px" >Homeroom</h5>
         <div class="row" id="homeroom-list" style="margin-left:10px">
              @foreach($homerooms as $homeroom)
-                <div class="card text-center mb-3" style="width: 18rem;">
-                    <a href="{{ route('class.show', ['id' => $homeroom->class_id]) }}">
-                        <div class="card-body">
-                            {{ $homeroom->class->class_name }}
-                        </div>
-                    </a>
-                </div>
+                @if ($homeroom->class->class_level == 'PYP')
+                    <div class="card text-center mb-3" style="width: 18rem;">
+                        <a href="{{ route('class.show', ['id' => $homeroom->class_id]) }}">
+                            <div class="card-body">
+                                {{ $homeroom->class->class_name }}
+                            </div>
+                        </a>
+                    </div>
+                @elseif ($homeroom->class->class_level == 'MYP')
+                    <div class="card text-center mb-3" style="width: 18rem;">
+                        <a href="{{ route('class.show.myp', ['id' => $homeroom->class_id]) }}">
+                            <div class="card-body">
+                                {{ $homeroom->class->class_name }}
+                            </div>
+                        </a>
+                    </div>
+                @endif
             @endforeach
         </div>
 

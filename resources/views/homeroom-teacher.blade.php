@@ -76,7 +76,17 @@
             <tr>
                     <td>{{ $student->first_name }} {{ $student->last_name }}</td>
                     <td>{{ $student->dob }}</td>
-                    <td data-bs-toggle="modal" data-bs-target="#fillAttendance" data-bs-whatever="{{ $student->first_name }} {{ $student->last_name }}">Fill Attendance</td>
+                    <td data-bs-toggle="modal"
+                        data-bs-target="#fillAttendance"
+                        data-bs-whatever="{{ $student->first_name }} {{ $student->last_name }}"
+                        data-student-id="{{ $student->nim_pyp }}"
+                        data-absent="{{ optional($student->attendance)->absent }}"
+                        data-present="{{ optional($student->attendance)->present }}"
+                        data-late="{{ optional($student->attendance)->late }}"
+                        data-sick="{{ optional($student->attendance)->sick }}"
+                        data-excused="{{ optional($student->attendance)->excused }}">
+                        Fill Attendance
+                    </td>
                     <td><a href="http://ccs-report-development.test:8080/homeroom-teacher-report-preview-myp">Preview Report</a></td>
             </tr>
             @endforeach
@@ -135,74 +145,116 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
         <div class="modal-header">
-            <h1 class="modal-title fs-5" id="fillAttendanceLabel">Fill Attendance</h1>
+            <h1 class="modal-title fs-5" id="fillAttendanceLabel">Fill Attendance for {{ $student->first_name }} {{ $student->last_name }}</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <form>
+            <form id="attendanceForm" action="{{ route('attendance.save.myp') }}" method="POST">
+            @csrf
             <div class="mb-3">
-                <label for="recipient-name" class="col-form-label"><b>Student's Name</b></label>
-                <input type="text" class="form-control" id="recipient-name">
+                <label for="data-student-name" class="col-form-label"><b>Student's Name</b></label>
+                <input type="text" name='student_name' class="form-control" id="data-student-name" disabled>
             </div>
+            <input type="hidden" id="studentId" name="student_id">
             <label for="message-text" class="col-form-label"><b>Attendance</b></label>
 
-            <div class="row">
+            <div class="row" style="text-align: center;">
                 <div class="col-md-2">
-                    <label for="inputAbsent" class="col-form-label center-align">Absent</label>
-                    <input type="text" class="form-control" id="inputAbsent">
+                    <label for="data-absent" class="col-form-label center-align">Absent</label>
+                    <input type="text" class="form-control" id="data-absent" name='absent' value="{{ old('absent') ?? $student->attendance->absent ?? '' }}">
                 </div>
 
                 <div class="col-md-2">
-                    <label for="inputPresent" class="col-form-label center-align">Present</label>
-                    <input type="text" class="form-control" id="inputPresent">
+                    <label for="data-present" class="col-form-label center-align">Present</label>
+                    <input type="text" class="form-control" id="data-present" name='present' value="{{ old('present') ?? $student->attendance->present ?? '' }}">
                 </div>
 
                 <div class="col-md-2">
-                    <label for="inputSick" class="col-form-label center-align">Sick</label>
-                    <input type="text" class="form-control" id="inputSick">
+                    <label for="data-sick" class="col-form-label center-align">Sick</label>
+                    <input type="text" class="form-control" id="data-sick" name='sick' value="{{ old('sick') ?? $student->attendance->sick ?? '' }}">
                 </div>
 
                 <div class="col-md-2">
-                    <label for="inputLate" class="col-form-label center-align">Late</label>
-                    <input type="text" class="form-control" id="inputLate">
+                    <label for="data-late" class="col-form-label center-align">Late</label>
+                    <input type="text" class="form-control" id="data-late" name='late' value="{{ old('late') ?? $student->attendance->late ?? '' }}">
                 </div>
 
                 <div class="col-md-2">
-                    <label for="inputExcused" class="col-form-label center-align">Excused</label>
-                    <input type="text" class="form-control" id="inputExcused">
+                    <label for="data-excused" class="col-form-label center-align">Excused</label>
+                    <input type="text" class="form-control" id="data-excused" name='excused' value="{{ old('excused') ?? $student->attendance->excused ?? '' }}">
                 </div>
             </div>
             
-            </form>
+            
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Yes</button>
+            <button type="submit" class="btn btn-primary">Yes</button>
         </div>
+        </form>
         </div>
     </div>
     </div>
 
 
     <script>
-        const exampleModal = document.getElementById('fillAttendance')
-            if (exampleModal) {
-            exampleModal.addEventListener('show.bs.modal', event => {
-                // Button that triggered the modal
-                const button = event.relatedTarget
-                // Extract info from data-bs-* attributes
-                const recipient = button.getAttribute('data-bs-whatever')
-                // If necessary, you could initiate an Ajax request here
-                // and then do the updating in a callback.
+        const exampleModal = document.getElementById('fillAttendance');
 
-                // Update the modal's content.
-                const modalTitle = exampleModal.querySelector('.modal-title')
-                const modalBodyInput = exampleModal.querySelector('.modal-body input')
+if (exampleModal) {
+    exampleModal.addEventListener('show.bs.modal', event => {
+        // Button that triggered the modal
+        const button = event.relatedTarget;
 
-                modalTitle.textContent = `Fill Attendance for ${recipient}`
-                modalBodyInput.value = recipient
-            })
-            }
+        // Extract necessary data from data-bs-* attributes
+        const studentName = button.getAttribute('data-bs-whatever');
+        const studentId = button.getAttribute('data-student-id');
+        const absent = button.getAttribute('data-absent') || '';
+        const present = button.getAttribute('data-present') || '';
+        const late = button.getAttribute('data-late') || '';
+        const sick = button.getAttribute('data-sick') || '';
+        const excused = button.getAttribute('data-excused') || '';
+
+        // Update the modal's content
+        const modalTitle = exampleModal.querySelector('.modal-title');
+        modalTitle.textContent = `Fill Attendance for ${studentName}`;
+
+        // Update the student name input
+        const studentNameInput = exampleModal.querySelector('#data-student-name');
+        studentNameInput.value = studentName;
+
+        const studentIdInput = exampleModal.querySelector('#studentId');
+        studentIdInput.value = studentId;
+
+        // Update the attendance inputs
+        const inputAbsent = exampleModal.querySelector('#data-absent');
+        inputAbsent.value = absent;
+
+        const inputPresent = exampleModal.querySelector('#data-present');
+        inputPresent.value = present;
+
+        const inputLate = exampleModal.querySelector('#data-late');
+        inputLate.value = late;
+
+        const inputSick = exampleModal.querySelector('#data-sick');
+        inputSick.value = sick;
+
+        const inputExcused = exampleModal.querySelector('#data-excused');
+        inputExcused.value = excused;
+
+        axios.get('/attendance-myp/' + studentId)
+        .then(function (response) {
+            var attendanceData = response.data;
+            document.getElementById('data-absent').value = attendanceData.absent;
+            document.getElementById('data-present').value = attendanceData.present;
+            document.getElementById('data-late').value = attendanceData.late;
+            document.getElementById('data-sick').value = attendanceData.sick;
+            document.getElementById('data-excused').value = attendanceData.excused;
+        })
+        .catch(function (error) {
+            console.error('Error fetching attendance data:', error);
+        });
+    });
+}
 
             //alert
             const alertPlaceholder = document.getElementById('liveAlertPlaceholder')

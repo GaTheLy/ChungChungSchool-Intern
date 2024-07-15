@@ -140,7 +140,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
+// Class/ Homeroom
 Route::get('/class/{id}', [ClassController::class, 'show'])->name('class.show');
+
+Route::get('/class-myp/{id}', [ClassController::class, 'showMyp'])->name('class.show.myp');
 
 //Subject -> Grading
 Route::get('/subject/{teacher_id}/{sub_id}/{class_id}', [TeachController::class, 'subjectDetail'])->name('subject.show');
@@ -155,10 +159,13 @@ Route::get('/subject-teacher-myp/{teacherId}/{subjectId}/{classId}/{studentId}/g
 Route::post('/subject-myp/grade/save', [TeachController::class, 'saveGradeMyp'])->name('subject.grade.myp.save');
 
 // Attendance
-Route::post('/attendance/save', [TeachController::class, 'saveAttendance'])->name('attendance.save');
+Route::post('/attendance/save', [TeachController::class, 'saveAttendance'])->name('attendance.save.pyp');
 
 Route::get('/attendance/{studentId}', [ClassController::class, 'getAttendance']);
 
+Route::post('/attendance-myp/save', [TeachController::class, 'saveAttendanceMyp'])->name('attendance.save.myp');
+
+Route::get('/attendance-myp/{studentId}', [ClassController::class, 'getAttendanceMyp']);
 
 require __DIR__.'/auth.php';
 

@@ -581,7 +581,7 @@ class TeachController extends Controller
 
     public function saveAttendance(Request $request)
     {
-        Log::info('Request Data: ', $request->all());
+        // Log::info('Request Data: ', $request->all());
         // Validate the incoming request
         $validated = $request->validate([
             'student_id' => 'required|exists:student_pyp,nim_pyp',
@@ -604,6 +604,34 @@ class TeachController extends Controller
         return redirect()->back()->with('success', 'Attendance recorded successfully.');
     }
 
+    public function saveAttendanceMyp(Request $request)
+    {
+        Log::info('Request Data: ', $request->all());
+        // Validate the incoming request
+        $validated = $request->validate([
+            'student_id' => 'required|exists:student_pyp,nim_pyp',
+            'absent' => 'required|integer|min:0',
+            'present' => 'required|integer|min:0',
+            'sick' => 'required|integer|min:0',
+            'late' => 'required|integer|min:0',
+            'excused' => 'required|integer|min:0',
+        ]);
+
+        // Insert or update attendance record
+        DB::table('attendance_myp')->updateOrInsert(
+            ['student_id' => $validated['student_id']],
+            [
+                'absent' => $validated['absent'],
+                'present' => $validated['present'],
+                'late' => $validated['late'],
+                'sick' => $validated['sick'],
+                'excused' => $validated['excused'],
+            ]
+        );
+
+        // Redirect or return a response as needed
+        return redirect()->back()->with('success', 'Attendance recorded successfully.');
+    }
 
 
 }

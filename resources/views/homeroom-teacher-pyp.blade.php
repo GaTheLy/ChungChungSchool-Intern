@@ -148,7 +148,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <form id="attendanceForm" action="{{ route('attendance.save') }}" method="POST">
+            <form id="attendanceForm" action="{{ route('attendance.save.pyp') }}" method="POST">
             @csrf
             <div class="mb-3">
                 <label for="data-student-name" class="col-form-label"><b>Student's Name</b></label>

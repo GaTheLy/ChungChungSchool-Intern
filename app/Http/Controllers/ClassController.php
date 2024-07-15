@@ -35,6 +35,26 @@ class ClassController extends Controller
         return view('homeroom-teacher-pyp', compact('class', 'students'));
     }
 
+    public function showMyp($id)
+    {
+        $user = Auth::user();
+        $teacher = $user->teacher;
+        $class = ClassModel::findOrFail($id);
+        // Assuming you have related models like students or subjects
+        // Assuming $students is already fetched
+        $students = $class->students;
+        // $subjects = $class->subjects;
+        foreach ($students as $student) {
+            // Fetch existing attendance data for the student
+            $attendance = DB::table('attendance_myp')
+                ->where('student_id', $student->nim_pyp)
+                ->first(); // Assuming only one attendance record per student
+    
+        $student->attendance = $attendance; // Assigning attendance data to each student
+        }
+        return view('homeroom-teacher', compact('class', 'students', 'teacher'));
+    }
+
     public function class($userId)
     {
         $authUserId = Auth::id();
