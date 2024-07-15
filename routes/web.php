@@ -8,11 +8,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeachController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\SubjectController;
-
-
-
-
-
+use App\Http\Controllers\YearProgramController;
 
 // admin route
 Route::get('/custom-report-pyp', function () {
@@ -22,30 +18,8 @@ Route::get('/custom-report-pyp', function () {
 Route::get('/custom-report-myp', function () {
     return view('admin-custom-report/custom-myp');
 });
-Route::get('/subject-admin-add', function () {
-    return view('subject-admin-add');
-});
 
-Route::get('/teacher-admin', function () {
-    return view('teacher-admin');
-});
-Route::get('/teacher-admin-add', function () {
-    return view('teacher-admin-add');
-});
 
-Route::get('/student-admin', function () {
-    return view('student-admin');
-});
-Route::get('/student-admin-add', function () {
-    return view('student-admin-add');
-});
-
-Route::get('/year-program-admin', function () {
-    return view('yp-admin');
-});
-Route::get('/year-program-admin-add', function () {
-    return view('yp-admin-add');
-});
 
 //dashroute all
 Route::get('/dashboard/{userId}', [TeachController::class, 'show'])
@@ -70,6 +44,13 @@ Route::get('/subject-edit/{userId}/{subjectId}', [SubjectController::class, 'edi
 ->middleware(['auth', 'verified'])->name('subject.edit');
 Route::post('/subject-edit-submit/{userId}/{subjectId}', [SubjectController::class, 'editSubmit'])
 ->middleware(['auth', 'verified'])->name('subject-edit.submit');
+Route::delete('/subject-edit/{userId}/{subjectId}/criteriaPYP/{criteriaId}', [SubjectController::class, 'deleteCritPYP'])
+    ->middleware(['auth', 'verified'])->name('subject-edit-criteriaPYP.delete');
+Route::delete('/subject-edit/{userId}/{subjectId}/criteria/{criteriaId}', [SubjectController::class, 'deleteCritMYP'])
+    ->middleware(['auth', 'verified'])->name('subject-edit-criteriaMYP.delete');
+// delete subject
+Route::post('/subject-delete/{userId}/{subjectId}', [SubjectController::class, 'delete'])
+->middleware(['auth', 'verified'])->name('subject.delete');
 // delete subject
 Route::post('/subject-delete/{userId}/{subjectId}', [SubjectController::class, 'delete'])
 ->middleware(['auth', 'verified'])->name('subject.delete');
@@ -133,8 +114,24 @@ Route::post('/student-delete/{userId}/{studentId}', [StudentController::class, '
 
 
 // admin route || year program crud
-Route::get('/year-program/{userId}', [TeachController::class, 'yearProgram'])
+Route::get('/year-program/{userId}', [YearProgramController::class, 'yearProgram'])
 ->middleware(['auth', 'verified'])->name('yearProgram');
+Route::get('/year-program-add/{userId}', [YearProgramController::class, 'add'])
+->middleware(['auth', 'verified'])->name('yearProgram-add.index');
+
+//class make route
+Route::get('/class/{userId}', [ClassController::class, 'class'])
+->middleware(['auth', 'verified'])->name('class');
+// show form
+Route::get('/class-add/{userId}', [ClassController::class, 'add'])
+->middleware(['auth', 'verified'])->name('class-add.index');
+// submit form
+Route::post('/class-submit/{userId}', [ClassController::class, 'submit'])
+->middleware(['auth', 'verified'])->name('class-add.submit');
+//detail class
+Route::get('/class/{userId}/{classId}', [ClassController::class, 'detail'])
+->middleware(['auth', 'verified'])->name('class.detail');
+
 
 
 Route::middleware('auth')->group(function () {

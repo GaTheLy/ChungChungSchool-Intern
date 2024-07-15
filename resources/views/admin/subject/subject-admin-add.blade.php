@@ -109,24 +109,8 @@
     {{-- pyp form --}}
     <div id="PYP" style="display:none;">
         <div id="PYPContainer" class="PYPCriteria">
-{{--  
-            <div class="form-group">
-                <div class="row">
-                        <div class="col-3" style="margin-left:80px;">
-                            <span>Criteria </span>
-                                <div class="row">
-                                    <div class="col-4">
-                                    <input type="text" name="criteria[0][name]" id="criteria[0][name]" class="criteria-name">
-                                    </div>
-                                </div>
-                        </div>
 
-                        <span class="delete-btn">Delete</span>
-
-                    </div>
-            </div>
-
-             --}}
+        
         </div>
         <div class="d-grid gap-4 d-md-flex justify-content-md-end">
             <button class="btn me-md-2" type="button" id="addInputA">
@@ -142,44 +126,7 @@
     <div id="MYP" style="display:none;">
 
     <div id="MYPContainer" class="MYPCriteria">
-            {{-- 
-    <div class="form-group">
-            <div class="row">
-                <div class="col-3" style="margin-left:80px;">
-                    <span>Criteria </span>
-                        <div class="row">
-                            <div class="col-2">
-                            <input type="text" name="criteria[0][title]" id="criteria[0][title]" class="criteria-title">
-                            </div>
-                            <div class="col-4">
-                            <input type="text" name="criteria[0][name]" id="criteria[0][name]" class="criteria-name">
-                            </div>
-                        </div>
-                </div> 
-                <div class="col-1">
-                    <span>Range </span>
-                        @for ($i=0;$i<8;$i++)
-                            <div class="row">
-                            <input type="text" value="{{$i+1}}" class="crit-progress" name="criteria[0][ranges][{{ $i }}]" id="criteria[0][ranges][{{ $i }}]">
-                            </div>
-                        @endfor
-                        
-                </div> 
-                <div class="col-4">
-                    <span>Descriptor</span>
-                        @for ($i=0;$i<8;$i++)
-                            <div class="row">
-                            <input type="text" name="criteria[0][ranges][{{ $i }}][description]" id="criteria[0][ranges][{{ $i }}][description]" placeholder="descriptor {{$i+1}}" class="criteria-desc">
-                            </div>
-                        @endfor
-                        
 
-                        <span class="delete-btn">Delete</span>
-
-                </div> 
-            </div>
-        </div>
-                --}}
 
         </div>
         <div class="d-grid gap-4 d-md-flex justify-content-md-end">

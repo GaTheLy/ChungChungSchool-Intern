@@ -47,6 +47,14 @@
                 </li>
 
                 <li class="sidebar-item">
+                    <a href="{{ route('class', ['userId' => $teacher->user_id]) }}" class="sidebar-link">
+                    <i class="lni lni-blackboard"></i>
+
+                        <span>Class</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
                     <a href="{{ route('yearProgram', ['userId' => $teacher->user_id]) }}" class="sidebar-link">
                     <img src="{{ asset('assets-icon/icon-homeroom-white.png')}}" alt="Icon" class="icon" />
 

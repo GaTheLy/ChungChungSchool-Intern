@@ -61,6 +61,8 @@
         color: red;
         margin-top: 10px;
         margin-left: 10px;
+        border: none;
+        background: none;
     }
 
 </style>
@@ -106,6 +108,14 @@
 
          {{--      --}}
                 
+
+        <div class="d-grid gap-4 d-md-flex justify-content-md-end">
+            <button class="btn me-md-2" type="button" id="addInputA">
+                add more criteria            <i class="lni lni-circle-plus"></i>
+            </button>
+        </div>
+
+
         </div>
     </div>
 
@@ -117,9 +127,13 @@
         <div id="MYPContainer" class="MYPCriteria">
             {{-- --}}
 
-            <h3>this is myp page</h3>
         
-            
+            <div class="d-grid gap-4 d-md-flex justify-content-md-end">
+            <button class="btn me-md-2" type="button" id="addInputB">
+                add more criteria            <i class="lni lni-circle-plus"></i>
+            </button>
+            </div>
+
         </div>
     </div>
 
@@ -137,6 +151,77 @@
             $('#MYP').hide();
         }
 
+        $('#addInputA').click(function() {
+            var newInputNumber = $('#PYPContainer .form-group').length;
+            console.log(newInputNumber);
+
+
+            var newInput = `
+            <div class="form-group">
+                <div class="row">
+                        <div class="col-3" style="margin-left:80px;">
+                            <span>Criteria ${newInputNumber}</span>
+                                <div class="row">
+                                    <div class="col-4">
+                                    <input type="text" name="criteriaNew[${newInputNumber}][name]" id="criteriaNew[${newInputNumber}][name]" class="criteria-name">
+                                    </div>
+                                </div>
+                        </div> 
+                                            <span class="delete-btn">Delete</span>
+
+                    </div>
+            </div>
+                            
+                            `;
+            $('#PYPContainer').append(newInput);
+        });
+
+
+        $('#addInputB').click(function() {
+            var newInputNumber = $('#MYPContainer .form-group').length;
+            console.log(newInputNumber);
+            var newInput = `
+            
+            <div class="form-group">
+       <div class="row">
+                <div class="col-3" style="margin-left:80px;">
+                    <span>Criteria ${newInputNumber}  </span>
+                        <div class="row">
+                            <div class="col-2">
+                            <input type="text" name="criteriaNew[${newInputNumber}][title]" id="criteriaNew[${newInputNumber}][title]" class="criteria-title">
+                            </div>
+                            <div class="col-4">
+                            <input type="text" name="criteriaNew[${newInputNumber}][name]" id="criteriaNew[${newInputNumber}][name]" class="criteria-name">
+                            </div>
+                        </div>
+                </div> 
+                <div class="col-1">
+                    <span>Range </span>
+                        @for ($i=0;$i<8;$i++)
+                            <div class="row">
+                            <input type="text" value="{{$i+1}}" class="crit-progress" name="criteriaNew[${newInputNumber}][ranges][{{ $i }}][range]" id="criteriaNew[${newInputNumber}][ranges][{{ $i }}][range]">
+                            </div>
+                        @endfor
+                        
+                </div> 
+                <div class="col-4">
+                    <span>Descriptor</span>
+                        @for ($i=0;$i<8;$i++)
+                            <div class="row">
+                            <input type="text" name="criteriaNew[${newInputNumber}][ranges][{{ $i }}][description]" id="criteriaNew[${newInputNumber}][ranges][{{ $i }}][description]" placeholder="descriptor {{$i+1}}" class="criteria-desc">
+                            </div>
+                        @endfor
+                        
+
+                        <span class="delete-btn">Delete</span>
+
+                </div> 
+            </div>
+        </div>`;
+            $('#MYPContainer').append(newInput);
+        });
+
+
         function checkSubjectLevel() {
             var selectedOption = $('#subject_level').val().trim();
             if (selectedOption === 'PYP') {
@@ -146,14 +231,17 @@
                     <div class="row">
                         <div class="col-3" style="margin-left:80px;">
                             <span>Criteria </span>
-                            {{$index = 0}}
                             @foreach ($subject->pypCriteria as $criteria)
                             <div class="row">
                                 <div class="col-4">
-                                    <input type="text" name="criteria[{{ $index }}][name]" id="criteria[{{ $index}}][name]" value="{{ old('criteria.' . $index . '.name', $criteria->crit_name) }}" class="criteria-name">
+                                    <input type="text" name="criteria[{{ $criteria->sc_pyp_id }}][name]" id="criteria[{{ $criteria->sc_pyp_id}}][name]" value="{{ old('criteria.' . $criteria->sc_pyp_id . '.name', $criteria->crit_name) }}" class="criteria-name">
                                 </div>
                             </div>
-                            {{$index += 1}}
+                            <form method="POST" action="{{ route('subject-edit-criteriaPYP.delete', ['userId' => $teacher->user_id, 'subjectId' => $subject->id, 'criteriaId' => $criteria->sc_pyp_id]) }}" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="delete-btn">Delete</button>
+                            </form>
                             @endforeach
                         </div> 
                     </div>
@@ -192,6 +280,12 @@
                                 </div>
                             @endforeach
                         </div>
+
+                        <form method="POST" action="{{ route('subject-edit-criteriaMYP.delete', ['userId' => $teacher->user_id, 'subjectId' => $subject->id, 'criteriaId' => $criteria->id]) }}" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="delete-btn">Delete</button>
+                        </form>
                         @endforeach
                     </div>
                 </div>`;
@@ -201,6 +295,14 @@
 
         resetForms();
         checkSubjectLevel();
+
+        $(document).on('click', '.delete-btn', function(event) {
+        event.preventDefault();
+        if (confirm('Are you sure you want to delete this criteria?')) {
+            $(this).closest('form').submit();
+        }
+        });
+
     });
 </script>
 

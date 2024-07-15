@@ -80,28 +80,12 @@ class SubjectController extends Controller
         $user = Auth::user();
 
         $teacher = $user->teacher;
-        
-        // $lastSubject = SubjectModel::orderBy('id', 'desc')->first();
-        // if($lastSubject->id == null){
-        //     $index = 1;
-        // }else{
-        //     $index = $lastSubject->id + 1;
-        // }
-        
 
         $role = User::find($authUserId)->role;
 
         $subject = new SubjectModel();
         $subject->subject_name = $request->subject_name;
         $subject->subject_level = $request->option;
-        // $subject->id = $index;     
-
-
-        
-        // $subject = new SubjectModel();
-        // $subject->subject_name = $request->subject_name;
-        // $subject->subject_level = $request->option;
-        // $subject->save(); // Let MySQL handle the ID generation
         
         if ($subject->save()) {
 
@@ -113,8 +97,6 @@ class SubjectController extends Controller
 
             if ($role == 0) { // admin
                 return redirect()->route('subject', ['userId' => $teacher->user_id])->with('status', 'Subject added successfully!');
-
-                // return view('subject-admin', compact('teacher', 'subjects'))->with('status', 'Subject added successfully!');
             }
         } else {
             return back()->withInput()->withErrors(['error' => 'Failed to add subject. Please try again.']);
@@ -146,7 +128,7 @@ class SubjectController extends Controller
             foreach ($criteria['ranges'] as $range) {
                 $mypCriteriaRange = new MYPCriteriaDetail();
                 $mypCriteriaRange->sub_criteria_myp_id = $mypCriteria->id;
-                $mypCriteriaRange->criteria_range = $count;
+                $mypCriteriaRange->criteria_range = $count ;
                 $mypCriteriaRange->criteria_range_desc = $range['description'];
                 $mypCriteriaRange->save();
                 $count+=1;
@@ -230,7 +212,14 @@ class SubjectController extends Controller
                     } else {
                         return back()->withErrors(['error' => "Criteria with ID {$criteriaId} not found."]);
                     }
+
+                    if ($request->input('criteriaNew')) {
+                        $this->savePYPCriteria($request->input('criteriaNew'), $subject->id);
+                    }
                 }
+
+
+
             } else if ($subject->subject_level == 'MYP') {
                 foreach ($request->input('criteria') as $criteriaId => $criteriaData) {
                     $criteria = MYPCriteria::find($criteriaId);
@@ -238,21 +227,28 @@ class SubjectController extends Controller
                         $criteria->criteria_name = $criteriaData['name'] ?? $criteria->criteria_name;
                         $criteria->save();
     
-                        foreach ($criteriaData['ranges'] as $detailId => $detailData) {
-                            $detail = MYPCriteriaDetail::find($detailId);
-                            if ($detail) {
-                                $detail->criteria_range = $detailData['range'] ?? $detail->criteria_range;
-                                $detail->criteria_range_desc = $detailData['description'] ?? $detail->criteria_range_desc;
-                                $detail->save();
-                            } else {
-                                return back()->withErrors(['error' => "Criteria detail with ID {$detailId} not found."]);
+                        if (isset($criteriaData['ranges'])) {
+                            foreach ($criteriaData['ranges'] as $detailId => $detailData) {
+                                $detail = MYPCriteriaDetail::find($detailId);
+                                if ($detail) {
+                                    $detail->criteria_range = $detailData['range'] ?? $detail->criteria_range;
+                                    $detail->criteria_range_desc = $detailData['description'] ?? $detail->criteria_range_desc;
+                                    $detail->save();
+                                } else {
+                                    return back()->withErrors(['error' => "Criteria detail with ID {$detailId} not found."]);
+                                }
                             }
+                        }
+
+                        if ($request->input('criteriaNew')) {
+                            $this->saveMYPCriteria($request->input('criteriaNew'), $subject->id);
                         }
                     } else {
                         return back()->withErrors(['error' => "Criteria with ID {$criteriaId} not found."]);
                     }
                 }
             }
+
     
             if ($role == 0) { // admin
                 return redirect()->route('subject', ['userId' => $teacher->user_id])->with('status', 'Subject updated successfully!');
@@ -262,6 +258,43 @@ class SubjectController extends Controller
         }
     }
 
+    public function deleteCritPYP($userId, $subjectId, $criteriaId){
+        $authUserId = Auth::id();
+
+        // Check if the authenticated user's ID matches the requested user ID
+        if ($authUserId != $userId) {
+            // Redirect to the authenticated user's dashboard
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+        $role = User::find($authUserId)->role;
+
+        $delCrit = PYPCriteria::find($criteriaId);
+        $delCrit->delete();
+        
+        if ($role == 0) {  // admin
+            return redirect()->route('subject.edit', ['userId' => $userId, 'subjectId' => $subjectId])->with('success', 'Criteria deleted.');
+        }
+
+    }
+
+    public function deleteCritMYP($userId, $subjectId, $criteriaId){
+        $authUserId = Auth::id();
+
+        // Check if the authenticated user's ID matches the requested user ID
+        if ($authUserId != $userId) {
+            // Redirect to the authenticated user's dashboard
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+        $role = User::find($authUserId)->role;
+
+        $delCrit = MYPCriteria::with(['mypCriteriaDetail'])->find($criteriaId);
+        $delCrit->delete();
+        
+        if ($role == 0) {  // admin
+            return redirect()->route('subject.edit', ['userId' => $userId, 'subjectId' => $subjectId])->with('success', 'Criteria deleted.');
+        }
+
+    }
 
 
     public function delete($userId, $subjectId)

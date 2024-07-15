@@ -167,29 +167,7 @@ class TeachController extends Controller
         
     }
 
-    public function yearProgram($userId)
-    {
-        $authUserId = Auth::id();
 
-        // Check if the authenticated user's ID matches the requested user ID
-        if ($authUserId != $userId) {
-            // Redirect to the authenticated user's dashboard
-            return redirect()->route('dashboard', ['userId' => $authUserId]);
-        }
-
-        // Fetch the authenticated user
-        $user = Auth::user();
-
-        $teacher = $user->teacher;
-
-
-        $role = User::find($authUserId)->role;
-
-        if ($role == 0){  //admin
-            return view('yp-admin', compact('teacher'));
-        }
-        
-    }
 
     public function subjectDetail($teacher_id, $sub_id, $class_id)
     {
@@ -321,7 +299,7 @@ class TeachController extends Controller
 
     public function saveGradeMyp(Request $request)
     {
-        \Log::debug('Request Data:', $request->all());
+        Log::debug('Request Data:', $request->all());
 
         $user = Auth::user();
         $teacher = $user->teacher; // Assuming you have this relationship set up in your User model
@@ -573,7 +551,7 @@ class TeachController extends Controller
 
     public function saveAttendance(Request $request)
     {
-        \Log::info('Request Data: ', $request->all());
+        Log::info('Request Data: ', $request->all());
         // Validate the incoming request
         $validated = $request->validate([
             'student_id' => 'required|exists:student_pyp,nim_pyp',

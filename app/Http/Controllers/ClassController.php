@@ -4,9 +4,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\StudentPyp;
+use App\Models\TeacherPyp;
+use App\Models\Homeroom;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\SubjectModel;
 use App\Models\ClassModel;
+use App\Models\StudentClass;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ClassController extends Controller
 {
@@ -27,4 +34,132 @@ class ClassController extends Controller
         }
         return view('homeroom-teacher-pyp', compact('class', 'students'));
     }
+
+    public function class($userId)
+    {
+        $authUserId = Auth::id();
+
+        // Check if the authenticated user's ID matches the requested user ID
+        if ($authUserId != $userId) {
+            // Redirect to the authenticated user's dashboard
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+
+        // Fetch the authenticated user
+        $user = Auth::user();
+
+        $teacher = $user->teacher;
+        $classes = ClassModel::get();
+        $homeroom = Homeroom::get();
+        $students = StudentClass::get();
+
+
+        $role = User::find($authUserId)->role;
+
+        if ($role == 0){  //admin
+            return view('admin/class/class-admin', compact('teacher','classes','homeroom','students'));
+        }
+        
+    }
+
+
+    public function add($userId)
+    {
+        $authUserId = Auth::id();
+
+        // Check if the authenticated user's ID matches the requested user ID
+        if ($authUserId != $userId) {
+            // Redirect to the authenticated user's dashboard
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+
+        // Fetch the authenticated user
+        $user = Auth::user();
+
+        $teacher = $user->teacher;
+        $teachers = TeacherPyp::get();
+        $students = StudentPyp::get();
+
+
+        $role = User::find($authUserId)->role;
+
+        if ($role == 0){  //admin
+            return view('admin/class/class-admin-add', compact('teacher','students','teachers'));
+        }
+        
+    }
+
+
+    public function submit(Request $request, $userId)
+    {
+        $authUserId = Auth::id();
+
+        // Check if the authenticated user's ID matches the requested user ID
+        if ($authUserId != $userId) {
+            // Redirect to the authenticated user's dashboard
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+
+        // Fetch the authenticated user
+        $user = Auth::user();
+
+        $teacher = $user->teacher;
+
+        $role = User::find($authUserId)->role;
+
+         // Create the class
+        $class = new ClassModel();
+        $class->class_name= $request->class_name;
+        $class->save();
+
+        // Assign homeroom
+        $homeroom = new Homeroom();
+        $homeroom->class_id = $class->class_id;
+        $homeroom->teacher_pyp_id = $request->input('homeroom'); 
+        $homeroom->save();
+
+        $studentIds = json_decode($request->input('students_array'), true);
+        if (is_array($studentIds)) {
+            foreach ($studentIds as $studentId) {
+                StudentClass::create([
+                    'class_id' => $class->class_id,
+                    'nim_pyp' => $studentId
+                ]);
+            }
+        }
+
+        if ($role == 0){  //admin
+            return redirect()->route('class', ['userId' => $teacher->user_id])->with('status', 'Class added successfully!');
+        }
+        
+    }
+
+
+    public function detail($userId, $classId)
+    {
+        $authUserId = Auth::id();
+
+        // Check if the authenticated user's ID matches the requested user ID
+        if ($authUserId != $userId) {
+            // Redirect to the authenticated user's dashboard
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+
+        // Fetch the authenticated user
+        $user = Auth::user();
+
+        // Get the teacher associated with the user
+        $teacher = $user->teacher;
+
+        // Get the subject with its criteria
+        $selectedClass = ClassModel::find($classId);
+
+        $role = User::find($authUserId)->role;
+
+        if ($role == 0) {  // admin
+            return view('admin/class/class-admin-detail', compact('teacher', 'selectedClass'));
+        }
+    }
+
+
 }

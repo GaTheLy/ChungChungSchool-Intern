@@ -16,7 +16,7 @@
             font-size: 25px;
         }
         a{
-            color:white;
+            color:black;
             text-decoration: none;
         }
     </style>
@@ -127,68 +127,21 @@
 
         
 
+        <div class="d-grid gap-4 d-md-flex justify-content-md-end">
+            <button class="btn me-md-2" type="button" id="addProgram">
+            <a href="{{ route('yearProgram-add.index', ['userId' => $teacher->user_id]) }}"> add program </a>          <i class="lni lni-circle-plus"></i>
+            </button>
+        </div>
 
         <br>
+        {{-- 
         <div class="row">
             <div class="col" style="text-align:right;margin-right:100px;">
             <button type="button" class="btn btn-primary" id="liveAlertBtn">Save</button>
             </div>
         </div>
 
-
-
-        {{-- modal fill Attendance --}}
-    <div class="modal fade" id="addSubject" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addSubjectLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h1 class="modal-title fs-5" id="addSubjectLabel">Fill Attendance</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form>
-            <div class="mb-3">
-                <label for="recipient-name" class="col-form-label"><b>Student's Name</b></label>
-                <input type="text" class="form-control" id="recipient-name">
-            </div>
-            <label for="message-text" class="col-form-label"><b>Attendance</b></label>
-
-            <div class="row">
-                <div class="col-md-2">
-                    <label for="inputAbsent" class="col-form-label center-align">Absent</label>
-                    <input type="text" class="form-control" id="inputAbsent">
-                </div>
-
-                <div class="col-md-2">
-                    <label for="inputPresent" class="col-form-label center-align">Present</label>
-                    <input type="text" class="form-control" id="inputPresent">
-                </div>
-
-                <div class="col-md-2">
-                    <label for="inputSick" class="col-form-label center-align">Sick</label>
-                    <input type="text" class="form-control" id="inputSick">
-                </div>
-
-                <div class="col-md-2">
-                    <label for="inputLate" class="col-form-label center-align">Late</label>
-                    <input type="text" class="form-control" id="inputLate">
-                </div>
-
-                <div class="col-md-2">
-                    <label for="inputExcused" class="col-form-label center-align">Excused</label>
-                    <input type="text" class="form-control" id="inputExcused">
-                </div>
-            </div>
-            
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-            <button type="button" class="btn btn-primary">Yes</button>
-        </div>
-        </div>
-    </div>
-    </div>
+         --}}
 
 
         <script>
@@ -212,7 +165,7 @@
                     appendAlert('All changes saved!', 'success')
                 })
                 }
-            </script>
+        </script>
 
 
     
