@@ -36,8 +36,8 @@
         <h1>{{ $subject->subject_name }} ({{ $class->class_name }})</h1>
         <h5>{{ $teacher->first_name }} {{ $teacher->last_name }}</h5>
         <br>
-            <div class="col" style="text-align:right;margin-right:50px;">
-            <button type="button" class="btn btn-primary" id="liveAlertBtn">Save</button>
+            <div style="text-align:right;margin-right:50px;">
+                <button type="button" class="btn btn-primary" id="liveAlertBtn">Save</button>
             </div>
 
 

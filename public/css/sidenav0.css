@@ -25,10 +25,6 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
-.wrapper {
-    display: flex;
-}
-
 .main {
     width: 100%;
     overflow: hidden;

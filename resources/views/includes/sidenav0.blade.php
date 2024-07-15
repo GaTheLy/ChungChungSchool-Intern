@@ -1,4 +1,4 @@
-<aside id="sidebar" style="height:730px;">
+<aside id="sidebar" style="height:100%;">
     <div class="d-flex">
                 <button class="toggle-btn" type="button">
                     <img src="{{ asset('assets-icon/icon-menu-white.png') }}" alt="Icon" class="icon" />

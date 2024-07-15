@@ -1,4 +1,4 @@
-@extends('base.base-pyp')
+@extends('base.base')
     <!-- section content -> yield content base.blade -->
     @section('content')
     <style>

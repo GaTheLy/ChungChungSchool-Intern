@@ -276,6 +276,8 @@ class TeachController extends Controller
         // Fetch the criteria for the subject
         $criteria = $subjectTeacher->subject->mypCriteria;
 
+        $atls = $subjectTeacher->subject->atl;
+
         $subCrit = DB::table('sub_criteria_myp');
 
         $studentGrade = DB::table('subject_crit_grade_myp')
@@ -283,6 +285,12 @@ class TeachController extends Controller
         // ->where('')
         ->get()
         ->keyBy('sc_myp_id');
+
+        $studentAtl = DB::table('sub_atl_progress_myp')
+        ->where('student_id', $student->nim_pyp)
+        // ->where('')
+        ->get()
+        ->keyBy('sub_atl_id');
 
         // dd($studentGrade);
 
@@ -292,6 +300,8 @@ class TeachController extends Controller
             'class' => $class,
             'student' => $student,
             'criteria' => $criteria,
+            'atls' => $atls,
+            'studentAtl' => $studentAtl,
             'studentGrade' => $studentGrade,
         ]);
 
@@ -306,7 +316,7 @@ class TeachController extends Controller
 
         $studentId = $request->input('student_id');
         $criteriaData = $request->input('criteria');
-
+        
         // Iterate through criteria data pairs
         foreach ($criteriaData as $criterionId => $data) {
             // Check if current data is criterion_id for MYP
@@ -321,6 +331,26 @@ class TeachController extends Controller
                     ],
                     [
                         'crit_grade' => $grade,
+                    ]
+                );
+            }
+        }
+
+        $atlsData = $request->input('atl_');
+
+        foreach ($atlsData as $atlId => $atl) {
+            // Check if current data is criterion_id for MYP
+            if (isset($atl['prog'])) {
+                $grade = $atl['prog'];
+
+                // Update or insert the grade for each criterion
+                DB::table('sub_atl_progress_myp')->updateOrInsert(
+                    [
+                        'student_id' => $studentId,
+                        'sub_atl_id' => $atlId,
+                    ],
+                    [
+                        'atl_progress' => $grade,
                     ]
                 );
             }

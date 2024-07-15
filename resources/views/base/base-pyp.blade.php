@@ -11,6 +11,37 @@
     <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
 
     <link rel="stylesheet" href="{{ asset('css/sidenav0.css') }}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .wrapper{
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+        /* .sidenav {
+            width: 250px;
+            flex-shrink: 0;
+        } */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: #fafbfe;
+        }
+    </style>
+
   
   </head>
 

@@ -95,52 +95,55 @@
             </div>
             <br>
         @endforeach
+
+        <br>
+
+        <h5 style="padding:20px;">Approaches to Learning</h5>
+
+        <table class="table" style="margin-left:50px;width:50%;">
+        <thead>
+            <tr>
+            <th scope="col"></th>
+            <th scope="col">EE</th>
+            <th scope="col">AE</th>
+            <th scope="col">ME</th>
+            <th scope="col">BE</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+        @foreach($atls as $index => $atl)
+            <tr>
+                <th scope="row">{{ $atl->atl_name }}</th>
+                <td>
+                    <input class="form-check-input" type="radio" name="atl_[{{ $atl->id }}][prog]" value="EE" id="prog_{{ $index }}_ee"
+                    @if($studentAtl->has($atl->id) && $studentAtl[$atl->id]->atl_progress == 'EE') checked @endif>
+                </td>
+                <td>
+                    <input class="form-check-input" type="radio" name="atl_[{{ $atl->id }}][prog]" value="AE" id="prog_{{ $index }}_ae"
+                    @if($studentAtl->has($atl->id) && $studentAtl[$atl->id]->atl_progress == 'AE') checked @endif>
+                </td>
+                <td>
+                    <input class="form-check-input" type="radio" name="atl_[{{ $atl->id }}][prog]" value="ME" id="prog_{{ $index }}_me"
+                    @if($studentAtl->has($atl->id) && $studentAtl[$atl->id]->atl_progress == 'ME') checked @endif>
+                </td>
+                <td>
+                    <input class="form-check-input" type="radio" name="atl_[{{ $atl->id }}][prog]" value="BE" id="prog_{{ $index }}_be"
+                    @if($studentAtl->has($atl->id) && $studentAtl[$atl->id]->atl_progress == 'BE') checked @endif>
+                </td>
+            </tr>
+        @endforeach
+
+        </tbody>
+        </table>
+
+
+        <h5 style="padding:20px;">Homeroom Teacher Comments</h5>
+        <textarea name="" id="" style="height:100px;width:1000px;margin-left:50px;"></textarea>
         </form>
 
 
 
-<br>
 
-<h5 style="padding:20px;">Approaches to Learning</h5>
-
-<table class="table" style="margin-left:50px;width:50%;">
-  <thead>
-    <tr>
-      <th scope="col"></th>
-      <th scope="col">EE</th>
-      <th scope="col">AE</th>
-      <th scope="col">ME</th>
-      <th scope="col">BE</th>
-    </tr>
-  </thead>
-  <tbody class="table-group-divider">
-    <tr>
-      <th scope="row">Communication</th>
-      <td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-      <td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-      <td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-      <td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-    </tr>
-    <tr>
-      <th scope="row">Communication</th>
-      <td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-      <td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-      <td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-      <td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-    </tr>
-    <tr>
-      <th scope="row">Communication</th>
-      <td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-      <td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-      <td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-      <td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-    </tr>
-  </tbody>
-</table>
-
-
-<h5 style="padding:20px;">Homeroom Teacher Comments</h5>
-<textarea name="" id="" style="height:100px;width:1000px;margin-left:50px;"></textarea>
 
 
 
