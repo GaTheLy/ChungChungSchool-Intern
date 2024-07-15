@@ -120,7 +120,7 @@ Route::get('/year-program-add/{userId}', [YearProgramController::class, 'add'])
 ->middleware(['auth', 'verified'])->name('yearProgram-add.index');
 
 //class make route
-Route::get('/class/{userId}', [ClassController::class, 'class'])
+Route::get('/class-page/{userId}', [ClassController::class, 'class'])
 ->middleware(['auth', 'verified'])->name('class');
 // show form
 Route::get('/class-add/{userId}', [ClassController::class, 'add'])
