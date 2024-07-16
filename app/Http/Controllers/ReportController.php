@@ -18,7 +18,7 @@ class ReportController extends Controller
 {
     public function previewReport($id){
 
-        $student = StudentPyp::findOrFail($id);
+        $student = StudentPyp::with(['class.homeroom.teacher'])->findOrFail($id);
 
         // Subjects
         $sub_teacherIds = DB::table('subject_class_teacher')

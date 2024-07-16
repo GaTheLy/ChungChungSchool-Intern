@@ -13,7 +13,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: white;;
         }
         .container {
             width: 100%;
@@ -31,7 +31,7 @@
             text-align: left;
         }
         .header img {
-            width: 100px;
+            width: 150px;
             height: auto;
             margin-right: 20px;
         }
@@ -81,18 +81,22 @@
             font-size: 24px;
             margin-bottom: 10px;
         }
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 5px 10px;
+        .info-container {
+            display: flex;
+            flex-direction: column;
         }
+
+        .info-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .info-label, .info-value {
+            flex: 1;
+        }
+
         .info-label {
             font-weight: bold;
-            color: #999;
-            margin-bottom: 5px;
-        }
-        .info-value {
-            margin-bottom: 5px;
         }
         .grades-table {
             width: 100%;
@@ -306,7 +310,7 @@
                     </div>
                     <div class="info-row">
                         <div class="info-label">Homeroom Teacher</div>
-                        <div class="info-value"></div>
+                        <div class="info-value">{{ $student->class->first()->homeroom->teacher->first_name }} {{ $student->class->first()->homeroom->teacher->last_name }}</div>
                     </div>
                 </div>
             </div>
@@ -395,7 +399,7 @@
                     <span class="attendance-box" style="background-color: #ba68c8;">{{$attendance->excused}} Excused</span>
                 </div>
                 <div class="grade-mentor-comments">
-                    <p><strong>Martin Lasut</strong> &mdash; Grade Mentor Comments</p>
+                    <p><strong>{{ $student->class->first()->homeroom->teacher->first_name }} {{ $student->class->first()->homeroom->teacher->last_name }}</strong> &mdash; Grade Mentor Comments</p>
                     <p>Hanley is a skilled communicator, expressing thoughts and ideas with clarity and precision in class discussions and presentations. This semester, he has demonstrated strong literature skills, showcasing creativity in English story writing. To further enhance his writing composition, it is recommended that he engages in consistent English writing practice. Additionally, Hanley should aim to show more enthusiasm and curiosity in his learning by posing meaningful inquiries during class discussions.</p>
                 </div>
             </div>
