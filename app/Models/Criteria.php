@@ -15,6 +15,6 @@ class Criteria extends Model
 
     public function subject()
     {
-        return $this->belongsTo(Subject::class, 'subject_pyp_id');
+        return $this->belongsTo(SubjectModel::class, 'subject_pyp_id');
     }
 }

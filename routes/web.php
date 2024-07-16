@@ -116,8 +116,11 @@ Route::post('/student-delete/{userId}/{studentId}', [StudentController::class, '
 // admin route || year program crud
 Route::get('/year-program/{userId}', [YearProgramController::class, 'yearProgram'])
 ->middleware(['auth', 'verified'])->name('yearProgram');
-Route::get('/year-program-add/{userId}', [YearProgramController::class, 'add'])
+Route::post('/year-program-add/{userId}', [YearProgramController::class, 'add'])
 ->middleware(['auth', 'verified'])->name('yearProgram-add.index');
+Route::post('/year-program-add-subject/{userId}/{ypId}', [YearProgramController::class, 'addSubject'])
+->middleware(['auth', 'verified'])->name('yearProgram-add.subject');
+
 
 //class make route
 Route::get('/class-page/{userId}', [ClassController::class, 'class'])

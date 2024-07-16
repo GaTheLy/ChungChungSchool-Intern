@@ -41,7 +41,6 @@
     }
     .criteria-name{
         height:35px;
-        width:155px;
         border:1px solid black;
         display:inline-block;
         border-radius:5px;
@@ -102,13 +101,12 @@
         <div id="PYPContainer" class="PYPCriteria">
 
          {{--      --}}
-         <h3>this is pyp page</h3>
                 <div class="row">
                         <div class="col-3" style="margin-left:80px;">
                             <span>Criteria </span>
                             @foreach ($subject->pypCriteria as $criteria)
                             <div class="row">
-                                    <div class="col-4">
+                                    <div class="col-6">
                                     <input type="text" disabled value="{{$criteria->crit_name}}" class="criteria-name">
                                     </div>
                                 </div>

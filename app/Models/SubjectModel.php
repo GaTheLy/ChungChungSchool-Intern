@@ -17,10 +17,10 @@ class SubjectModel extends Model
     // Define the fillable fields
     protected $fillable = ['subject_name, subject_level','created_at', 'updated_at' ];
 
-    // public function pypCriteria()
-    // {
-    //     return $this->hasMany(PYPCriteria::class, 'subject_pyp_id','id');
-    // }
+    public function pypCriteria()
+    {
+        return $this->hasMany(PYPCriteria::class, 'subject_pyp_id','id');
+    }
     public function mypCriteria()
     {
         return $this->hasMany(MYPCriteria::class, 'subject_id','id');
@@ -35,9 +35,9 @@ class SubjectModel extends Model
         return $this->hasMany(Criteria::class, 'subject_pyp_id');
     }
 
-    public function atl()
+    public function atls()
     {
-        return $this->HasMany(ATL::class, 'subject_id');
+        return $this->hasMany(ATLMYP::class, 'subject_id', 'id');
     }
 }
 

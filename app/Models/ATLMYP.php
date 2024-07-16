@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ATL extends Model
+class ATLMYP extends Model
 {
     public $timestamps = false;
 
@@ -14,12 +14,11 @@ class ATL extends Model
     // protected $primaryKey = 'atl_id';
 
     // Define the fillable fields
-    protected $fillable = ['atl_name','subject_id', 'atl_progress'];
+    protected $fillable = ['atl_name','subject_id'];
 
     // Define the relationships
-
-    public function detailSubjectMYP()
+    public function subject()
     {
-        return $this->belongsTo(DetailSubjectMYP::class, 'atl_id');
+        return $this->belongsTo(SubjectModel::class, 'subject_id', 'id');
     }
 }

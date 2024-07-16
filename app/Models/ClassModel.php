@@ -30,5 +30,10 @@ class ClassModel extends Model
         return $this->belongsToMany(SubjectModel::class, 'subject_class', 'class_id', 'subject_pyp_id');
     }
 
+    public function detailClassMYP()
+    {
+        return $this->belongsToMany(SubjectModel::class, 'subject_class', 'class_id', 'subject_pyp_id');
+    }
+
     
 }

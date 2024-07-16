@@ -169,6 +169,13 @@
                     appendAlert('All changes saved!', 'success')
                 })
                 }
+
+            $(document).ready(function() {
+                var subjects = []
+                var classes = []
+
+            });
+
         </script>
 
 
