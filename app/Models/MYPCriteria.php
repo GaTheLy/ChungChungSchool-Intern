@@ -29,6 +29,10 @@ class MYPCriteria extends Model
         return $this->hasMany(MYPCriteriaDetail::class, 'sub_criteria_myp_id','id');
     }
 
+    public function mypCriteriaGrades()
+    {
+        return $this->hasMany(MYPCriteriaGrade::class, 'sc_myp_id','id');
+    }
 
 }
 

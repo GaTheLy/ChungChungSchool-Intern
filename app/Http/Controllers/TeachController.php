@@ -10,6 +10,8 @@ use App\Models\Subject;
 use App\Models\SubjectTeacher;
 use App\Models\SubjectModel;
 use App\Models\ClassModel;
+use App\Models\MYPCriteria;
+use App\Models\MYPCriteriaDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -274,9 +276,11 @@ class TeachController extends Controller
         $student = StudentPyp::findOrFail($studentId);
 
         // Fetch the criteria for the subject
-        $criteria = $subjectTeacher->subject->mypCriteria;
+        $criteria = MYPCriteria::where('subject_id', $subjectId)
+                            ->with('mypCriteriaDetail')
+                            ->get();
 
-        $atls = $subjectTeacher->subject->atl;
+        $atls = $subjectTeacher->subject->atls;
 
         $subCrit = DB::table('sub_criteria_myp');
 
@@ -293,6 +297,7 @@ class TeachController extends Controller
         ->keyBy('sub_atl_id');
 
         // dd($studentGrade);
+        $descriptors = MYPCriteriaDetail::all()->groupBy('criteria_id');
 
         return view('subject-detail-grade', [
             'teacher' => $teacher,
@@ -303,6 +308,7 @@ class TeachController extends Controller
             'atls' => $atls,
             'studentAtl' => $studentAtl,
             'studentGrade' => $studentGrade,
+            'descriptors' => $descriptors,
         ]);
 
     }

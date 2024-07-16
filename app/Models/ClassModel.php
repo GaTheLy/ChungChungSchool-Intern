@@ -12,7 +12,7 @@ class ClassModel extends Model
     protected $primaryKey = 'class_id';
 
     // Define the fillable fields
-    protected $fillable = ['class_name'];
+    protected $fillable = ['class_name', 'class_level'];
 
     // Define the relationship with Homeroom
     public function homeroom()

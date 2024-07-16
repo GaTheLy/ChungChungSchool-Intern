@@ -87,7 +87,7 @@
                         data-excused="{{ optional($student->attendance)->excused }}">
                         Fill Attendance
                     </td>
-                    <td><a href="http://ccs-report-development.test:8080/homeroom-teacher-report-preview-myp">Preview Report</a></td>
+                    <td><a href="{{ route('report.myp', [$student->nim_pyp]) }}">Preview Report</a></td>
             </tr>
             @endforeach
         </tbody>

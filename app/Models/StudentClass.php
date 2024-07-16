@@ -18,4 +18,20 @@ class StudentClass extends Model
         'class_id',
         'nim_pyp',
     ];
+
+    /**
+     * Get the class that owns the student.
+     */
+    public function class()
+    {
+        return $this->belongsTo(ClassModel::class, 'class_id');
+    }
+
+    /**
+     * Get the student that belongs to the class.
+     */
+    public function student()
+    {
+        return $this->belongsTo(StudentPyp::class, 'nim_pyp');
+    }
 }

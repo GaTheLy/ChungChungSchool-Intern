@@ -82,15 +82,19 @@
                 <div class="col-3">
                     <h5>{{ $criterion->criteria_title }}: {{ $criterion->criteria_name }}</h5>
                     <div class="btn-group" role="group" aria-label="Grade Range">
-                        @for ($i=1; $i <= 8; $i++)
+                        @for ($i = 1; $i <= 8; $i++)
                             <input type="radio" class="btn-check" name="criteria[{{ $criterion->id }}][grade]" id="grade-{{ $criterion->id }}-{{ $i }}" autocomplete="off" value="{{ $i }}"
                                 @if($studentGrade->has($criterion->id) && $studentGrade[$criterion->id]->crit_grade == $i) checked @endif>
-                            <label class="btn btn-outline-secondary" for="grade-{{ $criterion->id }}-{{ $i }}">{{ $i }}</label>
+                            <label class="btn btn-outline-secondary" for="grade-{{ $criterion->id }}-{{ $i }}" onclick="updateDescriptor({{ $criterion->id }}, {{ $i }})">{{ $i }}</label>
                         @endfor
                     </div>
                 </div>
                 <div class="col-6" style="text-align:left;margin-left:-55px;">
-                    <p style="height:80px;width:500px; border-style:ridge;"></p>
+                    <p id="descriptor-{{ $criterion->id }}" style="height:80px;width:500px; border-style:ridge;">
+                        @if($studentGrade->has($criterion->id))
+                            {{ $criterion->mypCriteriaDetail->firstWhere('criteria_range', $studentGrade[$criterion->id]->crit_grade)->criteria_range_desc ?? '' }}
+                        @endif
+                    </p>
                 </div>
             </div>
             <br>
@@ -205,6 +209,15 @@
                 alertTrigger.addEventListener('click', () => {
                     appendAlert('All changes saved!', 'success')
                 })
+                }
+            
+                const descriptors = @json($criteria->mapWithKeys(function ($criterion) {
+                    return [$criterion->id => $criterion->mypCriteriaDetail->pluck('criteria_range_desc', 'criteria_range')];
+                }));
+
+                function updateDescriptor(criteriaId, grade) {
+                    const descriptor = descriptors[criteriaId][grade] || '';
+                    document.getElementById(`descriptor-${criteriaId}`).innerText = descriptor;
                 }
             </script>
 

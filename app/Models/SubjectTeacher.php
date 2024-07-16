@@ -19,7 +19,7 @@ class SubjectTeacher extends Model
     // Define the relationship with TeacherPyp
     public function teacher()
     {
-        return $this->belongsTo(TeacherPyp::class, 'teacher_pyp_id', 'teacher_pyp');
+        return $this->belongsTo(TeacherPyp::class, 'teacher_id', 'nip_pyp', 'teacher_pyp');
     }
 
     // Define the relationship with ClassModel
@@ -31,5 +31,17 @@ class SubjectTeacher extends Model
     public function subject()
     {
         return $this->belongsTo(SubjectModel::class, 'subject_pyp_id', 'id');
+    }
+
+    public function getFormattedCriteria()
+    {
+        $criteria = 
+        $formattedCriteria = '';
+
+        foreach ($this->subject->criteria as $criterion) {
+            $formattedCriteria .= '<td>5</td>'; // Replace '5' with your actual criterion data
+        }
+
+        return $formattedCriteria;
     }
 }
