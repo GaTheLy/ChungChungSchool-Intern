@@ -17,7 +17,7 @@ class Unit extends Model
     protected $primaryKey = 'unit_id';
 
     // Define the fillable fields
-    protected $fillable = ['name, year_program_pyp_id'];
+    protected $fillable = ['name', 'year_program_pyp_id', 'central_idea'];
 
     // Define the relationship 
     public function yearProgramPYP()

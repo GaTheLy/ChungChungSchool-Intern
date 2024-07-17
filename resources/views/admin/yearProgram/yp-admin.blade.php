@@ -27,9 +27,10 @@
                 <h5>{{ $teacher->first_name }}</h5>
             </div>
         </div>
-        <div class="row" style="text-align:right;margin-right:50px;">
+        {{-- <div class="row" style="text-align:right;margin-right:50px;">
                 <h5>Collapse All</h5>
-        </div>
+        </div> --}}
+        
 
         <div id="liveAlertPlaceholder"></div>
 
@@ -54,6 +55,7 @@
                             <thead>
                                 <tr class="table table-secondary">
                                     <th>Unit</th>
+                                    <th>Central Idea</th>
                                     <th>Lines of Inquiry</th>
                                     <th>Key Concepts</th>
                                 </tr>
@@ -62,6 +64,7 @@
                             @foreach ($units as $unit)
                                 <tr>
                                     <td>{{ $unit->name }}</td>
+                                    <td>{{ $unit->central_idea }}</td>
                                     <td>
                                         <ul>
                                             @foreach ($unit->linesOfInquiry as $loi)
@@ -322,6 +325,16 @@
 
                         <div class="col-8" >
                             <input type="text" name="unit_name" id="unit_name" style="radius:10px;"></input>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4">
+                            <label for="" class="col-form-label"><b>Central Idea</b></label>
+                        </div> 
+
+                        <div class="col-8" >
+                            <input type="text" name="central_idea" id="central_idea" style="radius:10px;"></input>
                         </div>
                     </div>
 

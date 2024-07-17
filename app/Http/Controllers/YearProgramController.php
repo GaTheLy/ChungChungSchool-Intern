@@ -123,6 +123,7 @@ class YearProgramController extends Controller
 
                 $unit = new Unit();
                 $unit->name = $request->unit_name;
+                $unit->central_idea = $request->central_idea;
                 $unit->year_program_pyp_id = $yearProgram->id;
                 if($unit->save()){
                     if($request->input('loi')){
@@ -215,6 +216,7 @@ class YearProgramController extends Controller
         
             $unit = new Unit();
             $unit->name = $request->unit_name;
+            $unit->central_idea = $request->central_idea;
             $unit->year_program_pyp_id = $ypId;
         
             if($unit->save()){
