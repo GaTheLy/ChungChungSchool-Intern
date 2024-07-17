@@ -27,10 +27,10 @@
             width: 100vw;
             overflow: hidden;
         }
-        /* .sidenav {
+        .sidenav {
             width: 250px;
             flex-shrink: 0;
-        } */
+        } 
         .main {
             flex: 1;
             display: flex;

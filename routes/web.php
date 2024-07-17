@@ -119,8 +119,22 @@ Route::get('/year-program/{userId}', [YearProgramController::class, 'yearProgram
 ->middleware(['auth', 'verified'])->name('yearProgram');
 Route::post('/year-program-add/{userId}', [YearProgramController::class, 'add'])
 ->middleware(['auth', 'verified'])->name('yearProgram-add.index');
+Route::post('/year-program-addPYP/{userId}', [YearProgramController::class, 'addPYP'])
+->middleware(['auth', 'verified'])->name('yearProgram-add.indexPYP');
+Route::post('/year-program-add-unit/{userId}/{ypId}', [YearProgramController::class, 'addUnit'])
+->middleware(['auth', 'verified'])->name('yearProgram-add.unitPYP');
+Route::post('/year-program-add-atl/{userId}/{ypId}', [YearProgramController::class, 'addATL'])
+->middleware(['auth', 'verified'])->name('yearProgram-add.atlPYP');
+
 Route::post('/year-program-add-subject/{userId}/{ypId}', [YearProgramController::class, 'addSubject'])
 ->middleware(['auth', 'verified'])->name('yearProgram-add.subject');
+Route::post('/year-program-add-subjectPYP/{userId}/{ypId}', [YearProgramController::class, 'addSubjectPYP'])
+->middleware(['auth', 'verified'])->name('yearProgram-add.subjectPYP');
+
+Route::post('/year-program-add-class/{userId}/{ypId}', [YearProgramController::class, 'addClass'])
+->middleware(['auth', 'verified'])->name('yearProgram-add.class');
+Route::post('/year-program-add-classPYP/{userId}/{ypId}', [YearProgramController::class, 'addClassPYP'])
+->middleware(['auth', 'verified'])->name('yearProgram-add.classPYP');
 
 
 //class make route

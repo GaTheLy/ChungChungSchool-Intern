@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ATLPYP;
 use App\Models\DetailSubjectMYP;
+use App\Models\DetailSubjectPYP;
+use App\Models\LinesOfInquiry;
 use App\Models\StudentPyp;
 use App\Models\TeacherPyp;
 use App\Models\Homeroom;
@@ -11,7 +14,12 @@ use App\Models\ATLMYP;
 use App\Models\SubjectTeacher;
 use App\Models\SubjectModel;
 use App\Models\ClassModel;
+use App\Models\DetailClassMYP;
+use App\Models\DetailClassPYP;
+use App\Models\KeyConcept;
+use App\Models\Unit;
 use App\Models\YearProgramMYP;
+use App\Models\YearProgramPYP;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -41,10 +49,26 @@ class YearProgramController extends Controller
             $yearProgramMYP = YearProgramMYP::get();
             $subjectMYP = SubjectModel::where('subject_level', 'MYP')->get();
             $teacherMYP = TeacherPyp::where('is_myp', 1)->get();
+            $class = ClassModel::get();
+            $detailSubMYP = DetailSubjectMYP::with(['subject.atls', 'teacher'])->get();
+            $detailClassMYP = DetailClassMYP::with(['class', 'homeroom.teacher'])->get();
+
+            //pyp
+            $yearProgramPYP = YearProgramPYP::with('atlpyp')->get();
+            $units = Unit::with(['linesOfInquiry', 'keyConcepts'])->get();
+            $subjectPYP = SubjectModel::where('subject_level', 'PYP')->get();
+            $teacherPYP = TeacherPyp::where('is_pyp', 1)->get();
+            $detailSubPYP = DetailSubjectPYP::with(['subject', 'teacher'])->get();
+            $detailClassPYP = DetailClassPYP::with(['class', 'homeroom.teacher'])->get();
+            // ->whereHas('homeroom.teacher', function ($query) {
+            //     $query->where('level', 'PYP');
+            // })->get();
+
 
 
             if ($role == 0){  //admin
-                return view('/admin/yearProgram/yp-admin', compact('teacher', 'yearProgramMYP', 'subjectMYP', 'teacherMYP'));
+                return view('/admin/yearProgram/yp-admin', compact('teacher', 'yearProgramMYP', 'subjectMYP', 'teacherMYP','class','detailSubMYP','detailClassMYP'
+                                                                    ,'units','yearProgramPYP', 'subjectPYP', 'teacherPYP','detailSubPYP','detailClassPYP'));
             }
             
         }
@@ -76,7 +100,149 @@ class YearProgramController extends Controller
                 return back()->withInput()->withErrors(['error' => 'Failed to add year program. Please try again.']);
             }
         }
+        public function addPYP(Request $request, $userId)
+        {
+            $authUserId = Auth::id();
+    
+            // Check if the authenticated user's ID matches the requested user ID
+            if ($authUserId != $userId) {
+                // Redirect to the authenticated user's dashboard
+                return redirect()->route('dashboard', ['userId' => $authUserId]);
+            }
+    
+            // Fetch the authenticated user
+            $user = Auth::user();
+    
+            $teacher = $user->teacher;
+            $role = User::find($authUserId)->role;
+    
+            $yearProgram = new YearProgramPYP();
+            $yearProgram->name = $request->program_name;
 
+            if ($yearProgram->save()) {
+
+                $unit = new Unit();
+                $unit->name = $request->unit_name;
+                $unit->year_program_pyp_id = $yearProgram->id;
+                if($unit->save()){
+                    if($request->input('loi')){
+                        foreach ($request->input('loi') as $loiInput) {
+                            $loi = new LinesOfInquiry();
+                            $loi->description = $loiInput['name'] ?? null;
+                            $loi->unit_id = $unit->unit_id;;
+                            $loi->save();
+                        }
+                    }
+                    if($request->input('key')){
+                        foreach ($request->input('key') as $keyInput) {
+                            $key = new KeyConcept();
+                            $key->topic = $keyInput['name'] ?? null;
+                            $key->unit_id = $unit->unit_id;;
+                            $key->save();
+                        }
+                    }
+                }
+
+                if($request->input('atl')){
+                    foreach ($request->input('atl') as $atlInput) {
+                        $atl = new ATLPYP();
+                        $atl->description = $atlInput['name'] ?? null;
+                        $atl->year_program_pyp_id = $yearProgram->id;
+                        $atl->save();
+                    }
+                }
+
+                
+
+                if ($role == 0) { // admin
+                    return redirect()->route('yearProgram', ['userId' => $teacher->user_id])->with('status', 'Year Program added successfully!');
+                }
+            } else {
+                return back()->withInput()->withErrors(['error' => 'Failed to add year program. Please try again.']);
+            }
+        }
+        public function addATL(Request $request, $userId, $ypId)
+        {
+            $authUserId = Auth::id();
+    
+            // Check if the authenticated user's ID matches the requested user ID
+            if ($authUserId != $userId) {
+                // Redirect to the authenticated user's dashboard
+                return redirect()->route('dashboard', ['userId' => $authUserId]);
+            }
+    
+            // Fetch the authenticated user
+            $user = Auth::user();
+    
+            $teacher = $user->teacher;
+            $role = User::find($authUserId)->role;
+
+                if($request->input('atl')){
+                    foreach ($request->input('atl') as $atlInput) {
+                        $atl = new ATLPYP();
+                        $atl->description = $atlInput['name'] ?? null;
+                        $atl->year_program_pyp_id = $ypId;
+                        $atl->save();
+                    }
+                }
+
+                if ($role == 0) { // admin
+                    return redirect()->route('yearProgram', ['userId' => $teacher->user_id])->with('status', 'Year Program added successfully!');
+                }
+                else {
+                    return back()->withInput()->withErrors(['error' => 'Failed to add year program. Please try again.']);
+                }
+        }
+
+        public function addUnit(Request $request, $userId, $ypId)
+        {
+            $authUserId = Auth::id();
+        
+            if ($authUserId != $userId) {
+                return redirect()->route('dashboard', ['userId' => $authUserId]);
+            }
+        
+            $user = Auth::user();
+            $teacher = $user->teacher;
+            $role = User::find($authUserId)->role;
+        
+        
+            // Check if the $ypId exists in the year_program_pyp table
+            $yearProgramPYP = YearProgramPYP::find($ypId);
+            if (!$yearProgramPYP) {
+                return back()->withInput()->withErrors(['error' => 'Year Program PYP ID does not exist.']);
+            }
+        
+            $unit = new Unit();
+            $unit->name = $request->unit_name;
+            $unit->year_program_pyp_id = $ypId;
+        
+            if($unit->save()){
+                if($request->input('loi')){
+                    foreach ($request->input('loi') as $loiInput) {
+                        $loi = new LinesOfInquiry();
+                        $loi->description = $loiInput['name'] ?? null;
+                        $loi->unit_id = $unit->unit_id;
+                        $loi->save();
+                    }
+                }
+                if($request->input('key')){
+                    foreach ($request->input('key') as $keyInput) {
+                        $key = new KeyConcept();
+                        $key->topic = $keyInput['name'] ?? null;
+                        $key->unit_id = $unit->unit_id;
+                        $key->save();
+                    }
+                }
+            }
+        
+            if ($role == 0) { // admin
+                return redirect()->route('yearProgram', ['userId' => $teacher->user_id])->with('status', 'Year Program added successfully!');
+            }
+            else {
+                return back()->withInput()->withErrors(['error' => 'Failed to add year program. Please try again.']);
+            }
+        }
         public function addSubject(Request $request, $userId,$ypId)
         {
             $authUserId = Auth::id();
@@ -99,10 +265,6 @@ class YearProgramController extends Controller
             $detailSubject->subject_id =  $request->input('subject');
             $detailSubject->teacher_id = $request->input('teacher');
 
-
-            
-
-
             if ($detailSubject->save()) {
                 if($request->input('atl')){
                     foreach ($request->input('atl') as $atlInput) {
@@ -118,6 +280,103 @@ class YearProgramController extends Controller
                 }
             } else {
                 return back()->withInput()->withErrors(['error' => 'Failed to add year program. Please try again.']);
+            }
+        }
+
+        public function addSubjectPYP(Request $request, $userId,$ypId)
+        {
+            $authUserId = Auth::id();
+    
+            // Check if the authenticated user's ID matches the requested user ID
+            if ($authUserId != $userId) {
+                // Redirect to the authenticated user's dashboard
+                return redirect()->route('dashboard', ['userId' => $authUserId]);
+            }
+    
+            // Fetch the authenticated user
+            $user = Auth::user();
+    
+            $teacher = $user->teacher;
+            $role = User::find($authUserId)->role;
+    
+
+            $detailSubject = new DetailSubjectPYP();
+            $detailSubject->year_program_pyp_id = $ypId;
+            $detailSubject->subject_id =  $request->input('subject');
+            $detailSubject->teacher_id = $request->input('teacher');
+
+            if ($detailSubject->save()) {
+                if ($role == 0) { // admin
+                    return redirect()->route('yearProgram', ['userId' => $teacher->user_id])->with('status', 'Year Program added successfully!');
+                }
+            } else {
+                return back()->withInput()->withErrors(['error' => 'Failed to add year program. Please try again.']);
+            }
+        }
+
+        public function addClass(Request $request, $userId,$ypId)
+        {
+            $authUserId = Auth::id();
+    
+            // Check if the authenticated user's ID matches the requested user ID
+            if ($authUserId != $userId) {
+                // Redirect to the authenticated user's dashboard
+                return redirect()->route('dashboard', ['userId' => $authUserId]);
+            }
+    
+            // Fetch the authenticated user
+            $user = Auth::user();
+    
+            $teacher = $user->teacher;
+            $role = User::find($authUserId)->role;
+    
+
+            $detailClass = new DetailClassMYP();
+            $detailClass->year_program_myp_id = $ypId;
+            $detailClass->class_id =  $request->input('class');
+            $detailClass->start_date = $request->start_date;
+            $detailClass->end_date = $request->end_date;
+
+            if ($detailClass->save()) {
+                
+                if ($role == 0) { // admin
+                    return redirect()->route('yearProgram', ['userId' => $teacher->user_id])->with('status', 'Year Program Class added successfully!');
+                }
+            } else {
+                return back()->withInput()->withErrors(['error' => 'Failed to add year program class. Please try again.']);
+            }
+        }
+
+        public function addClassPYP(Request $request, $userId,$ypId)
+        {
+            $authUserId = Auth::id();
+    
+            // Check if the authenticated user's ID matches the requested user ID
+            if ($authUserId != $userId) {
+                // Redirect to the authenticated user's dashboard
+                return redirect()->route('dashboard', ['userId' => $authUserId]);
+            }
+    
+            // Fetch the authenticated user
+            $user = Auth::user();
+    
+            $teacher = $user->teacher;
+            $role = User::find($authUserId)->role;
+    
+
+            $detailClass = new DetailClassPYP();
+            $detailClass->year_program_pyp_id = $ypId;
+            $detailClass->class_id =  $request->input('class');
+            $detailClass->start_date = $request->start_date;
+            $detailClass->end_date = $request->end_date;
+
+            if ($detailClass->save()) {
+                
+                if ($role == 0) { // admin
+                    return redirect()->route('yearProgram', ['userId' => $teacher->user_id])->with('status', 'Year Program Class added successfully!');
+                }
+            } else {
+                return back()->withInput()->withErrors(['error' => 'Failed to add year program class. Please try again.']);
             }
         }
 
