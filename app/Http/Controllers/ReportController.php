@@ -55,4 +55,13 @@ class ReportController extends Controller
 
         return $pdf->stream('report.pdf');
     }
+
+    public function previewReportPyp(){
+        $html =  view('reports.report-pyp');
+
+        $pdf = PDF::loadHtml($html);
+
+        return $pdf->stream('report.pdf');
+
+    }
 }
