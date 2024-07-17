@@ -113,7 +113,7 @@
                     <option value="">--Select--</option>
                     <option value="PYP" name="PYP">PYP</option>
                     <option value="MYP" name="MYP">MYP</option>
-                    <option value="ALL" name="ALL">PYP & MYP</option>
+                    <option value="ALL" name="ALL">Admin</option>
                     </select>
                 </div>
                 </div>

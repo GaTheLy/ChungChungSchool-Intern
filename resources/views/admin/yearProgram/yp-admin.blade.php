@@ -19,6 +19,10 @@
             color:black;
             text-decoration: none;
         }
+
+        .hidden{
+            color: white ;
+        }
     </style>
     
         <h1>Year Program</h1>
@@ -40,7 +44,7 @@
 
         <div class="accordion" id="accordionExample">
             <h2>PYP Year Program</h2>
-            {{ @$index=0 }}
+            <span class="hidden">{{ $index=0 }}</span>
             @foreach ($yearProgramPYP as $ypPYP)
             <div class="accordion-item">
                 <h2 class="accordion-header">
@@ -51,7 +55,7 @@
                 <div id="collapse{{$index}}PYP" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
                     {{-- fill --}}
-                    <table id="units" class="table table-bordered" style="width:80%;">
+                    <table id="units" class="table table-bordered" style="width:90%;">
                             <thead>
                                 <tr class="table table-secondary">
                                     <th>Unit</th>
@@ -62,6 +66,7 @@
                             </thead>
                             <tbody>
                             @foreach ($units as $unit)
+                            @if ($unit->year_program_pyp_id == $ypPYP->id)
                                 <tr>
                                     <td>{{ $unit->name }}</td>
                                     <td>{{ $unit->central_idea }}</td>
@@ -87,6 +92,7 @@
                                         </ul>
                                     </td>
                                 </tr>
+                            @endif
                             @endforeach
                             </tbody>
                         </table>
@@ -106,14 +112,11 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                     @foreach ($ypPYP->atlpyp as $atl)
                                     <tr>
-                                        @foreach ($ypPYP->atlpyp as $atl)
                                             <td>{{ $atl->description }}</td>
-                                        @endforeach
                                     </tr>
-                                    <tr>
-                                        <td>list of approaches to learning</td>
-                                    </tr>
+                                    @endforeach
                             </tbody>
                         </table>
                         <div class="row">
@@ -133,10 +136,12 @@
                             </thead>
                             <tbody>
                                 @foreach ($detailSubPYP as $sub)
+                                @if ($sub->year_program_pyp_id == $ypPYP->id)
                                     <tr>
                                         <td>{{ $sub->subject->subject_name }}</td>
                                         <td>{{ $sub->teacher->first_name }} {{ $sub->teacher->last_name }}</td> <!-- Assuming 'name' is the teacher's name column -->
                                     </tr>
+                                @endif
                                 @endforeach
                             </tbody>
                         </table>
@@ -162,6 +167,8 @@
                             </thead>
                             <tbody>
                                 @foreach ($detailClassPYP as $classDetail)
+                                @if ($classDetail->year_program_pyp_id == $ypPYP->id)
+
                                         <tr>
                                             <td>{{ $classDetail->class->class_name }}</td>
                                             <td>
@@ -174,6 +181,7 @@
                                             <td>{{ $classDetail->end_date }}</td>
                                             <td>{{ $classDetail->class->students()->count() }}</td>
                                         </tr>
+                                @endif
                                 @endforeach
                             </tbody>
                         </table>
@@ -188,7 +196,7 @@
                 </div>
                 </div>
             </div>
-            {{ $index+=1 }}
+            <span class="hidden">{{ $index+=1 }}</span>
             @endforeach
 
             <div class="d-grid gap-4 d-md-flex justify-content-md-end">
@@ -199,14 +207,15 @@
             </div>
             
             <h2>MYP Year Program</h2>
+            <span class="hidden">{{ $indexMYP=0 }}</span>
             @foreach ($yearProgramMYP as $yp)
             <div class="accordion-item">
                 <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse{{$indexMYP}}MYP" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapse{{$indexMYP}}MYP">
                     <b>{{ $yp->name }}</b>
                 </button>
                 </h2>
-                <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div id="collapse{{$indexMYP}}MYP" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
                     {{-- fill --}}
                         <table id="example" class="table table-bordered" style="width:80%;">
@@ -279,6 +288,7 @@
                 </div>
                 </div>
             </div>
+            <span class="hidden">{{ $index=+1 }}</span>
             @endforeach
 
 

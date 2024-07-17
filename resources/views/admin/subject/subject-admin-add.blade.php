@@ -41,7 +41,7 @@
     }
     .criteria-name{
         height:35px;
-        width:155px;
+        width:355px;
         border:1px solid black;
         display:inline-block;
         border-radius:5px;

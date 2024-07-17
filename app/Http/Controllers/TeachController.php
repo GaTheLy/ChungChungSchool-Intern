@@ -423,7 +423,7 @@ class TeachController extends Controller
         } else if ($request->input('option') == 'MYP') {
             $newTeacher->is_myp = 1; 
             $newTeacher->is_pyp = 0;
-            $newUser->role=1;
+            $newUser->role=2;
         } else if ($request->input('option') == 'ALL'){
             $newTeacher->is_myp = 1; 
             $newTeacher->is_pyp = 1;
