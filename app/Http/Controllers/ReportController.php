@@ -56,8 +56,34 @@ class ReportController extends Controller
         return $pdf->stream('report.pdf');
     }
 
-    public function previewReportPyp(){
-        $html =  view('reports.report-pyp');
+    public function previewReportPyp($id){
+        $student = StudentPyp::with(['class.homeroom.teacher'])->findOrFail($id);
+
+        $sub_teacherIds = DB::table('subject_class_teacher')
+            ->where('class_id', $student->class->first()->class_id)
+            ->distinct()
+            ->pluck('subject_teacher_id');
+
+            $subjectIds = DB::table('sub_teacher')
+            ->whereIn('sub_teacher_id', $sub_teacherIds)
+            ->pluck('subject_pyp_id');
+
+        $subjects = SubjectModel::findOrFail($subjectIds);
+
+        $subject_teacher_s = SubjectTeacher::whereIn('sub_teacher_id', $sub_teacherIds)
+            ->with(['subject.pypCriteria.pypCriteriaProgress' => function ($query) use ($id) {
+                $query->where('student_id', $id);
+            }])
+            ->get();
+
+        //Grades
+        
+
+        $attendance = DB::table('attendance_pyp')
+                ->where('student_id', $student->nim_pyp)
+                ->first();
+
+        $html = view('reports.report-pyp', compact('student', 'subject_teacher_s', 'attendance'))->render();
 
         $pdf = PDF::loadHtml($html);
 

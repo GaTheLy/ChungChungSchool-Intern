@@ -188,7 +188,7 @@ Route::get('/attendance-myp/{studentId}', [ClassController::class, 'getAttendanc
 // Report Preview
 Route::get('/report-myp/{studentId}', [ReportController::class, 'previewReport'])->name('report.myp');
 
-Route::get('/report-pyp', [ReportController::class, 'previewReportPyp'])->name('report.pyp');
+Route::get('/report-pyp/{studentId}', [ReportController::class, 'previewReportPyp'])->name('report.pyp');
 
 require __DIR__.'/auth.php';
 
