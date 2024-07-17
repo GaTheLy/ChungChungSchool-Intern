@@ -141,21 +141,21 @@
             <div>
                 <h1>PYP Report</h1>
                 <h2>Chung Chung Christian School</h2>
-                <p>Second Term (2023 - 2024)</p>
-                <p>Prepared: December 12, 2023</p>
+                <p>First Term (2024 - 2025)</p>
+                <p>Prepared: {{ \Carbon\Carbon::today()->format('d/m/Y') }}</p>
             </div>
         </div>
 
         <div class="report-body">
             <div class="teacher-info">
                 <div>
-                    <strong>Alicia Natalia Tjandranegara</strong><br>
+                    <strong>{{ $student->first_name }} {{ $student->last_name }}</strong><br>
                     Grade<br>
-                    E1
+                    {{ $student->class->first()->class_name }}
                 </div>
                 <div>
                     Homeroom Teacher<br>
-                    Debry Mudjiono
+                    {{ $student->class->first()->homeroom->teacher->first_name }} {{ $student->class->first()->homeroom->teacher->last_name }}
                 </div>
             </div>
 
@@ -180,78 +180,37 @@
             <div class="section">
                 <h3>Attendance</h3>
                 <div class="attendance-summary">
-                    <span class="attendance-box" style="background-color: #ff4d4d;">0 Absent</span>
-                    <span class="attendance-box" style="background-color: #4caf50;">0 Present</span>
-                    <span class="attendance-box" style="background-color: #ffa726;">0 Late</span>
+                    <span class="attendance-box" style="background-color: #ff4d4d;">{{$attendance->absent}} Absent</span>
+                    <span class="attendance-box" style="background-color: #4caf50;">{{$attendance->present}} Present</span>
+                    <span class="attendance-box" style="background-color: #ffa726;">{{$attendance->late}} Late</span>
                 </div>  
             </div>
 
             <div class="page-break"></div>
 
             <div class="subjects-section">
-                <div class="subject">
-                    <div class="subject-header">
-                        <img src="path/to/subject-icon.png" alt="Subject Icon">
-                        <h3>English</h3>
-                        <h5 style='text-align:right;'>Student Progress</h5>
-                    </div>
-                    <div class="subject-body">
-                        <div class="subject-row">
-                            <span class="subject-title">• Oral language - listening and speaking</span>
-                            <span class="student-progress">Exceeding</span>
+                @foreach($subject_teacher_s as $sub_teacher)
+                    <div class="subject">
+                        <div class="subject-header">
+                            <img src="path/to/subject-icon.png" alt="Subject Icon">
+                            <h3>{{ $sub_teacher->subject->subject_name }}</h3>
+                            <h5 style='text-align:right;'>Student Progress</h5>
                         </div>
-                        <div class="subject-row">
-                            <span class="subject-title">• Written language - reading</span>
-                            <span class="student-progress">Exceeding</span>
-                        </div>
-                        <div class="subject-row">
-                            <span class="subject-title">• Written language - writing</span>
-                            <span class="student-progress">Exceeding</span>
-                        </div>
-                    </div>
-                </div>
-                <hr>
-                <div class="subject">
-                    <div class="subject-header">
-                        <img src="path/to/subject-icon.png" alt="Subject Icon">
-                        <h3>Chinese</h3>
-                        <h5 style='text-align:right;'>Student Progress</h5>
-                    </div>
-                    <div class="subject-body">
-                        <div class="subject-row">
-                            <span class="subject-title">• Oral language - listening and speaking</span>
-                            <span class="student-progress">Achieving</span>
-                        </div>
-                        <div class="subject-row">
-                            <span class="subject-title">• Written language - writing</span>
-                            <span class="student-progress">Exceeding</span>
+                        <div class="subject-body">
+                                @foreach($sub_teacher->subject->pypCriteria as $criterion)
+                                    @php
+                                        $grade = $criterion->pypCriteriaProgress->first();
+                                    @endphp
+                                    <div class="subject-row">
+                                        <span class="subject-title">• {{$criterion->crit_name}}</span>
+                                        <span class="student-progress">{{$criterion->pypCriteriaProgress->first()->description}}</span>
+                                    </div>
+                                @endforeach
                         </div>
                     </div>
-                </div>
-                <hr>
-
-                <div class="subject">
-                    <div class="subject-header">
-                        <img src="path/to/subject-icon.png" alt="Subject Icon">
-                        <h3>Bahasa Indonesia</h3>
-                        <h5 style='text-align:right;'>Student Progress</h5>
-                    </div>
-                    <div class="subject-body">
-                        <div class="subject-row">
-                            <span class="subject-title">• Keterampilan berbahasa lisan - mendengarkan dan berbicara</span>
-                            <span class="student-progress">Achieving</span>
-                        </div>
-                        <div class="subject-row">
-                            <span class="subject-title">• Bahasa tertulis - membaca</span>
-                            <span class="student-progress">Exceeding</span>
-                        </div>
-                        <div class="subject-row">
-                            <span class="subject-title">• Bahasa tertulis - menulis</span>
-                            <span class="student-progress">Exceeding</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                    <hr>
+                @endforeach
+                    
 
             <hr>
             <div class="teacher-comment">

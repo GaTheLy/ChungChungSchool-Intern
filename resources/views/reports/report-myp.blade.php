@@ -298,7 +298,7 @@
 
         <div class="content">
             <div class="section student-info">
-                <h2>{{ $student->first_name }}</h2>
+                <h2>{{ $student->first_name }} {{ $student->last_name }}</h2>
                 <div class="info-container">
                     <div class="info-row">
                         <div class="info-label">Grade</div>

@@ -84,7 +84,7 @@
                         Fill Attendance
                     </td>
                     <td style="text-align: center;"><span data-bs-toggle="modal" data-bs-target="#unitProgress" data-bs-whatever="{{ $student->first_name }} {{ $student->last_name }}">Unit</span> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp | &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <span>ATL</span></td>
-                    <td><a href="/homeroom-teacher-report-preview-myp">Preview Report</a></td>
+                    <td><a href="{{ route('report.pyp', [$student->nim_pyp]) }}">Preview Report</a></td>
             </tr>
             @endforeach
         </tbody>

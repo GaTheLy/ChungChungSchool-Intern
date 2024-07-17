@@ -19,10 +19,14 @@ class PYPCriteria extends Model
     protected $fillable = ['sc_pyp_id, crit_name, subject_pyp_id, criteria_descriptor'];
 
     // Define the relationship with Homeroom
-    public function sub_critPYP()
+    public function subject()
     {
         return $this->belongsTo(SubjectModel::class, 'subject_pyp_id', 'id');
     }
 
+    public function pypCriteriaProgress()
+    {
+        return $this->hasMany(PYPCriteriaProgress::class, 'sc_pyp_id', 'sc_pyp_id');
+    }
 }
 
