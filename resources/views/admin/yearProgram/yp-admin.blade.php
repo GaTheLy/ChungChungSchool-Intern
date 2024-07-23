@@ -44,15 +44,34 @@
 
         <div class="accordion" id="accordionExample">
             <h2>PYP Year Program</h2>
+            <div class="row" style="margin-left: 50px;">
+                <div class="col">
+                    <button class="btn btn-primary">
+                        <b>config ATL</b>
+                    </button>
+                </div>
+
+                <div class="col">
+                    <button class="btn btn-primary">
+                        <b>config LOI</b>
+                    </button>
+                </div>
+
+                <div class="col">
+                    <button class="btn btn-primary">
+                        <b>config Key Concepts</b>
+                    </button>
+                </div>
+            </div>
             <span class="hidden">{{ $index=0 }}</span>
             @foreach ($yearProgramPYP as $ypPYP)
             <div class="accordion-item">
                 <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{$index}}PYP" aria-expanded="false" aria-controls="collapse{{$index}}PYP">
-                    <b>{{ $ypPYP->name }}</b>
+                    <b>{{ $ypPYP->name .' '. $ypPYP->id }}</b>
                 </button>
                 </h2>
-                <div id="collapse{{$index}}PYP" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div id="collapse{{$index}}PYP" class="accordion-collapse collapse">
                 <div class="accordion-body">
                     {{-- fill --}}
                     <table id="units" class="table table-bordered" style="width:90%;">
@@ -95,10 +114,10 @@
                             @endif
                             @endforeach
                             </tbody>
-                        </table>
+                    </table>
                         <div class="row">
                             <div class="col" style="text-align:right;margin-right:10px;margin-top:10px;">
-                            <button class="btn me-md-2" type="button" id="addUnit" data-bs-toggle="modal" data-bs-target="#staticAddUnit">
+                            <button class="btn me-md-2" type="button" id="addUnit" data-bs-toggle="modal" data-bs-target="#staticAddUnit" data-bs-ypId = "{{$ypPYP->id}}" data-bs-ypName = "{{$ypPYP->name}}">
                                 add unit                                 
                                 <i class="lni lni-circle-plus"></i>
                             </button>
@@ -121,7 +140,7 @@
                         </table>
                         <div class="row">
                             <div class="col" style="text-align:right;margin-right:10px;margin-top:10px;">
-                            <button class="btn me-md-2" type="button" id="addATLPYP" data-bs-toggle="modal" data-bs-target="#staticAddATLPYP">
+                            <button class="btn me-md-2" type="button" id="addATLPYP" data-bs-toggle="modal" data-bs-target="#staticAddATLPYP"  data-bs-ypId = "{{$ypPYP->id}}" data-bs-ypName = "{{$ypPYP->name}}">
                                 add atl                                 
                                 <i class="lni lni-circle-plus"></i>
                             </button>
@@ -136,7 +155,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($detailSubPYP as $sub)
-                                @if ($sub->year_program_pyp_id == $ypPYP->id)
+                                @if ($sub->yp_pyp_id == $ypPYP->id)
                                     <tr>
                                         <td>{{ $sub->subject->subject_name }}</td>
                                         <td>{{ $sub->teacher->first_name }} {{ $sub->teacher->last_name }}</td> <!-- Assuming 'name' is the teacher's name column -->
@@ -147,7 +166,7 @@
                         </table>
                         <div class="row">
                             <div class="col" style="text-align:right;margin-right:10px;margin-top:10px;">
-                            <button class="btn me-md-2" type="button" id="addSubjectPYP" data-bs-toggle="modal" data-bs-target="#staticAddSubjectPYP">
+                            <button class="btn me-md-2" type="button" id="addSubjectPYP" data-bs-toggle="modal" data-bs-target="#staticAddSubjectPYP" data-bs-ypId = "{{$ypPYP->id}}" data-bs-ypName = "{{$ypPYP->name}}">
                                 add subject                                 
                                 <i class="lni lni-circle-plus"></i>
                             </button>
@@ -187,7 +206,7 @@
                         </table>
                         <div class="row">
                             <div class="col" style="text-align:right;margin-right:10px;margin-top:10px;">
-                            <button class="btn me-md-2" type="button" id="addClassPYP" data-bs-toggle="modal" data-bs-target="#staticAddPYPClass">
+                            <button class="btn me-md-2" type="button" id="addClassPYP" data-bs-toggle="modal" data-bs-target="#staticAddPYPClass" data-bs-ypId = "{{$ypPYP->id}}" data-bs-ypName = "{{$ypPYP->name}}">
                                 add class                                 
                                 <i class="lni lni-circle-plus"></i>
                             </button>
@@ -211,11 +230,11 @@
             @foreach ($yearProgramMYP as $yp)
             <div class="accordion-item">
                 <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse{{$indexMYP}}MYP" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapse{{$indexMYP}}MYP">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $indexMYP }}MYP" aria-expanded="false" aria-controls="collapse{{ $indexMYP }}MYP">
                     <b>{{ $yp->name }}</b>
                 </button>
                 </h2>
-                <div id="collapse{{$indexMYP}}MYP" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div id="collapse{{ $indexMYP }}MYP" class="accordion-collapse collapse">
                 <div class="accordion-body">
                     {{-- fill --}}
                         <table id="example" class="table table-bordered" style="width:80%;">
@@ -228,6 +247,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($detailSubMYP as $sub)
+                                @if ($sub->yp_myp_id == $yp->id)
                                     <tr>
                                         <td>{{ $sub->subject->subject_name }}</td>
                                         <td>{{ $sub->teacher->first_name }} {{ $sub->teacher->last_name }}</td> <!-- Assuming 'name' is the teacher's name column -->
@@ -237,12 +257,13 @@
                                             @endforeach
                                         </td>
                                     </tr>
+                                @endif
                                 @endforeach
                             </tbody>
                         </table>
                         <div class="row">
                             <div class="col" style="text-align:right;margin-right:10px;margin-top:10px;">
-                            <button class="btn me-md-2" type="button" id="addSubject" data-bs-toggle="modal" data-bs-target="#staticAddSubject">
+                            <button class="btn me-md-2" type="button" id="addSubject" data-bs-toggle="modal" data-bs-target="#staticAddSubjectMYP" data-bs-ypId = "{{$yp->id}}" data-bs-ypName = "{{$yp->name}}">
                                 add subject                                 
                                 <i class="lni lni-circle-plus"></i>
                             </button>
@@ -262,6 +283,8 @@
                             </thead>
                             <tbody>
                                 @foreach ($detailClassMYP as $classDetail)
+                                @if ($classDetail->year_program_myp_id == $yp->id)
+
                                     <tr>
                                         <td>{{ $classDetail->class->class_name }}</td>
                                         <td>
@@ -274,12 +297,13 @@
                                         <td>{{ $classDetail->end_date }}</td>
                                         <td>{{ $classDetail->class->students()->count() }}</td>
                                     </tr>
+                                @endif
                                 @endforeach
                             </tbody>
                         </table>
                         <div class="row">
                             <div class="col" style="text-align:right;margin-right:10px;margin-top:10px;">
-                            <button class="btn me-md-2" type="button" id="addClass" data-bs-toggle="modal" data-bs-target="#staticAddClass">
+                            <button class="btn me-md-2" type="button" id="addClass" data-bs-toggle="modal" data-bs-target="#staticAddMYPClass" data-bs-ypId = "{{$yp->id}}" data-bs-ypName = "{{$yp->name}}">
                                 add class                                 
                                 <i class="lni lni-circle-plus"></i>
                             </button>
@@ -288,12 +312,8 @@
                 </div>
                 </div>
             </div>
-            <span class="hidden">{{ $index=+1 }}</span>
+            <span class="hidden">{{ $indexMYP=+1 }}</span>
             @endforeach
-
-
-           
-        
 
         <div class="d-grid gap-4 d-md-flex justify-content-md-end">
             <button class="btn me-md-2" type="button" id="addProgram" data-bs-toggle="modal" data-bs-target="#staticAddYP">
@@ -301,6 +321,8 @@
                 <i class="lni lni-circle-plus"></i>
             </button>
         </div>
+
+        
 
         <br>
 
@@ -399,38 +421,32 @@
 
          {{-- modal Add ATL for PYP --}}
          <div class="modal fade" id="staticAddATLPYP" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticAddATLPYPLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticAddATLPYPLabel">Add New ATL for {{ $ypPYP->name }} </h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form method="POST" action="{{ route('yearProgram-add.atlPYP', ['userId' => $teacher->user_id, 'ypId'=>$ypPYP->id]) }} ">
-                @csrf
-            <div class="modal-body">
-                <br>
-
-                    <div class="row">
-                        <label for="" class="col-form-label"><b>Approaches to Learning</b></label>
-                        <div id="ATLContainerAdd" class="PYPCriteria">
-
-        
-                        </div>
-                        <div class="d-grid gap-4 d-md-flex justify-content-md-end">
-                            <button class="btn me-md-2" type="button" id="addInputATLAdd">
-                                <i class="lni lni-circle-plus"></i>
-                            </button>
-                        </div>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modal-titleATL">Add New ATL</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                
+                    <form method="POST" id="addATLForm">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="row">
+                                <label for="" class="col-form-label"><b>Approaches to Learning</b></label>
+                                <div id="ATLContainerAdd" class="PYPCriteria"></div>
+                                <div class="d-grid gap-4 d-md-flex justify-content-md-end">
+                                    <button class="btn me-md-2" type="button" id="addInputATLAdd">
+                                        <i class="lni lni-circle-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Add</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-primary">Add</button>
-            </div>
-            </form>
-            </div>
-        </div>
         </div>
 
         {{-- modal AddUnit for PYP --}}
@@ -438,10 +454,10 @@
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticAddUnitLabel">Add New Year Program for PYP</h1>
+                <h1 class="modal-title fs-5" id="modal-title">Add New Unit</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="POST" action="{{ route('yearProgram-add.unitPYP', ['userId' => $teacher->user_id, 'ypId'=>$ypPYP->id]) }} ">
+            <form method="POST" id="addUnitForm">
                 @csrf
             <div class="modal-body">
                 <br>
@@ -452,6 +468,16 @@
 
                         <div class="col-8" >
                             <input type="text" name="unit_name" id="unit_name" style="radius:10px;"></input>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4">
+                            <label for="" class="col-form-label"><b>Central Idea</b></label>
+                        </div> 
+
+                        <div class="col-8" >
+                            <input type="text" name="central_idea" id="central_idea" style="radius:10px;"></input>
                         </div>
                     </div>
 
@@ -496,10 +522,10 @@
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticAddSubjectPYPLabel">Add Subject to Year Program {{$ypPYP->name}}</h1>
+                <h1 class="modal-title fs-5" id="modal-titleSubPYP">Add New Subject</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="POST" action="{{ route('yearProgram-add.subjectPYP', ['userId' => $teacher->user_id, 'ypId' => $ypPYP->id]) }} ">
+            <form method="POST" id="addSubPYPForm">
                 @csrf
             <div class="modal-body">
                 <br>
@@ -548,10 +574,10 @@
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticAddPYPClassLabel">Add Class to Year Program {{$ypPYP->name}}</h1>
+                <h1 class="modal-title fs-5" id="modal-titleClassPYP">Add Class</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="POST" action="{{ route('yearProgram-add.classPYP', ['userId' => $teacher->user_id, 'ypId' => $ypPYP->id]) }} ">
+            <form method="POST" id="addClassPYPForm">
                 @csrf
             <div class="modal-body">
                 <br>
@@ -601,8 +627,6 @@
         </div>
         </div>
 
-
-
          {{-- modal AddYP for MYP--}}
         <div class="modal fade" id="staticAddYP" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticAddYPLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -635,16 +659,15 @@
         </div>
         </div>
 
-
         {{-- modal Add Subject --}}
-        <div class="modal fade" id="staticAddSubject" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticAddSubjectLabel" aria-hidden="true">
+        <div class="modal fade" id="staticAddSubjectMYP" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticAddSubjectLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticAddSubjectLabel">Add Subject to Year Program {{$yp->name}}</h1>
+                <h1 class="modal-title fs-5" id="modal-titleSubMYP">Add Subject</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="POST" action="{{ route('yearProgram-add.subject', ['userId' => $teacher->user_id, 'ypId' => $yp->id]) }} ">
+            <form method="POST" id="addSubMYPForm">
                 @csrf
             <div class="modal-body">
                 <br>
@@ -701,17 +724,15 @@
         </div>
         </div>
 
-
-
         {{-- modal Add Class --}}
-        <div class="modal fade" id="staticAddClass" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticAddClassLabel" aria-hidden="true">
+        <div class="modal fade" id="staticAddMYPClass" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticAddClassLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticAddClassLabel">Add Class to Year Program {{$yp->name}}</h1>
+                <h1 class="modal-title fs-5" id="modal-titleClassMYP">Add Class</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="POST" action="{{ route('yearProgram-add.class', ['userId' => $teacher->user_id, 'ypId' => $yp->id]) }} ">
+            <form method="POST" id="addClassMYPForm">
                 @csrf
             <div class="modal-body">
                 <br>
@@ -761,11 +782,133 @@
         </div>
         </div>
 
-
-
-
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
+            //modal get prev value
+            document.addEventListener('DOMContentLoaded', function() {
+                var staticAddUnitModal = document.getElementById('staticAddUnit');
+                
+                if (staticAddUnitModal){
+                     staticAddUnitModal.addEventListener('show.bs.modal', function(event) {
+                    var button = event.relatedTarget; // Button that triggered the modal
+                    var ypId = button.getAttribute('data-bs-ypId');
+                    var ypName = button.getAttribute('data-bs-ypName');
+                    
+                    // Update the modal title
+                    var modalTitle = staticAddUnitModal.querySelector('.modal-title');
+                    modalTitle.textContent = 'Add New Unit for ' + ypName + ' ' + ypId;
+                    
+                    // Update the form action URL
+                    var form = staticAddUnitModal.querySelector('#addUnitForm');
+                    var baseActionUrl = "{{ route('yearProgram-add.unitPYP', ['userId' => $teacher->user_id, 'ypId' => 'DUMMY_YP_ID']) }}";
+                    form.action = baseActionUrl.replace('DUMMY_YP_ID', ypId);
+                    });
+                }
+                    // atl pyp
+                    var staticAddATLModal = document.getElementById('staticAddATLPYP');
+                    
+                    if (staticAddATLModal) {
+                        staticAddATLModal.addEventListener('show.bs.modal', function(event) {
+                            var button = event.relatedTarget; // Button that triggered the modal
+                            var ypId = button.getAttribute('data-bs-ypId');
+                            var ypName = button.getAttribute('data-bs-ypName');
+                            
+                            // Update the modal title
+                            var modalTitle = staticAddATLModal.querySelector('#modal-titleATL');
+                            modalTitle.textContent = 'Add New ATL for ' + ypName + ' ' + ypId;
+                            
+                            // Update the form action URL
+                            var form = staticAddATLModal.querySelector('#addATLForm');
+                            var baseActionUrl = "{{ route('yearProgram-add.atlPYP', ['userId' => $teacher->user_id, 'ypId' => 'DUMMY_YP_ID']) }}";
+                            form.action = baseActionUrl.replace('DUMMY_YP_ID', ypId);
+                        });
+                    }
+
+                    // subject pyp
+                    var staticAddSubPYPModal = document.getElementById('staticAddSubjectPYP');
+                    
+                    if (staticAddSubPYPModal) {
+                        staticAddSubPYPModal.addEventListener('show.bs.modal', function(event) {
+                            var button = event.relatedTarget; // Button that triggered the modal
+                            var ypId = button.getAttribute('data-bs-ypId');
+                            var ypName = button.getAttribute('data-bs-ypName');
+                            
+                            // Update the modal title
+                            var modalTitle = staticAddSubPYPModal.querySelector('#modal-titleSubPYP');
+                            modalTitle.textContent = 'Add New Subject for ' + ypName + ' ' + ypId;
+                            
+                            // Update the form action URL
+                            var form = staticAddSubPYPModal.querySelector('#addSubPYPForm');
+                            var baseActionUrl = "{{ route('yearProgram-add.subjectPYP', ['userId' => $teacher->user_id, 'ypId' => 'DUMMY_YP_ID']) }}";
+                            form.action = baseActionUrl.replace('DUMMY_YP_ID', ypId);
+                        });
+                    }
+
+                    // class pyp
+                    var staticAddClassPYPModal = document.getElementById('staticAddPYPClass');
+                    
+                    if (staticAddClassPYPModal) {
+                        staticAddClassPYPModal.addEventListener('show.bs.modal', function(event) {
+                            var button = event.relatedTarget; // Button that triggered the modal
+                            var ypId = button.getAttribute('data-bs-ypId');
+                            var ypName = button.getAttribute('data-bs-ypName');
+                            
+                            // Update the modal title
+                            var modalTitle = staticAddClassPYPModal.querySelector('#modal-titleClassPYP');
+                            modalTitle.textContent = 'Add New Class for ' + ypName + ' ' + ypId;
+                            
+                            // Update the form action URL
+                            var form = staticAddClassPYPModal.querySelector('#addClassPYPForm');
+                            var baseActionUrl = "{{ route('yearProgram-add.classPYP', ['userId' => $teacher->user_id, 'ypId' => 'DUMMY_YP_ID']) }}";
+                            form.action = baseActionUrl.replace('DUMMY_YP_ID', ypId);
+                        });
+                    }
+
+
+                    // subject MYP
+                    var staticAddSubMYPModal = document.getElementById('staticAddSubjectMYP');
+                    
+                    if (staticAddSubMYPModal) {
+                        staticAddSubMYPModal.addEventListener('show.bs.modal', function(event) {
+                            var button = event.relatedTarget; // Button that triggered the modal
+                            var ypId = button.getAttribute('data-bs-ypId');
+                            var ypName = button.getAttribute('data-bs-ypName');
+                            
+                            // Update the modal title
+                            var modalTitle = staticAddSubMYPModal.querySelector('#modal-titleSubMYP');
+                            modalTitle.textContent = 'Add New Subject for ' + ypName + ' ' + ypId;
+                            
+                            // Update the form action URL
+                            var form = staticAddSubMYPModal.querySelector('#addSubMYPForm');
+                            var baseActionUrl = "{{ route('yearProgram-add.subject', ['userId' => $teacher->user_id, 'ypId' => 'DUMMY_YP_ID']) }}";
+                            form.action = baseActionUrl.replace('DUMMY_YP_ID', ypId);
+                        });
+                    }
+
+                    // class MYP
+                    var staticAddClassMYPModal = document.getElementById('staticAddMYPClass');
+                    
+                    if (staticAddClassMYPModal) {
+                        staticAddClassMYPModal.addEventListener('show.bs.modal', function(event) {
+                            var button = event.relatedTarget; // Button that triggered the modal
+                            var ypId = button.getAttribute('data-bs-ypId');
+                            var ypName = button.getAttribute('data-bs-ypName');
+                            
+                            // Update the modal title
+                            var modalTitle = staticAddClassMYPModal.querySelector('#modal-titleClassMYP');
+                            modalTitle.textContent = 'Add New Class for ' + ypName + ' ' + ypId;
+                            
+                            // Update the form action URL
+                            var form = staticAddClassMYPModal.querySelector('#addClassMYPForm');
+                            var baseActionUrl = "{{ route('yearProgram-add.class', ['userId' => $teacher->user_id, 'ypId' => 'DUMMY_YP_ID']) }}";
+                            form.action = baseActionUrl.replace('DUMMY_YP_ID', ypId);
+                        });
+                    }
+
+
+
+
+            });
                 //alert
             const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
                 const appendAlert = (message, type) => {
@@ -787,27 +930,28 @@
                 })
                 }
 
+
                 $(document).ready(function() {
 
-                   $('#addInputA').click(function(){
+                    $('#addInputA').click(function() {
                     var newInputNumber = $('#ATLContainer .form-group').length;
                     console.log(newInputNumber);
-
 
                     var newInput = `
                     <div class="form-group">
                         <div class="row">
-                            <div class="col-6">
-                                <input type="text" name="atl[${newInputNumber}][name]" id="atl[${newInputNumber}][name]">
-                                <span class="delete-btn"><i class="lni lni-trash-can"></i></span>
+                            <div class="col-10">
+                                <input type="text" name="atl[${newInputNumber}][name]" id="atl[${newInputNumber}][name]" class="form-control" placeholder="Enter ATL name">
+                            </div>
+                            <div class="col-2">
+                                <button type="button" class="btn btn-danger delete-btn"><i class="lni lni-trash-can"></i></button>
                             </div>
                         </div>
                     </div>
-                                    <br>
-                                    `;
+                    <br>
+                    `;
                     $('#ATLContainer').append(newInput);
-
-                   });
+                });
 
                     $('#addInputATLAdd').click(function(){
                     var newInputNumber = $('#ATLContainerAdd .form-group').length;

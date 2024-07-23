@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\ATLPYP;
-use App\Models\DetailSubjectMYP;
-use App\Models\DetailSubjectPYP;
 use App\Models\LinesOfInquiry;
 use App\Models\StudentPyp;
 use App\Models\TeacherPyp;
@@ -50,7 +48,7 @@ class YearProgramController extends Controller
             $subjectMYP = SubjectModel::where('subject_level', 'MYP')->get();
             $teacherMYP = TeacherPyp::where('is_myp', 1)->get();
             $class = ClassModel::get();
-            $detailSubMYP = DetailSubjectMYP::with(['subject.atls', 'teacher'])->get();
+            $detailSubMYP = SubjectTeacher::where('level', 'MYP')->with(['subject.atls', 'teacher'])->get();
             $detailClassMYP = DetailClassMYP::with(['class', 'homeroom.teacher'])->get();
 
             //pyp
@@ -58,7 +56,7 @@ class YearProgramController extends Controller
             $units = Unit::with(['linesOfInquiry', 'keyConcepts'])->get();
             $subjectPYP = SubjectModel::where('subject_level', 'PYP')->get();
             $teacherPYP = TeacherPyp::where('is_pyp', 1)->get();
-            $detailSubPYP = DetailSubjectPYP::with(['subject', 'teacher'])->get();
+            $detailSubPYP = SubjectTeacher::where('level', 'PYP')->with(['subject', 'teacher'])->get();
             $detailClassPYP = DetailClassPYP::with(['class', 'homeroom.teacher'])->get();
             // ->whereHas('homeroom.teacher', function ($query) {
             //     $query->where('level', 'PYP');
@@ -262,10 +260,11 @@ class YearProgramController extends Controller
             $role = User::find($authUserId)->role;
     
 
-            $detailSubject = new DetailSubjectMYP();
-            $detailSubject->year_program_myp_id = $ypId;
-            $detailSubject->subject_id =  $request->input('subject');
+            $detailSubject = new SubjectTeacher();
+            $detailSubject->yp_myp_id = $ypId;
+            $detailSubject->subject_pyp_id =  $request->input('subject');
             $detailSubject->teacher_id = $request->input('teacher');
+            $detailSubject->level = "MYP";
 
             if ($detailSubject->save()) {
                 if($request->input('atl')){
@@ -302,10 +301,11 @@ class YearProgramController extends Controller
             $role = User::find($authUserId)->role;
     
 
-            $detailSubject = new DetailSubjectPYP();
-            $detailSubject->year_program_pyp_id = $ypId;
-            $detailSubject->subject_id =  $request->input('subject');
+            $detailSubject = new SubjectTeacher();
+            $detailSubject->yp_pyp_id = $ypId;
+            $detailSubject->subject_pyp_id =  $request->input('subject');
             $detailSubject->teacher_id = $request->input('teacher');
+            $detailSubject->teacher_id = "PYP";
 
             if ($detailSubject->save()) {
                 if ($role == 0) { // admin

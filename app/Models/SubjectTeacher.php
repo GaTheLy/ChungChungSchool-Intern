@@ -10,11 +10,14 @@ class SubjectTeacher extends Model
     use HasFactory;
     protected $table = 'sub_teacher';
 
+    public $timestamps = false;
+
+
     // Define the primary key if it's not 'id'
     protected $primaryKey = 'sub_teacher_id';
 
     // Define the fillable fields
-    protected $fillable = ['teacher_id', 'subject_pyp_id'];
+    protected $fillable = ['teacher_id', 'subject_pyp_id', 'yp_pyp_id', 'yp_myp_id', 'level'];
 
     // Define the relationship with TeacherPyp
     public function teacher()
@@ -32,6 +35,18 @@ class SubjectTeacher extends Model
     {
         return $this->belongsTo(SubjectModel::class, 'subject_pyp_id', 'id');
     }
+
+    // year program
+    public function yearProgramPYP()
+    {
+        return $this->belongsTo(YearProgramPYP::class, 'year_program_pyp_id');
+    }
+
+    public function yearProgramMYP()
+    {
+        return $this->belongsTo(YearProgramMYP::class, 'year_program_myp_id');
+    }
+    // end year program
 
     public function getFormattedCriteria()
     {

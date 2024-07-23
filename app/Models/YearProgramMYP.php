@@ -21,5 +21,6 @@ class YearProgramMYP extends Model
         return $this->hasMany(DetailSubjectMYP::class, 'id');
     }
     
+    
 
 }
