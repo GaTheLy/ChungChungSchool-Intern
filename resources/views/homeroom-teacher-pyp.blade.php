@@ -41,8 +41,8 @@
             </div>
         </div>
 
-        <br>
         <div id="liveAlertPlaceholder"></div>
+        {{-- 
         <div class="row">
             <div class="col-3" style="text-align:center;">
             <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticExport">Export All</button>
@@ -56,10 +56,40 @@
             <button type="button" class="btn btn-primary" id="liveAlertBtn">Save</button>
             </div>
         </div>
+         --}}
+        <br />
+        <div class="row" style="text-align:center;">
+            <div class="col">
+                <button type="button" class="btn btn-info" id="show-main-button">Main</button>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-info" id="show-attendance-button">Fill Attendance</button>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-info" id="show-atl-pyp-button">ATL Progress</button>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-info" id="show-unit-button">Unit Progress</button>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-info" id="show-hc-button">Homeroom's Comment</button>
+            </div>
+        </div>
 
     <br>
 
-    <table id="example" class="table table-striped" style="width:100%">
+    @include('homeroom.attendance')
+
+    @include('homeroom.atl-pyp-progress')
+
+    @include('homeroom.unit-progress')
+
+    @include('homeroom.comments')
+
+    @include('homeroom.main-pyp')
+
+    {{-- baek aku tak comment yg dulu --}}
+    {{-- <table id="example" class="table table-striped" style="width:100%">
         <thead>
             <tr>
                 <th>Name</th>
@@ -98,7 +128,7 @@
                 <th>Report</th>
             </tr>
         </tfoot>
-    </table>
+    </table>  --}} 
 
 
 {{-- modal export --}}
@@ -139,7 +169,7 @@
     </div>
     </div>
 
-    {{-- modal fill Attendance --}}
+    {{-- modal fill Attendance 
     <div class="modal fade" id="fillAttendance" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="fillAttendanceLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -184,6 +214,7 @@
         </div>
     </div>
     </div>
+    --}}
 
 
      {{-- modal unit progress --}}
@@ -224,6 +255,74 @@
 
 
     <script>
+        var mainContent = document.getElementById('main-pyp-content');
+        var attendanceContent = document.getElementById('attendance-content');
+        var unitContent = document.getElementById('unit-content');
+        var atlPypContent = document.getElementById('atl-pyp-content');
+        var hcContent = document.getElementById('comments-content');
+
+        document.getElementById('show-main-button').addEventListener('click', function() {
+            if (mainContent.style.display === 'none') {
+                mainContent.style.display = 'block';
+                attendanceContent.style.display = 'none';
+                unitContent.style.display = 'none';
+                atlPypContent.style.display = 'none';
+                hcContent.style.display = 'none';
+            } else {
+                mainContent.style.display = 'none';
+            }
+        });
+
+        document.getElementById('show-attendance-button').addEventListener('click', function() {
+            if (attendanceContent.style.display === 'none') {
+                attendanceContent.style.display = 'block';
+                unitContent.style.display = 'none';
+                atlPypContent.style.display = 'none';
+                hcContent.style.display = 'none';
+                mainContent.style.display = 'none';
+            } else {
+                attendanceContent.style.display = 'none';
+            }
+        });
+
+        document.getElementById('show-unit-button').addEventListener('click', function() {
+            if (unitContent.style.display === 'none') {
+                unitContent.style.display = 'block';
+                attendanceContent.style.display = 'none';
+                atlPypContent.style.display = 'none';
+                hcContent.style.display = 'none';
+                mainContent.style.display = 'none';
+            } else {
+                unitContent.style.display = 'none';
+            }
+        });
+
+        document.getElementById('show-atl-pyp-button').addEventListener('click', function() {
+            if (atlPypContent.style.display === 'none') {
+                atlPypContent.style.display = 'block';
+                unitContent.style.display = 'none';
+                attendanceContent.style.display = 'none';
+                hcContent.style.display = 'none';
+                mainContent.style.display = 'none';
+            } else {
+                atlPypContent.style.display = 'none';
+            }
+        });
+
+        document.getElementById('show-hc-button').addEventListener('click', function() {
+            if (hcContent.style.display === 'none') {
+                hcContent.style.display = 'block';
+                unitContent.style.display = 'none';
+                atlPypContent.style.display = 'none';
+                attendanceContent.style.display = 'none';
+                mainContent.style.display = 'none';
+            } else {
+                hcContent.style.display = 'none';
+            }
+        });
+
+
+
         const exampleModal = document.getElementById('fillAttendance');
 
         if (exampleModal) {
