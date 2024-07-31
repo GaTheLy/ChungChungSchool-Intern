@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class HomeroomController extends Controller
 {
+    // Attendance
     public function savePyp(Request $request)
     {
         $data = $request->json()->all();
@@ -27,6 +28,21 @@ class HomeroomController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function getAttendanceByDate(Request $request, $classId)
+    {
+        $date = $request->input('date');
+
+        $attendanceRecords = DB::table('attendance_pyp')
+            ->join('student_pyp', 'attendance_pyp.student_id', '=', 'student_pyp.nim_pyp')
+            ->where('date', $date)
+            ->where('student_pyp.class_id', $classId)
+            ->get();
+
+        return response()->json($attendanceRecords);
+    }
+
+
+    // Unit Progress
     public function saveUnitProg(Request $request)
     {
         $unitProgressData = $request->json()->all();
@@ -46,16 +62,27 @@ class HomeroomController extends Controller
         return response()->json(['message' => 'Unit progress saved successfully.']);
     }
 
-    // In HomeroomController.php
-    public function getUnitProgress($unitId)
+    public function getUnitProgress($unitId, $classId)
     {
         $unitProgress = DB::table('unit_progress')
-            ->where('unit_progress.unit_id', $unitId)
-            ->get();
-
+        ->join('student_pyp', 'unit_progress.student_id', '=', 'student_pyp.nim_pyp')
+        ->where('unit_progress.unit_id', $unitId)
+        ->where('student_pyp.class_id', $classId)
+        ->select('unit_progress.*', 'student_pyp.first_name', 'student_pyp.last_name')
+        ->get();
         // dd($unitProgress);
 
         return response()->json($unitProgress);
     }
 
+
+    public function getStudentsByClass($classId)
+    {
+        // Fetch students based on classId
+        $students = DB::table('student_pyp')
+            ->where('class_id', $classId)
+            ->get(['nim_pyp', 'first_name', 'last_name']); // Modify fields as needed
+
+        return response()->json($students);
+    }
 }

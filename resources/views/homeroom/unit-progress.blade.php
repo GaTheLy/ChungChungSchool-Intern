@@ -133,12 +133,14 @@
     });
 
     document.addEventListener('DOMContentLoaded', function() {
+        const classId = '{{ $class->class_id }}';
+
         // Handle unit selection change
         document.getElementById('unit-select').addEventListener('change', function() {
             const unitId = this.value;
             
             // Fetch progress data for the selected unit
-            fetch(`/unit-progress/${unitId}`)
+            fetch(`/unit-progress/${unitId}/${classId}`)
                 .then(response => response.json())
                 .then(data => {
                     console.log('Fetched unit progress data:', data);
@@ -154,7 +156,7 @@
             data.forEach(progress => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>{{ $student->first_name }} {{ $student->last_name }}</td>
+                    <td>${progress.first_name} ${progress.last_name} </td>
                     <td>
                         <input type="radio" id="exceeding_${progress.student_id}" name="performance_${progress.student_id}" value="EXCEEDING" ${progress.description === 'EXCEEDING' ? 'checked' : ''}>
                         <label for="exceeding_${progress.student_id}">EXCEEDING</label>

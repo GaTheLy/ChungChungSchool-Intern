@@ -189,10 +189,15 @@ Route::get('/attendance-myp/{studentId}', [ClassController::class, 'getAttendanc
 // New Attendance
 Route::post('/new-attendance/save', [HomeroomController::class, 'savePyp'])->name('new.attendance.save.pyp');
 
+Route::post('/attendance-by-date/{classId}', [HomeroomController::class, 'getAttendanceByDate']);
+
+Route::get('/students-by-class/{classId}', [HomeroomController::class, 'getStudentsByClass']);
+
+
 // Unit Progress
 Route::post('/save-unit-progress', [HomeroomController::class, 'saveUnitProg'])->name('homeroom.saveUnitProg');
 
-Route::get('/unit-progress/{unitId}', [HomeroomController::class, 'getUnitProgress']);
+Route::get('/unit-progress/{unitId}/{classId}', [HomeroomController::class, 'getUnitProgress']);
 
 
 
