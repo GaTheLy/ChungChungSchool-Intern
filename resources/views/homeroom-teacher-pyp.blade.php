@@ -1,5 +1,5 @@
 @extends('base.base-pyp')
-    <!-- section content -> yield content base.blade -->
+
     @section('content')
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">

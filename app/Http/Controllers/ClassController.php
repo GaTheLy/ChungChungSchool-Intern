@@ -20,9 +20,30 @@ class ClassController extends Controller
     public function show($id)
     {
         $class = ClassModel::findOrFail($id);
+
+        $detail_class = DB::table('detail_class_pyp')
+            ->where('class_id', $class->class_id)
+            ->first();
+
+        
+
+        $year_prog = DB::table('year_program_pyp')
+            ->where('id', $detail_class->year_program_pyp_id)
+            ->first();
+
+        
+        // dd($year_prog);
+
+        $units = DB::table('unit')
+            ->where('year_program_pyp_id', $year_prog->id)
+            ->get();
+
+        // dd($units);
+
         // Assuming you have related models like students or subjects
         // Assuming $students is already fetched
         $students = $class->students;
+        
         // $subjects = $class->subjects;
         foreach ($students as $student) {
             // Fetch existing attendance data for the student
@@ -32,7 +53,7 @@ class ClassController extends Controller
     
         $student->attendance = $attendance; // Assigning attendance data to each student
         }
-        return view('homeroom-teacher-pyp', compact('class', 'students'));
+        return view('homeroom-teacher-pyp', compact('class', 'students', 'units'));
     }
 
     public function showMyp($id)

@@ -10,6 +10,7 @@ use App\Http\Controllers\ClassController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\YearProgramController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\HomeroomController;
 
 // admin route
 Route::get('/custom-report-pyp', function () {
@@ -184,6 +185,16 @@ Route::get('/attendance/{studentId}', [ClassController::class, 'getAttendance'])
 Route::post('/attendance-myp/save', [TeachController::class, 'saveAttendanceMyp'])->name('attendance.save.myp');
 
 Route::get('/attendance-myp/{studentId}', [ClassController::class, 'getAttendanceMyp']);
+
+// New Attendance
+Route::post('/new-attendance/save', [HomeroomController::class, 'savePyp'])->name('new.attendance.save.pyp');
+
+// Unit Progress
+Route::post('/save-unit-progress', [HomeroomController::class, 'saveUnitProg'])->name('homeroom.saveUnitProg');
+
+Route::get('/unit-progress/{unitId}', [HomeroomController::class, 'getUnitProgress']);
+
+
 
 // Report Preview
 Route::get('/report-myp/{studentId}', [ReportController::class, 'previewReport'])->name('report.myp');
