@@ -9,12 +9,6 @@
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
-    <script>
-        $(document).ready(function() {
-            $('#example').DataTable();
-        });
-    </script>
-
     
     <style>
         h1{
@@ -70,9 +64,6 @@
                 <button type="button" class="btn btn-info" id="show-attendance-button">Fill Attendance</button>
             </div>
             <div class="col">
-                <button type="button" class="btn btn-info" id="show-atl-pyp-button">ATL Progress</button>
-            </div>
-            <div class="col">
                 <button type="button" class="btn btn-info" id="show-hc-button">Homeroom's Comment</button>
             </div>
         </div>
@@ -80,8 +71,6 @@
     <br>
 
     @include('homeroom.attendance')
-
-    @include('homeroom.atl-myp-progress')
 
     @include('homeroom.comments')
 
@@ -227,16 +216,19 @@
 --}}
 
     <script>
+
         var mainContent = document.getElementById('main-myp-content');
         var attendanceContent = document.getElementById('attendance-content');
-        var atlPypContent = document.getElementById('atl-myp-content');
         var hcContent = document.getElementById('comments-content');
+
+        $(document).ready(function() {
+            $('#example').DataTable();
+        });
 
             document.getElementById('show-main-button').addEventListener('click', function() {
                 if (mainContent.style.display === 'none') {
                     mainContent.style.display = 'block';
                     attendanceContent.style.display = 'none';
-                    atlPypContent.style.display = 'none';
                     hcContent.style.display = 'none';
                 } else {
                     mainContent.style.display = 'none';
@@ -246,7 +238,6 @@
             document.getElementById('show-attendance-button').addEventListener('click', function() {
                 if (attendanceContent.style.display === 'none') {
                     attendanceContent.style.display = 'block';
-                    atlPypContent.style.display = 'none';
                     hcContent.style.display = 'none';
                     mainContent.style.display = 'none';
                 } else {
@@ -254,21 +245,10 @@
                 }
             });
 
-            document.getElementById('show-atl-pyp-button').addEventListener('click', function() {
-                if (atlPypContent.style.display === 'none') {
-                    atlPypContent.style.display = 'block';
-                    attendanceContent.style.display = 'none';
-                    hcContent.style.display = 'none';
-                    mainContent.style.display = 'none';
-                } else {
-                    atlPypContent.style.display = 'none';
-                }
-            });
 
             document.getElementById('show-hc-button').addEventListener('click', function() {
                 if (hcContent.style.display === 'none') {
                     hcContent.style.display = 'block';
-                    atlPypContent.style.display = 'none';
                     attendanceContent.style.display = 'none';
                     mainContent.style.display = 'none';
                 } else {

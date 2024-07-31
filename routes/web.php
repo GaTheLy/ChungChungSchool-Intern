@@ -148,11 +148,28 @@ Route::get('/class-add/{userId}', [ClassController::class, 'add'])
 Route::post('/class-submit/{userId}', [ClassController::class, 'submit'])
 ->middleware(['auth', 'verified'])->name('class-add.submit');
 //detail class
-Route::get('/class/{userId}/{classId}', [ClassController::class, 'detail'])
+Route::get('/class-detail/{userId}/{classId}', [ClassController::class, 'detail'])
 ->middleware(['auth', 'verified'])->name('class.detail');
+//edit class
+Route::get('/class-edit/{userId}/{classId}', [ClassController::class, 'edit'])
+->middleware(['auth', 'verified'])->name('class.edit');
+
+Route::post('/class-delete-student/{userId}/{classId}/{studentId}', [ClassController::class, 'deleteStudent'])
+    ->middleware(['auth', 'verified'])
+    ->name('class.delete.student');
+
+Route::post('/class-edit-submit/{userId}/{classId}', [ClassController::class, 'editSubmit'])
+    ->middleware(['auth', 'verified'])
+    ->name('class.edit.submit');
+
+    // delete class
+    Route::post('/class-delete/{userId}/{classId}', [ClassController::class, 'delete'])
+    ->middleware(['auth', 'verified'])
+    ->name('class.delete');
 
 
 
+    // profile
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

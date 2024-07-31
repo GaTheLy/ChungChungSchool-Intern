@@ -1,4 +1,4 @@
-<div class="container" name="main-pyp" style="display:none;" id="main-pyp-content">
+<div class="container" name="main-pyp" style="display:block;" id="main-pyp-content">
     <table id="example" class="table table-striped" style="width:100%">
         <thead>
             <tr>

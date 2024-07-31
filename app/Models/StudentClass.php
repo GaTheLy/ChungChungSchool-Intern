@@ -12,7 +12,7 @@ class StudentClass extends Model
     public $timestamps = false;
     protected $table = 'student_class';
 
-    protected $primaryKey = 'student_class_id';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'class_id',

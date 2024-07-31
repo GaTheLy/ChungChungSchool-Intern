@@ -15,13 +15,13 @@
             $('#example').DataTable();
         });
 
-        function showModal(subjectId) {
-        $('#confirmDeleteModal').data('subject-id', subjectId).modal('show');
+        function showModal(classId) {
+        $('#confirmDeleteModal').data('class-id', classId).modal('show');
         }
 
         function confirmDelete() {
-            var subjectId = $('#confirmDeleteModal').data('subject-id');
-            $('#delete-form-' + subjectId).submit();
+            var classId = $('#confirmDeleteModal').data('class-id');
+            $('#delete-form-' + classId).submit();
         }
 
     </script>
@@ -83,13 +83,13 @@
                     <td>
                         
                         <a href="{{ route('class.detail', ['userId' => $teacher->user_id, 'classId' => $class->class_id]) }}" style="color:black;">Detail</a>
-                        {{-- 
-                        <a href="{{ route('subject.edit', ['userId' => $teacher->user_id, 'subjectId' => $subject->id]) }}" style="color:black;">Edit</a>
-                        <button onclick="showModal({{$subject->id}})" style="text-decoration:none;border:0px;background:none;">Delete</button>
-                        <form id="delete-form-{{ $subject->id }}" action="{{ route('subject.delete', ['userId' => $teacher->user_id, 'subjectId' => $subject->id]) }}" method="post" style="display:none;">
+                        <a href="{{ route('class.edit', ['userId' => $teacher->user_id, 'classId' => $class->class_id]) }}" style="color:black;">Edit</a>
+                        
+                        <button onclick="showModal({{$class->class_id}})" style="text-decoration:none;border:0px;background:none;">Delete</button>
+                        <form id="delete-form-{{ $class->class_id }}" action="{{ route('class.delete', ['userId' => $teacher->user_id, 'classId' => $class->class_id]) }}" method="post" style="display:none;">
                             @csrf
                         </form>
-                         --}}
+                        
                     </td>
 
 
@@ -114,7 +114,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            Are you sure want to delete this subject?
+            Are you sure want to delete this class?
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
             <button type="button" class="btn btn-danger" onclick="confirmDelete()">Yes</button>

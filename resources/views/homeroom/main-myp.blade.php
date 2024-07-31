@@ -1,4 +1,4 @@
-<div class="container" name="main-myp" style="display:none;" id="main-myp-content">
+<div class="container" name="main-myp" style="display:block;" id="main-myp-content">
     <table id="example" class="table table-striped" style="width:100%">
         <thead>
             <tr>

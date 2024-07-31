@@ -11,6 +11,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\SubjectModel;
 use App\Models\ClassModel;
+use App\Models\DetailClassMYP;
+use App\Models\DetailClassPYP;
 use App\Models\StudentClass;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -38,7 +40,12 @@ class ClassController extends Controller
             ->where('year_program_pyp_id', $year_prog->id)
             ->get();
 
+
         // dd($units);
+
+        $atls = DB::table('approach_to_learning')
+            ->where('year_program_pyp_id', $year_prog->id)
+            ->get();
 
         // Assuming you have related models like students or subjects
         // Assuming $students is already fetched
@@ -53,7 +60,7 @@ class ClassController extends Controller
     
         $student->attendance = $attendance; // Assigning attendance data to each student
         }
-        return view('homeroom-teacher-pyp', compact('class', 'students', 'units'));
+        return view('homeroom-teacher-pyp', compact('class', 'students', 'units', 'atls'));
     }
 
     public function showMyp($id)
@@ -193,7 +200,12 @@ class ClassController extends Controller
         $teacher = $user->teacher;
 
         // Get the subject with its criteria
-        $selectedClass = ClassModel::find($classId);
+        // $selectedClass = ClassModel::with('students')->find($classId);
+        // dd($selectedClass->students);
+        $selectedClass = ClassModel::with(['students' => function ($query) {
+            $query->orderBy('first_name')->orderBy('middle_name')->orderBy('last_name');
+        }])->find($classId);
+        
 
         $role = User::find($authUserId)->role;
 
@@ -202,5 +214,183 @@ class ClassController extends Controller
         }
     }
 
+
+    public function edit($userId, $classId)    {
+        $authUserId = Auth::id();
+
+        // Check if the authenticated user's ID matches the requested user ID
+        if ($authUserId != $userId) {
+            // Redirect to the authenticated user's dashboard
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+
+        // Fetch the authenticated user
+        $user = Auth::user();
+
+        $teacher = $user->teacher;
+
+        $selectedClass = ClassModel::with(['students' => function ($query) {
+            $query->orderBy('first_name')->orderBy('middle_name')->orderBy('last_name');
+        }])->find($classId);
+        $teachers = TeacherPyp::get();
+        $students = StudentPyp::get();
+
+        $role = User::find($authUserId)->role;
+
+        if ($role == 0){  //admin
+            return view('admin/class/class-admin-edit', compact('teacher' ,'selectedClass','teachers','students'));
+        }
+        
+    }
+
+    public function deleteStudent(Request $request, $userId, $classId, $studentId)
+    {
+        $authUserId = Auth::id();
+
+        // Check if the authenticated user's ID matches the requested user ID
+        if ($authUserId != $userId) {
+            // Redirect to the authenticated user's dashboard
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+
+        // Fetch the authenticated user
+        $user = Auth::user();
+        $role = User::find($authUserId)->role;
+
+
+        // Find the student-class relationship
+        $studentClass = StudentClass::where('class_id', $classId)
+                                    ->where('nim_pyp', $studentId)
+                                    ->first();
+
+        // dd($studentClass->id);
+        
+        if ($studentClass->id) {
+            // Delete the relationship
+            $studentClass->delete();
+            if ($role == 0){  //admin
+                return redirect()->back()->with('success', 'Student removed successfully.');
+            }
+        }
+
+        return redirect()->back()->with('error', 'Student not found.');
+
+        
+        
+    }
+
+    public function editSubmit(Request $request, $userId,$classId)
+    {
+        $authUserId = Auth::id();
+
+        // Check if the authenticated user's ID matches the requested user ID
+        if ($authUserId != $userId) {
+            // Redirect to the authenticated user's dashboard
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+
+        // Fetch the authenticated user
+        $user = Auth::user();
+
+        $teacher = $user->teacher;
+
+        $role = User::find($authUserId)->role;
+
+         // Create the class
+        $class = ClassModel::find($classId);
+        $class->class_name= $request->class_name;
+        $class->save();
+
+        // Assign homeroom
+        if(Homeroom::where('class_id', $classId)->first()== null){
+            $homeroom = new Homeroom();
+            $homeroom->class_id = $class->class_id;
+            $homeroom->teacher_pyp_id = $request->input('homeroom'); 
+            $homeroom->save();
+        }else{
+            $homeroom = Homeroom::where('class_id', $classId)->first();
+            $homeroom->teacher_pyp_id = $request->input('homeroom'); 
+            $homeroom->save();
+        }
+        
+
+        $studentIds = json_decode($request->input('students_array'), true);
+        if (is_array($studentIds)) {
+            foreach ($studentIds as $studentId) {
+                StudentClass::create([
+                    'class_id' => $class->class_id,
+                    'nim_pyp' => $studentId
+                ]);
+            }
+        }
+
+        if ($role == 0){  //admin
+            return redirect()->route('class', ['userId' => $teacher->user_id])->with('status', 'Class edited successfully!');
+        }
+        
+    }
+
+    public function delete(Request $request, $userId, $classId)
+    {
+        $authUserId = Auth::id();
+
+        // Check if the authenticated user's ID matches the requested user ID
+        if ($authUserId != $userId) {
+            // Redirect to the authenticated user's dashboard
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+
+        // Fetch the authenticated user
+        $user = Auth::user();
+
+        $teacher = $user->teacher;
+
+        $role = User::find($authUserId)->role;
+
+        // Remove all students associated with the class
+        $students = StudentClass::where('class_id', $classId);
+        if ($students) {
+            $students->delete();
+        }
+
+        // Remove homeroom associated with the class
+        $homeroom = Homeroom::where('class_id', $classId)->first();
+        if ($homeroom) {
+            $homeroom->delete();
+        }
+
+        // remove any detail class-yearprogram associated with the class
+        $detailMYP = DetailClassMYP::where('class_id', $classId)->first();
+        $detailPYP = DetailClassPYP::where('class_id', $classId)->first();
+        if($detailMYP != null){
+            $detailMYP->delete();
+        } else if ($detailPYP != null){
+            $detailPYP->delete();
+        }
+
+
+        // Delete the class
+        $class = ClassModel::find($classId);
+        if ($class) {
+            $class->delete();
+        }
+        
+        
+
+        $studentIds = json_decode($request->input('students_array'), true);
+        if (is_array($studentIds)) {
+            foreach ($studentIds as $studentId) {
+                StudentClass::create([
+                    'class_id' => $class->class_id,
+                    'nim_pyp' => $studentId
+                ]);
+            }
+        }
+
+        if ($role == 0){  //admin
+            return redirect()->route('class', ['userId' => $teacher->user_id])->with('status', 'Class edited successfully!');
+        }
+        
+    }
 
 }

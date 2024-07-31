@@ -12,6 +12,8 @@ class StudentPyp extends Model
 
     // Define the primary key if it's not 'id'
     protected $primaryKey = 'nim_pyp';
+    protected $keyType = 'string'; // Add this line
+
 
     // Define the fillable fields
     protected $fillable = ['nim_pyp','first_name', 'last_name', 'dob', 'address', 'fathers_name', 'mothers_name', 'fathers_phone', 'mothers_phone', 'parents_email', 'previous_school', 'entry_date', 'level'];

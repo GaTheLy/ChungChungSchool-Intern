@@ -75,11 +75,6 @@
 
 <br>
 <div id="liveAlertPlaceholder"></div>
-<div class="row">
-    <div class="col" style="text-align:right;margin-right:100px;">
-        <button type="button" class="btn btn-primary"><a href="{{ route('class-add.index', ['userId' => $teacher->user_id]) }}">Add</a></button>
-    </div>
-</div>
 
 <br>
 

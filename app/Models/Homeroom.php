@@ -8,6 +8,8 @@ class Homeroom extends Model
 {
     protected $table = 'homeroom';
 
+    public $timestamps = false;
+
     // Define the primary key if it's not 'id'
     protected $primaryKey = 'homeroom_id';
 

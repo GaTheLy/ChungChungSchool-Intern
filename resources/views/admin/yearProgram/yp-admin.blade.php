@@ -346,7 +346,7 @@
                         </div> 
 
                         <div class="col-8" >
-                            <input type="text" name="program_name" id="program_name" style="radius:10px;"></input>
+                            <input type="text" name="program_name" id="program_name" style="border-radius:10px;"></input>
                         </div>
                     </div>
 
@@ -356,7 +356,7 @@
                         </div> 
 
                         <div class="col-8" >
-                            <input type="text" name="unit_name" id="unit_name" style="radius:10px;"></input>
+                            <input type="text" name="unit_name" id="unit_name" style="border-radius:10px;"></input>
                         </div>
                     </div>
 
@@ -366,7 +366,7 @@
                         </div> 
 
                         <div class="col-8" >
-                            <input type="text" name="central_idea" id="central_idea" style="radius:10px;"></input>
+                            <input type="text" name="central_idea" id="central_idea" style="border-radius:10px;"></input>
                         </div>
                     </div>
 
@@ -467,7 +467,7 @@
                         </div> 
 
                         <div class="col-8" >
-                            <input type="text" name="unit_name" id="unit_name" style="radius:10px;"></input>
+                            <input type="text" name="unit_name" id="unit_name" style="border-radius:10px;"></input>
                         </div>
                     </div>
 
@@ -477,7 +477,7 @@
                         </div> 
 
                         <div class="col-8" >
-                            <input type="text" name="central_idea" id="central_idea" style="radius:10px;"></input>
+                            <input type="text" name="central_idea" id="central_idea" style="border-radius:10px;"></input>
                         </div>
                     </div>
 
@@ -645,7 +645,7 @@
                         </div> 
 
                         <div class="col-8" >
-                            <input type="text" name="program_name" id="program_name" style="radius:10px;"></input>
+                            <input type="text" name="program_name" id="program_name" style="border-radius:10px;"></input>
                         </div>
                     </div>
                 
