@@ -216,6 +216,8 @@ Route::post('/save-unit-progress', [HomeroomController::class, 'saveUnitProg'])-
 
 Route::get('/unit-progress/{unitId}/{classId}', [HomeroomController::class, 'getUnitProgress']);
 
+// Homeroom Teacher's Comment
+Route::post('/save-homeroom-comments', [HomeroomController::class, 'saveComments']);
 
 
 // Report Preview

@@ -85,4 +85,19 @@ class HomeroomController extends Controller
 
         return response()->json($students);
     }
+
+    // Homeroom Teacher's Comment
+    public function saveComments(Request $request)
+    {
+        $comments = $request->input('comments', []);
+
+        foreach ($comments as $studentId => $comment) {
+            DB::table('homeroom_teacher_comment')->updateOrInsert(
+                ['student_id' => $studentId],
+                ['description' => $comment]
+            );
+        }
+
+        return response()->json(['success' => true]);
+    }
 }
