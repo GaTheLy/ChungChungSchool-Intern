@@ -9,6 +9,7 @@ use App\Models\TeacherPyp;
 use App\Models\Homeroom;
 use App\Models\User;
 use App\Models\ATLMYP;
+use App\Models\Boundaries;
 use App\Models\SubjectTeacher;
 use App\Models\SubjectModel;
 use App\Models\ClassModel;
@@ -50,6 +51,7 @@ class YearProgramController extends Controller
             $class = ClassModel::get();
             $detailSubMYP = SubjectTeacher::where('level', 'MYP')->with(['subject.atls', 'teacher'])->get();
             $detailClassMYP = DetailClassMYP::with(['class', 'homeroom.teacher'])->get();
+            $boundaries = Boundaries::get();
 
             //pyp
             $yearProgramPYP = YearProgramPYP::with('atlpyp')->get();
@@ -65,7 +67,7 @@ class YearProgramController extends Controller
 
 
             if ($role == 0){  //admin
-                return view('/admin/yearProgram/yp-admin', compact('teacher', 'yearProgramMYP', 'subjectMYP', 'teacherMYP','class','detailSubMYP','detailClassMYP'
+                return view('/admin/yearProgram/yp-admin', compact('teacher', 'yearProgramMYP', 'subjectMYP', 'teacherMYP','class','detailSubMYP','detailClassMYP', 'boundaries'
                                                                     ,'units','yearProgramPYP', 'subjectPYP', 'teacherPYP','detailSubPYP','detailClassPYP'));
             }
             
@@ -379,6 +381,54 @@ class YearProgramController extends Controller
                 }
             } else {
                 return back()->withInput()->withErrors(['error' => 'Failed to add year program class. Please try again.']);
+            }
+        }
+
+        public function boundaries(Request $request, $userId,$ypId)
+        {
+            $authUserId = Auth::id();
+    
+            // Check if the authenticated user's ID matches the requested user ID
+            if ($authUserId != $userId) {
+                // Redirect to the authenticated user's dashboard
+                return redirect()->route('dashboard', ['userId' => $authUserId]);
+            }
+    
+            // Fetch the authenticated user
+            $user = Auth::user();
+    
+            $teacher = $user->teacher;
+            $role = User::find($authUserId)->role;
+    
+
+            $boundaries = Boundaries::updateOrCreate(
+                ['yp_myp_id' => $ypId], // Condition to find the record
+                [
+                    'start_1' => $request->grade1start,
+                    'end_1' => $request->grade1end,
+                    'start_2' => $request->grade2start,
+                    'end_2' => $request->grade2end,
+                    'start_3' => $request->grade3start,
+                    'end_3' => $request->grade3end,
+                    'start_4' => $request->grade4start,
+                    'end_4' => $request->grade4end,
+                    'start_5' => $request->grade5start,
+                    'end_5' => $request->grade5end,
+                    'start_6' => $request->grade6start,
+                    'end_6' => $request->grade6end,
+                    'start_7' => $request->grade7start,
+                    'end_7' => $request->grade7end,
+                ]
+            );
+            
+
+            if ($boundaries->save()) {
+                
+                if ($role == 0) { // admin
+                    return redirect()->route('yearProgram', ['userId' => $teacher->user_id])->with('status', 'Boundaries added successfully!');
+                }
+            } else {
+                return back()->withInput()->withErrors(['error' => 'Failed to add Boundaries. Please try again.']);
             }
         }
 

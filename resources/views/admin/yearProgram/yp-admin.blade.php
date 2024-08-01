@@ -44,6 +44,7 @@
 
         <div class="accordion" id="accordionExample">
             <h2>PYP Year Program</h2>
+            {{-- 
             <div class="row" style="margin-left: 50px;">
                 <div class="col">
                     <button class="btn btn-primary">
@@ -63,6 +64,7 @@
                     </button>
                 </div>
             </div>
+             --}}
             <span class="hidden">{{ $index=0 }}</span>
             @foreach ($yearProgramPYP as $ypPYP)
             <div class="accordion-item">
@@ -269,6 +271,100 @@
                             </button>
                             </div>
                         </div>
+                        <h5>Grade Boundaries</h5>
+                        <form action="{{ route('yearProgram-add.boundariesMYP', ['userId' => $teacher->user_id, 'ypId' => $yp->id]) }}" method="post">
+                            @csrf
+                            <table class="table table-bordered">
+                                <tr>
+
+                                    <th>Grade</th>
+                                    <th colspan="3">1</th>
+                                    <th colspan="3">2</th>
+                                    <th colspan="3">3</th>
+                                    <th colspan="3">4</th>
+                                    <th colspan="3">5</th>
+                                    <th colspan="3">6</th>
+                                    <th colspan="3">7</th>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Boundaries</td>
+                                    @php
+                                        $hasBoundaries = false;
+                                    @endphp
+
+                                    @foreach ($boundaries as $bound)
+                                        @if ($bound->yp_myp_id == $yp->id)
+                                            @php
+                                                $hasBoundaries = true;
+                                            @endphp
+                                    <td><input type="text" name="grade1start" id="grade1start" style="width: 40px;" value="{{$bound->start_1}}"></td>
+                                    <td><input disabled style="width: 20px;" value="–"></td>
+                                    <td><input type="text" name="grade1end" id="grade1end" style="width: 40px;" value="{{$bound->end_1}}"></td>
+
+                                    <td><input type="text" name="grade2start" id="grade2start" style="width: 40px;" value="{{$bound->start_2}}"></td>
+                                    <td><input disabled style="width: 20px;" value="–"></td>
+                                    <td><input type="text" name="grade2end" id="grade2end" style="width: 40px;" value="{{$bound->end_2}}"></td>
+
+                                    <td><input type="text" name="grade3start" id="grade3start" style="width: 40px;" value="{{$bound->start_3}}"></td>
+                                    <td><input disabled style="width: 20px;" value="–"></td>
+                                    <td><input type="text" name="grade3end" id="grade3end" style="width: 40px;" value="{{$bound->end_3}}"></td>
+
+                                    <td><input type="text" name="grade4start" id="grade4start" style="width: 40px;" value="{{$bound->start_4}}"></td>
+                                    <td><input disabled style="width: 20px;" value="–"></td>
+                                    <td><input type="text" name="grade4end" id="grade4end" style="width: 40px;" value="{{$bound->end_4}}"></td>
+
+                                    <td><input type="text" name="grade5start" id="grade5start" style="width: 40px;" value="{{$bound->start_5}}"></td>
+                                    <td><input disabled style="width: 20px;" value="–"></td>
+                                    <td><input type="text" name="grade5end" id="grade5end" style="width: 40px;" value="{{$bound->end_5}}"></td>
+
+                                    <td><input type="text" name="grade6start" id="grade6start" style="width: 40px;" value="{{$bound->start_6}}"></td>
+                                    <td><input disabled style="width: 20px;" value="–"></td>
+                                    <td><input type="text" name="grade6end" id="grade6end" style="width: 40px;" value="{{$bound->end_6}}"></td>
+
+                                    <td><input type="text" name="grade7start" id="grade7start" style="width: 40px;" value="{{$bound->start_7}}"></td>
+                                    <td><input disabled style="width: 20px;" value="–"></td>
+                                    <td><input type="text" name="grade7end" id="grade7end" style="width: 40px;" value="{{$bound->end_7}}"></td>
+                                    @endif
+                                    @endforeach
+
+
+                                    @if (!$hasBoundaries)
+                                        <td><input type="text" name="grade1start" id="grade1start" style="width: 40px;" value=""></td>
+                                        <td><input disabled style="width: 20px;" value="–"></td>
+                                        <td><input type="text" name="grade1end" id="grade1end" style="width: 40px;" value=""></td>
+
+                                        <td><input type="text" name="grade2start" id="grade2start" style="width: 40px;" value=""></td>
+                                        <td><input disabled style="width: 20px;" value="–"></td>
+                                        <td><input type="text" name="grade2end" id="grade2end" style="width: 40px;" value=""></td>
+
+                                        <td><input type="text" name="grade3start" id="grade3start" style="width: 40px;" value=""></td>
+                                        <td><input disabled style="width: 20px;" value="–"></td>
+                                        <td><input type="text" name="grade3end" id="grade3end" style="width: 40px;" value=""></td>
+
+                                        <td><input type="text" name="grade4start" id="grade4start" style="width: 40px;" value=""></td>
+                                        <td><input disabled style="width: 20px;" value="–"></td>
+                                        <td><input type="text" name="grade4end" id="grade4end" style="width: 40px;" value=""></td>
+
+                                        <td><input type="text" name="grade5start" id="grade5start" style="width: 40px;" value=""></td>
+                                        <td><input disabled style="width: 20px;" value="–"></td>
+                                        <td><input type="text" name="grade5end" id="grade5end" style="width: 40px;" value=""></td>
+
+                                        <td><input type="text" name="grade6start" id="grade6start" style="width: 40px;" value=""></td>
+                                        <td><input disabled style="width: 20px;" value="–"></td>
+                                        <td><input type="text" name="grade6end" id="grade6end" style="width: 40px;" value=""></td>
+
+                                        <td><input type="text" name="grade7start" id="grade7start" style="width: 40px;" value=""></td>
+                                        <td><input disabled style="width: 20px;" value="–"></td>
+                                        <td><input type="text" name="grade7end" id="grade7end" style="width: 40px;" value=""></td>
+                                    @endif
+
+                                </tr>
+                            </table>
+                            <div class="" style="text-align:right;margin-right:10px;margin-top:10px;">
+                                <button class="btn btn-primary" type="submit">Submit</button>
+                            </div>
+                        </form>
 
                         <h5>Active Class</h5>
 

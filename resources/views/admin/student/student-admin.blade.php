@@ -65,7 +65,7 @@
 
     <br>
 
-    <table id="example" class="table table-striped" style="width:100%">
+    <table id="example" class="table table-striped table-bordered" style="width:100%">
         <thead>
             <tr>
                 <th>Name</th>
@@ -79,27 +79,26 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($students as $student)
-                <tr>
-                    <td>{{ $student->first_name }} {{ $student->last_name }}</td>
-                    <td>{{ $student->dob }}</td>
-                    <td>{{ $student->level }}</td>
-                    <td>{{ $student->address }}</td>
-                    <td>{{ $student->fathers_phone }}</td>
-                    <td>{{ $student->parents_email }}</td>
-                    <td>{{ $student->entry_date }}</td>
-                    <td>
-                        <a href="{{ route('student.detail', ['userId' => $teacher->user_id, 'studentId' => $student->nim_pyp]) }}" style="color:black;">Detail</a>
-                        
-                        <a href="{{ route('student.edit', ['userId' => $teacher->user_id, 'studentId' => $student->nim_pyp]) }}" style="color:black;">Edit</a>
-                        
-                        <button onclick="showModal({{$student->nim_pyp}})" style="text-decoration:none;border:0px;background:none;">Delete</button>
-                        <form id="delete-form-{{ $student->nim_pyp }}" action="{{ route('student.delete', ['userId' => $teacher->user_id, 'studentId' => $student->nim_pyp]) }}" method="post">
-                            @csrf
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
+        @foreach($students as $student)
+            <tr>
+                <td>{{ $student->first_name }} {{ $student->last_name }}</td>
+                <td>{{ $student->dob }}</td>
+                <td>{{ $student->level }}</td>
+                <td>{{ $student->address }}</td>
+                <td>{{ $student->fathers_phone }}</td>
+                <td>{{ $student->parents_email }}</td>
+                <td>{{ $student->entry_date }}</td>
+                <td>
+                    <a href="route('student.detail', ['userId'=>$teacher->user_id, 'studentId'=>$student->nim_pyp])" style="color:black;">Detail</a>
+                    <a href="route('student.edit', ['userId' => $teacher->user_id, 'studentId' => $student->nim_pyp])" style="color:black;">Edit</a>
+                    <button onclick="showModal({{$student->nim_pyp}})" style="text-decoration:none;border:0px;background:none;">Delete</button>
+                    <form id="delete-form-{{ $student->nim_pyp }}" action="route('student.delete', ['userId' => $teacher->user_id, 'studentId' => $student->nim_pyp])" method="post">
+                        @csrf
+                    </form>
+                </td>
+            </tr>
+        @endforeach
+
         </tbody>
         <tfoot>
             <tr>

@@ -120,8 +120,12 @@ Route::get('/year-program/{userId}', [YearProgramController::class, 'yearProgram
 ->middleware(['auth', 'verified'])->name('yearProgram');
 Route::post('/year-program-add/{userId}', [YearProgramController::class, 'add'])
 ->middleware(['auth', 'verified'])->name('yearProgram-add.index');
+Route::post('/year-program-add-bound/{userId}/{ypId}', [YearProgramController::class, 'boundaries'])
+->middleware(['auth', 'verified'])->name('yearProgram-add.boundariesMYP');
+
 Route::post('/year-program-addPYP/{userId}', [YearProgramController::class, 'addPYP'])
 ->middleware(['auth', 'verified'])->name('yearProgram-add.indexPYP');
+
 Route::post('/year-program-add-unit/{userId}/{ypId}', [YearProgramController::class, 'addUnit'])
 ->middleware(['auth', 'verified'])->name('yearProgram-add.unitPYP');
 Route::post('/year-program-add-atl/{userId}/{ypId}', [YearProgramController::class, 'addATL'])
@@ -136,6 +140,8 @@ Route::post('/year-program-add-class/{userId}/{ypId}', [YearProgramController::c
 ->middleware(['auth', 'verified'])->name('yearProgram-add.class');
 Route::post('/year-program-add-classPYP/{userId}/{ypId}', [YearProgramController::class, 'addClassPYP'])
 ->middleware(['auth', 'verified'])->name('yearProgram-add.classPYP');
+
+
 
 
 //class make route
