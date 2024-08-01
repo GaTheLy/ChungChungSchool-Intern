@@ -13,7 +13,7 @@
             <tr>
                     <td>{{ $student->first_name }} {{ $student->last_name }}</td>
                     <td> 
-                        <input type="text" style="width: 90%;"/>  
+                        <textarea style="width: 90%; height: 150px; overflow: auto; word-wrap: break-word;"></textarea>  
                     </td>
             </tr>
             @endforeach
