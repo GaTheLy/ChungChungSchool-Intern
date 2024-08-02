@@ -322,6 +322,7 @@ class TeachController extends Controller
 
         $studentId = $request->input('student_id');
         $criteriaData = $request->input('criteria');
+        $subjectId = $request->input('subject_id');
         
         // Iterate through criteria data pairs
         foreach ($criteriaData as $criterionId => $data) {
@@ -361,6 +362,20 @@ class TeachController extends Controller
                 );
             }
         }
+
+        $overallGrade = $request->input('overall_grade');
+        $comment = $request->input('teacher_com');
+
+        DB::table('subject_progress')->updateOrInsert(
+            [
+                'student_id' => $studentId,
+                'subject_id' => $subjectId,
+            ],
+            [
+                'grade' => $overallGrade,
+                'teacher_comment' => $comment,
+            ]
+        );
 
         // Optionally, you can return a response or redirect
         return redirect()->back()->with('success', 'Grades saved successfully!');
