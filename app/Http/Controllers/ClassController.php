@@ -21,6 +21,8 @@ class ClassController extends Controller
 {
     public function show($id)
     {
+        $user = Auth::user();
+        $teacher = $user->teacher;
         $class = ClassModel::findOrFail($id);
 
         $detail_class = DB::table('detail_class_pyp')
@@ -60,7 +62,7 @@ class ClassController extends Controller
     
         $student->attendance = $attendance; // Assigning attendance data to each student
         }
-        return view('homeroom-teacher-pyp', compact('class', 'students', 'units', 'atls'));
+        return view('homeroom-teacher-pyp', compact('class', 'students', 'units', 'atls', 'teacher'));
     }
 
     public function showMyp($id)

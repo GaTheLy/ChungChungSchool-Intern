@@ -55,6 +55,10 @@
             font-size: 2.1rem;
             font-weight: 600;
         }
+        a{
+            text-decoration: none;
+            color: black;
+        }
     </style>
     
         <h1>Dashboard</h1>
@@ -72,8 +76,8 @@
     <div class="main-content">
             <h2>Report Customization</h2>
             <div class="programs">
-                <div class="program">Primary Year Program</div>
-                <div class="program">Middle Year Program</div>
+                <div class="program"><a href="{{ route('pypCustom.show', ['userId' => $teacher->user_id]) }}" > Primary Year Program</a></div>
+                <div class="program"><a href="{{ route('mypCustom.show', ['userId' => $teacher->user_id]) }}" >Middle Year Program</a></div>
             </div>
     </div>
 

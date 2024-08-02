@@ -30,8 +30,8 @@
 
         <br><br>
 
-<form method="POST" action="{{route('teacher-add.submit',['userId' => $teacher->user_id])}}">
-    @csrf
+            <form method="POST" action="{{route('teacher-add.submit',['userId' => $teacher->user_id])}}">
+                @csrf
                 <div class="row">
                     <div class="col-3">
                         <h5>1. First Name</h5>
@@ -82,7 +82,7 @@
                     <input type="text" name="phone" id="phone" style="height:40px;width:500px;"></input>
                     </div>
                 </div>
-        <br>
+                <br>
                 <div class="row">
                     <div class="col-3">
                         <h5>6. Address</h5>
@@ -121,7 +121,7 @@
             <button  class="btn btn-primary" >Save</button>
 
         
-    </form>
+            </form>
 
 
 

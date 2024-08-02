@@ -501,6 +501,107 @@ class TeachController extends Controller
         
     }
 
+    public function profileAdmin($userId, $teacherId)
+    {
+        $authUserId = Auth::id();
+
+        // Check if the authenticated user's ID matches the requested user ID
+        if ($authUserId != $userId) {
+            // Redirect to the authenticated user's dashboard
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+
+        // Fetch the authenticated user
+        $user = Auth::user();
+
+        $teacher = $user->teacher;
+        $selectedTeacher = TeacherPyp::find($teacherId);
+        $infoEmail = User::find($selectedTeacher->user_id)->email;
+
+
+        $role = User::find($authUserId)->role;
+
+        if ($role == 0){  //admin
+            return view('admin/profile/profile-admin', compact('teacher' ,'selectedTeacher','infoEmail'));
+        }else if ($role == 2) { // teacher
+            return view('teacher/profile/profile', compact('teacher' ,'selectedTeacher','infoEmail'));
+        }
+        
+    }
+
+    public function editProfileAdmin(Request $request, $userId, $teacherId)
+    {
+        $authUserId = Auth::id();
+
+        // Check if the authenticated user's ID matches the requested user ID
+        if ($authUserId != $userId) {
+            // Redirect to the authenticated user's dashboard
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+
+        // Fetch the authenticated user
+        $user = Auth::user();
+
+        $teacher = $user->teacher;
+        
+        $role = User::find($authUserId)->role;
+
+
+        $newTeacher = TeacherPyp::find($teacherId);
+        $newUser = User::find($newTeacher->user_id);
+        $newUser->name = $request->first_name;
+        $newUser->email = $request->email;
+        $password = $request->change_pass;
+        if ($password){
+            $newUser->password = Hash::make($request->change_pass);
+        }
+        $newUser->save();
+
+        $newTeacher->nip_pyp = $request->nip;
+        $newTeacher->first_name = $request->first_name;
+        $newTeacher->last_name = $request->last_name; 
+        $newTeacher->phone = $request->phone; 
+        $newTeacher->address = $request->address; 
+        $newTeacher->joined_at = $request->joined_at; 
+
+        
+        
+            if ($role == 0 && $newTeacher->save()) { // admin
+                return redirect()->route('profile-admin.show', ['userId' => $teacher->user_id, $newTeacher->nip_pyp])->with('status', 'Profile edited successfully!');
+            } else if ($role == 2 && $newTeacher->save()) { // teacher
+                return redirect()->route('profile-admin.show', ['userId' => $teacher->user_id, $newTeacher->nip_pyp])->with('status', 'Profile edited successfully!');
+            }
+        
+    }
+
+    public function profile($userId, $teacherId)
+    {
+        $authUserId = Auth::id();
+
+        // Check if the authenticated user's ID matches the requested user ID
+        if ($authUserId != $userId) {
+            // Redirect to the authenticated user's dashboard
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+
+        // Fetch the authenticated user
+        $user = Auth::user();
+
+        $teacher = $user->teacher;
+        $selectedTeacher = TeacherPyp::find($teacherId);
+        $infoEmail = User::find($selectedTeacher->user_id)->email;
+
+
+        $role = User::find($authUserId)->role;
+
+        if ($role == 2){  //admin
+            return view('teacher/profile/profile', compact('teacher' ,'selectedTeacher','infoEmail'));
+        }
+        
+    }
+
+    
+
     public function editSubmit(Request $request, $userId, $teacherId)
     {
         $authUserId = Auth::id();
@@ -523,7 +624,10 @@ class TeachController extends Controller
         $newUser = User::find($newTeacher->user_id);
         $newUser->name = $request->first_name;
         $newUser->email = $request->email;
-        // $newUser->password = Hash::make($request->password);
+        $password = $request->change_pass;
+        if ($password){
+            $newUser->password = Hash::make($request->change_pass);
+        }
         if ($request->input('option') == 'PYP') {
             $newTeacher->is_myp = 0; 
             $newTeacher->is_pyp = 1;
@@ -553,6 +657,8 @@ class TeachController extends Controller
             }
         
     }
+
+
     public function delete($userId, $teacherId)
     {
         $authUserId = Auth::id();

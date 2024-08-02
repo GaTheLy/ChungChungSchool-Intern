@@ -65,7 +65,7 @@
 
 </style>
 
-<h1>Teacher - Edit</h1>
+<h1>Profile</h1>
 <div class="row">
     <div class="col-6" style="text-align:left;">
         <h5>{{ $teacher->first_name }}</h5>
@@ -74,7 +74,7 @@
 
 <br><br>
 
-<form method="POST" action="{{ route('teacher-edit.submit', ['userId' => $teacher->user_id, 'teacherId' => $selectedTeacher->nip_pyp]) }}">
+<form method="POST" action="{{ route('profile-admin.edit', ['userId' => $teacher->user_id, 'teacherId' => $teacher->nip_pyp]) }}">
     @csrf
                 <div class="row">
                     <div class="col-3">
@@ -136,46 +136,12 @@
                     <input name="address" id="address" value="{{$selectedTeacher->address}}" style="height:40px;width:500px;"></input>
                     </div>
                 </div>
-                <br>
-                <div class="row">
-                    <div class="col-3">
-                        <h5>7. Joined At</h5>
-                    </div> 
-
-                    <div class="col-6">
-                    <input type="date" name="joined_at" id="joined_at" value="{{$selectedTeacher->joined_at}}"></input>
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                <div class="col-3">
-                    <h5>8. Level </h5>
-                </div> 
                 
-                <div class="col-2">
-                @php
-                    $level = '';
-                    if ($selectedTeacher->is_myp == 0 && $selectedTeacher->is_pyp == 1) {
-                        $level = 'PYP';
-                    } elseif ($selectedTeacher->is_myp == 1 && $selectedTeacher->is_pyp == 0) {
-                        $level = 'MYP';
-                    } elseif ($selectedTeacher->is_myp == 1 && $selectedTeacher->is_pyp == 1) {
-                        $level = 'PYP & MYP';
-                    }
-                @endphp
-                    <select name="option" id="option">
-                    <option value="{{ $level }}">{{ $level }}</option>
-                    <option value="PYP" name="PYP">PYP</option>
-                    <option value="MYP" name="MYP">MYP</option>
-                    <option value="ALL" name="ALL">PYP & MYP</option>
-                    </select>
-                </div>
-                </div>
 
                 <br/>
                 <div class="row">
                     <div class="col-3">
-                        <h5>9. Change Password</h5>
+                        <h5>7. Change Password</h5>
                     </div> 
 
                     <div class="col-6">

@@ -12,15 +12,6 @@ use App\Http\Controllers\YearProgramController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\HomeroomController;
 
-// admin route
-Route::get('/custom-report-pyp', function () {
-    return view('admin-custom-report/custom-pyp');
-});
-
-Route::get('/custom-report-myp', function () {
-    return view('admin-custom-report/custom-myp');
-});
-
 
 
 //dashroute all
@@ -85,7 +76,26 @@ Route::post('/teacher-delete/{userId}/{teacherId}', [TeachController::class, 'de
 ->middleware(['auth', 'verified'])->name('teacher.delete');
 
 
+//admin route profile
+Route::get('/profile-admin/{userId}/{teacherId}', [TeachController::class, 'profileAdmin'])
+->middleware(['auth', 'verified'])->name('profile-admin.show');
+Route::post('/profile-admin-edit/{userId}/{teacherId}', [TeachController::class, 'editProfileAdmin'])
+->middleware(['auth', 'verified'])->name('profile-admin.edit');
 
+//teacher route profile
+// Route::get('/profile/{userId}/{teacherId}', [TeachController::class, 'profile'])
+// ->middleware(['auth', 'verified'])->name('profile.show');
+// Route::post('/profile-edit/{userId}/{teacherId}', [TeachController::class, 'editProfileAdmin'])
+// ->middleware(['auth', 'verified'])->name('profile.edit');
+
+// admin route report custom
+Route::get('/pyp-report-custom/{userId}', [ReportController::class, 'pypCustom'])
+->middleware(['auth', 'verified'])->name('pypCustom.show');
+Route::post('/pyp-report-custom-edit/{userId}', [ReportController::class, 'editPypCustom'])
+->middleware(['auth', 'verified'])->name('pypCustom.edit');
+
+Route::get('/myp-report-custom/{userId}', [ReportController::class, 'mypCustom'])
+->middleware(['auth', 'verified'])->name('mypCustom.show');
 
 
 

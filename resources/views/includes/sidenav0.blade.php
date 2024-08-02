@@ -42,7 +42,7 @@
 
 
             <div class="sidebar-footer">
-                    <a href="#" class="sidebar-link">
+                    <a href="{{ route('profile-admin.show', ['userId' => $teacher->user_id, 'teacherId' => $teacher->nip_pyp]) }}" class="sidebar-link">
                         <i class="lni lni-user"></i>
                         <span>Profile</span>
                     </a>

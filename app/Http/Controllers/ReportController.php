@@ -9,10 +9,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Collection;
 use PDF;
 
+use App\Models\User;
 use App\Models\StudentPyp;
 use App\Models\SubjectTeacher;
 use App\Models\SubjectModel;
-
+use App\Models\CustomPypReport;
 
 class ReportController extends Controller
 {
@@ -121,15 +122,129 @@ class ReportController extends Controller
         )
         ->get();
 
+        // dd($units);
+        $custom = CustomPypReport::where('id', 1)->first();
 
+        $filename = $custom ? $custom->logopath : 'ccs-logo.jpg'; // default to 'ccs-logo.jpg' if not set
+        $greetings = $custom->greetings;
 
-        // dd($atls);
+        $filenameSign = $custom ? $custom->signpath : 'ccs-logo.jpg'; // default to 'ccs-logo.jpg' if not set
 
-        $html = view('reports.report-pyp', compact('student', 'subject_teacher_s', 'attendance', 'comment', 'units', 'atls'))->render();
+        $html = view('reports.report-pyp', compact('student', 'subject_teacher_s', 'attendance', 'comment', 'units', 'filename', 'greetings','filenameSign', 'custom','atls'))->render();
 
         $pdf = PDF::loadHtml($html);
 
         return $pdf->stream('report.pdf');
 
     }
+
+    public function mypCustom($userId){
+        $authUserId = Auth::id();
+
+        // Check if the authenticated user's ID matches the requested user ID
+        if ($authUserId != $userId) {
+            // Redirect to the authenticated user's dashboard
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+
+        // Fetch the authenticated user
+        $user = Auth::user();
+
+        $teacher = $user->teacher;
+        
+        $custom = CustomPypReport::where('id', 1)->first();
+
+        $filename = $custom ? $custom->logopath : 'ccs-logo.jpg'; // default to 'ccs-logo.jpg' if not set
+
+        $greetings = $custom->greetings;
+
+        $filenameSign = $custom ? $custom->signpath : 'ccs-logo.jpg'; 
+
+        $teacher = $user->teacher;
+        
+        $role = User::find($authUserId)->role;
+
+        if ($role == 0) { // admin
+            return view('admin/report-custom/myp-report', compact('teacher', 'filename', 'greetings', 'filenameSign'));
+        }
+
+    }
+
+    public function pypCustom($userId){
+        $authUserId = Auth::id();
+
+        // Check if the authenticated user's ID matches the requested user ID
+        if ($authUserId != $userId) {
+            // Redirect to the authenticated user's dashboard
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+
+        // Fetch the authenticated user
+        $user = Auth::user();
+        $custom = CustomPypReport::where('id', 1)->first();
+
+        $filename = $custom ? $custom->logopath : 'ccs-logo.jpg'; // default to 'ccs-logo.jpg' if not set
+
+        $greetings = $custom->greetings;
+
+        $filenameSign = $custom ? $custom->signpath : 'ccs-logo.jpg'; 
+
+        $teacher = $user->teacher;
+        
+        $role = User::find($authUserId)->role;
+
+        if ($role == 0) { // admin
+            return view('admin/report-custom/pyp-report', compact('teacher', 'filename', 'greetings', 'filenameSign'));
+        }
+
+    }
+
+    public function editPypCustom(Request $request, $userId)
+    {
+        // Validate the uploaded file
+        $authUserId = Auth::id();
+
+        if ($authUserId != $userId) {
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+    
+        $user = Auth::user();
+        $teacher = $user->teacher;
+        $role = User::find($authUserId)->role;
+        $newdata = CustomPypReport::where('id', 1)->first();
+        $filename=$newdata->logopath;
+        $filenameSign=$newdata->signpath;
+        if ($request->hasFile('logo')) {
+            $logoFile = $request->file('logo');
+            $extension = $logoFile->getClientOriginalExtension();
+            $filename = 'custom-logo-' . $authUserId . '.' . $extension;
+            $path = public_path('assets-image/');
+            $logoFile->move($path, $filename);
+        }
+
+        if ($request->hasFile('sign')){
+            $signFile = $request->file('sign');
+            $extension = $signFile->getClientOriginalExtension();
+            $filenameSign = 'custom-sign-' . $authUserId . '.' . $extension;
+            $path = public_path('assets-image/');
+            $signFile->move($path, $filenameSign);
+        }
+        
+            $newdata->logopath = $filename;
+            $newdata->greetings = $request->greetings;
+            $newdata->signpath = $filenameSign;
+            $newdata->central_idea = $request->input('central-idea');
+            $newdata->lines_of_inquiry = $request->input('loi');
+            $newdata->key_concepts = $request->input('key-concepts');
+            $newdata->attendance = $request->input('attendance');
+            $newdata->atl = $request->input('atl');
+
+        
+    
+        if ($role == 0 && $newdata->save()) { // admin
+            return redirect()->route('pypCustom.show', ['userId' => $authUserId]);
+        }
+    }
+
+    
 }

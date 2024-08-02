@@ -276,7 +276,7 @@
 <body>
     <div class="container">
         <div class="report-header">
-            <img src="{{ asset('assets-image/ccs-logo.jpg') }}" alt="School Logo">
+            <img src="{{ asset('assets-image/'. $filename) }}" alt="School Logo" name="logo">
             <div>
                 <h1>PYP Report</h1>
                 <h2>Chung Chung Christian School</h2>
@@ -300,22 +300,22 @@
 
             <div class="message mt-4">
                 <p>Dear Parents,</p>
-                <p>At Chung Chung Christian School, we believe in an education that actively combines challenging and enriching experiences with academic rigor and creative opportunities. Our goal is to empower students to courageously push the boundaries of their experiences and explore the vast possibilities available to them. While we take pride in their academic achievements, our commitment goes beyond test scores. We aim for our students to discover the excitement of realizing their capabilities far exceed what they might have thought possible. We hold high expectations for our students, and they, in turn, have high expectations for themselves. It is crucial that parents wholeheartedly embrace and support the school's ethos.</p>
-                <p>With this, I am pleased to present the first report card of the academic year. Let's collaborate to create an environment that fosters growth and development.</p>
+                {{ $greetings }}
+                <br />
                 <p>Kind regards,</p>
             </div>
             <br>
 
             <div class="principal-signature">
                 <div>
-                    <img src="path/to/signature.png" alt="Principal Signature" style="max-height: 50px;">
+                    <img src="{{ asset('assets-image/'. $filenameSign) }}" alt="Principal Signature" style="max-height: 50px;">
                 </div>
                 <div>
                     <strong>Laura Carolina</strong><br>
                     PYP Principal
                 </div>
             </div>
-
+            @if ($custom->attendance==1)
             <div class="section">
                 <h3>Attendance</h3>
                 <div class="attendance-summary">
@@ -326,6 +326,8 @@
                     <span class="attendance-box" style="background-color: #ba68c8;">{{$attendance->total_excused}} Excused</span>
                 </div>
             </div>
+            @endif
+
 
             <div class="page-break"></div>
 
@@ -337,10 +339,14 @@
                         <h3>{{$unit->name}}</h3>
                         <div class="student-progress-unit"><strong>{{$unit->description}}</strong> <br>Student Progress</div>
                     </div>
+                    @if ($custom->central_idea==1)
                     <div class="central-idea">
                         <h4>The Central Idea</h4>
                         <p>{{$unit->central_idea}}</p>
                     </div>
+                     @endif
+
+                    @if ($custom->lines_of_inquiry==1)
                     <div class="lines-of-inquiry">
                         <h4>Lines of Inquiry</h4>
                         <ul>
@@ -349,6 +355,9 @@
                             @endforeach
                         </ul>
                     </div>
+                    @endif
+
+                    @if ($custom->key_concepts==1)
                     <div class="key-concepts">
                         <h4>Key Concepts</h4>
                         <table>
@@ -369,13 +378,14 @@
                             </tbody>
                         </table>
                     </div>
+                    @endif  
                 </div>
                 @endforeach
             </div>
 
 
             <div class="page-break"></div>
-
+            @if ($custom->atl==1)
             <div class="atl-section">
                 <h3>Approaches to Learning</h3>
                     <div class="atl">
@@ -393,8 +403,10 @@
                         </div>
                     </div>
             </div>
+            @endif
 
 
+            @if ($custom->subjects==1)
             <div class="subjects-section">
                 <h3 style='font-size: 20px;margin: 5px 0;color: #0056b3;'>Subjects</h3>
                 @foreach($subject_teacher_s as $sub_teacher)
@@ -418,14 +430,16 @@
                     </div>
                 @endforeach
             </div>   
+            @endif
 
             <hr>
 
+            @if ($custom->homeroom_comments==1)
             <div class="teacher-comment">
                 <h3>Homeroom Teacher's Comment</h3>
                 <p>{{ $comment->description }}</p>
             </div>
-
+            @endif
         </div>
     </div>
 </body>

@@ -1,4 +1,4 @@
-@extends('base.base-pyp')
+@extends('base.base')
 
     @section('content')
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css">

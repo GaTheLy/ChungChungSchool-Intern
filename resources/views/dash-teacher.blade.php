@@ -1,3 +1,4 @@
+
 @extends('base.base')
     <!-- section content -> yield content base.blade -->
     @section('content')
@@ -69,3 +70,4 @@
         </div>
     
     @endsection 
+     
