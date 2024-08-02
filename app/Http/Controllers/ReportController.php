@@ -40,10 +40,10 @@ class ReportController extends Controller
 
         //Grades
         
-
-        $attendance = DB::table('attendance_myp')
-                ->where('student_id', $student->nim_pyp)
-                ->first();
+        $attendance = DB::table('attendance_pyp')
+            ->where('student_id', $student->nim_pyp)
+            ->selectRaw('SUM(present) as total_present, SUM(late) as total_late, SUM(absent) as total_absent, SUM(sick) as total_sick, SUM(excused) as total_excused')
+            ->first();
 
         $html = view('reports.report-myp', compact('student', 'subject_teacher_s', 'attendance'))->render();
 
@@ -59,6 +59,7 @@ class ReportController extends Controller
     public function previewReportPyp($id){
         $student = StudentPyp::with(['class.homeroom.teacher'])->findOrFail($id);
 
+        //Grades/ Criteria Progress
         $sub_teacherIds = DB::table('subject_class_teacher')
             ->where('class_id', $student->class->first()->class_id)
             ->distinct()
@@ -76,14 +77,40 @@ class ReportController extends Controller
             }])
             ->get();
 
-        //Grades
+        // Attendance
+        $attendance = DB::table('attendance_pyp')
+            ->where('student_id', $student->nim_pyp) // Nambah where buat date jadi date yang dicount between year_prog start date & end date
+            ->selectRaw('SUM(present) as total_present, SUM(late) as total_late, SUM(absent) as total_absent, SUM(sick) as total_sick, SUM(excused) as total_excused')
+            ->first();
+
+        // Teacher Comment
+        $comment = DB::table('homeroom_teacher_comment')
+        ->where('student_id', $student->nim_pyp)
+        ->first();
+
+        // Unit Progress
+        $units = DB::table('unit')
+        ->join('unit_progress', 'unit.unit_id', '=', 'unit_progress.unit_id')
+        ->where('student_id', $student->nim_pyp)
+        ->select('unit.*', 'unit_progress.*')
+        ->get();
+
+        foreach ($units as $unit) {
+            $unit->key_concepts = DB::table('key_concept')
+                ->where('unit_id', $unit->unit_id)
+                ->get();
+
+            $unit->line_of_inquiries = DB::table('lines_of_inquiry')
+                ->where('unit_id', $unit->unit_id)
+                ->get();
+        }
+
+        // ATL
         
 
-        $attendance = DB::table('attendance_pyp')
-                ->where('student_id', $student->nim_pyp)
-                ->first();
+        // dd($units);
 
-        $html = view('reports.report-pyp', compact('student', 'subject_teacher_s', 'attendance'))->render();
+        $html = view('reports.report-pyp', compact('student', 'subject_teacher_s', 'attendance', 'comment', 'units'))->render();
 
         $pdf = PDF::loadHtml($html);
 
