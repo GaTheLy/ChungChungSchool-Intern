@@ -222,6 +222,11 @@ Route::post('/save-unit-progress', [HomeroomController::class, 'saveUnitProg'])-
 
 Route::get('/unit-progress/{unitId}/{classId}', [HomeroomController::class, 'getUnitProgress']);
 
+// ATL
+Route::post('/new-atl-progress/save', [HomeroomController::class, 'saveAtlProg']);
+
+Route::get('/atl-progress/{atlId}/{classId}', [HomeroomController::class, 'getAtlProgress']);
+
 // Homeroom Teacher's Comment
 Route::post('/save-homeroom-comments', [HomeroomController::class, 'saveComments']);
 

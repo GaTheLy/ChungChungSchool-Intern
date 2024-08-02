@@ -100,4 +100,49 @@ class HomeroomController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    // ATL Progress
+    public function saveAtlProg(Request $request)
+    {
+
+        \Log::info('Received ATL Progress Data:', $request->json()->all());
+
+        $atlProgressData = $request->json()->all();
+
+        foreach ($atlProgressData as $progress) {
+            DB::table('atl_progress')->updateOrInsert(
+                [
+                    'student_id' => $progress['student_id'],
+                    'atl_id' => $progress['atl_id'],
+                ],
+                [
+                    'description' => $progress['performance'],
+                ]
+            );
+        }
+
+        return response()->json(['message' => 'ATL progress saved successfully.']);
+    }
+
+    public function getAtlProgress($atlId, $classId)
+    {
+
+        \Log::info('Fetching ATL Progress', ['atlId' => $atlId, 'classId' => $classId]);
+        $atlProgress = DB::table('atl_progress')
+            ->join('student_pyp', 'atl_progress.student_id', '=', 'student_pyp.nim_pyp')
+            ->where('atl_progress.atl_id', $atlId)
+            ->where('student_pyp.class_id', $classId)
+            ->select('atl_progress.*', 'student_pyp.first_name', 'student_pyp.last_name')
+            ->get();
+
+        // Debug the SQL query
+        \Log::info('ATL Progress Query', ['query' => DB::getQueryLog()]);
+
+        // Debug the result
+        \Log::info('ATL Progress Result', ['result' => $atlProgress]);
+
+        return response()->json($atlProgress);
+    }
+
+
 }

@@ -400,7 +400,7 @@
                 </div>
                 <div class="grade-mentor-comments">
                     <p><strong>{{ $student->class->first()->homeroom->teacher->first_name }} {{ $student->class->first()->homeroom->teacher->last_name }}</strong> &mdash; Grade Mentor Comments</p>
-                    <p>Hanley is a skilled communicator, expressing thoughts and ideas with clarity and precision in class discussions and presentations. This semester, he has demonstrated strong literature skills, showcasing creativity in English story writing. To further enhance his writing composition, it is recommended that he engages in consistent English writing practice. Additionally, Hanley should aim to show more enthusiasm and curiosity in his learning by posing meaningful inquiries during class discussions.</p>
+                    <p>{{$comment->description}}</p>
                 </div>
             </div>
 

@@ -32,20 +32,25 @@ class ReportController extends Controller
 
         $subjects = SubjectModel::findOrFail($subjectIds);
 
+        //Grades
         $subject_teacher_s = SubjectTeacher::whereIn('sub_teacher_id', $sub_teacherIds)
             ->with(['subject.mypCriteria.mypCriteriaGrades' => function ($query) use ($id) {
                 $query->where('student_id', $id);
             }])
             ->get();
-
-        //Grades
         
+        // Attendance
         $attendance = DB::table('attendance_pyp')
             ->where('student_id', $student->nim_pyp)
             ->selectRaw('SUM(present) as total_present, SUM(late) as total_late, SUM(absent) as total_absent, SUM(sick) as total_sick, SUM(excused) as total_excused')
             ->first();
 
-        $html = view('reports.report-myp', compact('student', 'subject_teacher_s', 'attendance'))->render();
+        // Teacher Comment
+        $comment = DB::table('homeroom_teacher_comment')
+        ->where('student_id', $student->nim_pyp)
+        ->first();
+
+        $html = view('reports.report-myp', compact('student', 'subject_teacher_s', 'attendance', 'comment'))->render();
 
         $pdf = PDF::loadHtml($html);
 
@@ -106,11 +111,21 @@ class ReportController extends Controller
         }
 
         // ATL
-        
+        $atls = DB::table('approach_to_learning')
+        ->join('atl_progress', 'approach_to_learning.atl_id', '=', 'atl_progress.atl_id')
+        ->where('atl_progress.student_id', $student->nim_pyp)
+        ->select(
+            'approach_to_learning.*',
+            'atl_progress.description as atl_progress_description',
+            'approach_to_learning.description as approach_description'
+        )
+        ->get();
 
-        // dd($units);
 
-        $html = view('reports.report-pyp', compact('student', 'subject_teacher_s', 'attendance', 'comment', 'units'))->render();
+
+        // dd($atls);
+
+        $html = view('reports.report-pyp', compact('student', 'subject_teacher_s', 'attendance', 'comment', 'units', 'atls'))->render();
 
         $pdf = PDF::loadHtml($html);
 

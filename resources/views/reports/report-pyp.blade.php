@@ -383,16 +383,13 @@
                             <h5 style='text-align:right;'>Student Progress</h5>
                         </div>
                         <div class="atl-body">
-                               {{-- @foreach($sub_teacher->subject->pypCriteria as $criterion)
-                                    @php
-                                        $grade = $criterion->pypCriteriaProgress->first();
-                                    @endphp --}}
+                               @foreach($atls as $atl)
                                     <div class="atl-row">
                                         <img src="path/to/subject-icon.png" alt="Subject Icon">
-                                        <span class="atl-title">[ATL Name]</span>
-                                        <span class="atl-progress">Exceeding</span>
+                                        <span class="atl-title">{{ $atl->description }}</span>
+                                        <span class="atl-progress">{{ $atl->atl_progress_description }}</span>
                                     </div>
-                                {{--@endforeach --}}
+                                @endforeach 
                         </div>
                     </div>
             </div>
