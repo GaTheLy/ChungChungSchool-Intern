@@ -101,6 +101,26 @@ class HomeroomController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function getComments($classId) {
+        \Log::info('getComments called with classId: ' . $classId);
+
+        try {
+            $comments = DB::table('homeroom_teacher_comment')
+                        ->join('student_pyp', 'homeroom_teacher_comment.student_id', '=', 'student_pyp.nim_pyp')
+                        ->where('student_pyp.class_id', $classId)
+                        ->select('homeroom_teacher_comment.description', 'student_pyp.nim_pyp')
+                        ->get();
+
+            \Log::info('Comments fetched: ', $comments->toArray());
+
+            return response()->json($comments);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching comments: ' . $e->getMessage());
+            return response()->json(['error' => 'Error fetching comments'], 500);
+        }
+    }
+
+
     // ATL Progress
     public function saveAtlProg(Request $request)
     {

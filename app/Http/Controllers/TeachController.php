@@ -299,6 +299,11 @@ class TeachController extends Controller
         // dd($studentGrade);
         $descriptors = MYPCriteriaDetail::all()->groupBy('criteria_id');
 
+        $subjectTeacher->subject->progress = DB::table('subject_progress')
+        ->where('subject_id', $subjectId)
+        ->where('student_id', $studentId)
+        ->first();
+
         return view('subject-detail-grade', [
             'teacher' => $teacher,
             'subject' => $subjectTeacher->subject,

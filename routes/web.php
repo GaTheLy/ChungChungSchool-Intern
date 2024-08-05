@@ -240,6 +240,8 @@ Route::get('/atl-progress/{atlId}/{classId}', [HomeroomController::class, 'getAt
 // Homeroom Teacher's Comment
 Route::post('/save-homeroom-comments', [HomeroomController::class, 'saveComments']);
 
+Route::get('/get-homeroom-comments/{classId}', [HomeroomController::class, 'getComments'])->name('getComment');
+
 
 // Report Preview
 Route::get('/report-myp/{studentId}', [ReportController::class, 'previewReport'])->name('report.myp');

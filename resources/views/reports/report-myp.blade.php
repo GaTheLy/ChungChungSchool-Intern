@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MYP Report</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+    
     <style>
         @page {
             size: A4;
@@ -283,6 +285,31 @@
             margin: 20px 0;
         }
 
+        /* Atl Checkmark */
+        .checkmark {
+        display: inline-block;
+        width: 8px;
+        height: 20px;
+        border: solid green;
+        border-width: 0 3px 3px 0;
+        transform: rotate(45deg);
+        margin: 5px;
+        }
+
+        /* .checkmark::after {
+        content: '';
+        display: block;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        position: absolute;
+        top: 2px;
+        left: 5px;
+        transform: rotate(45deg);
+        } */
+
+
     </style>
 </head>
 <body>
@@ -376,12 +403,12 @@
                                     <td></td>
                                 @endfor
 
-                                <td>100</td>
+                                <td>{{ $sub_teacher->subject->progress->grade }}</td>
 
                             </tr>
                             <tr>
                                 <td colspan="7">
-                                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat sapiente esse sint voluptatibus. Ad id assumenda soluta quasi tempora blanditiis quae, atque et aperiam numquam veritatis voluptas reiciendis sed deserunt porro consequuntur, optio ipsam? Culpa officiis voluptates deleniti labore aperiam dolorum animi. Saepe, eaque porro. Rem ex nobis modi consequatur!
+                                    {{ $sub_teacher->subject->progress->teacher_comment }}
                                 </td>
                             </tr>
                         </tbody>
@@ -465,7 +492,7 @@
                                 @for($i = $displayedCriteria; $i < 4; $i++)
                                     <td></td>
                                 @endfor
-                            <td>100</td>
+                            <td>{{ $sub_teacher->subject->progress->grade }}</td>
                         </tr>
                         <tr>
                             <td colspan="7" class="criterion-descriptor">Criterion Descriptors</td>
@@ -491,7 +518,7 @@
                         @endforeach
                         <tr>
                             <td colspan="7" class="overall-comment">
-                                Hanley has demonstrated strong text creation skills, performing well in writing tasks related to the novel "Wonder" and producing original works that reflect his passion for writing. He showcases creativity, especially during the discussions about documentaries, finding reliable sources, and creating an alternate ending for the novel "Wonder." To enhance his abilities, Hanley is encouraged to work on organizational skills, practicing how to structure and organize his ideas into well-rounded texts. Additional monthly writing tasks provided by the teacher can serve as valuable opportunities for improvement.
+                            {{ $sub_teacher->subject->progress->teacher_comment }}
                             </td>
                         </tr>
                         <tr>
@@ -520,7 +547,50 @@
                                 </table>
                             </td>
                         </tr>
+
+                        <tr>
+    <td colspan="7">
+        <h3>Approaches to Learning</h3>
+        <table class="table table-bordered atl-table">
+            <thead>
+                <tr>
+                    <th>ATL</th>
+                    <th>EE</th>
+                    <th>ME</th>
+                    <th>AE</th>
+                    <th>BE</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($sub_teacher->subject->atls as $atl)
+                <tr>
+                    <td>{{ $atl->atl_name }}</td>
+                    <td>@if($atl->progress->atl_progress == 'EE')  
+                        <span class="checkmark"></span>  
+                        @endif
+                    </td>
+                    <td>@if($atl->progress->atl_progress == 'ME')  
+                        <span class="checkmark"></span>  
+                        @endif
+                    </td>
+                    <td>@if($atl->progress->atl_progress == 'AE')  
+                        <span class="checkmark"></span>  
+                        @endif
+                    </td>
+                    <td>@if($atl->progress->atl_progress == 'BE')  
+                        <span class="checkmark"></span>  
+                        @endif
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </td>
+</tr>
+
                     </tbody>
+
+
                 </table>
                 @endforeach
             </div>

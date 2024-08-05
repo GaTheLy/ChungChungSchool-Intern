@@ -39,6 +39,23 @@ class ReportController extends Controller
                 $query->where('student_id', $id);
             }])
             ->get();
+
+        // Subject Progress
+        foreach($subject_teacher_s as $subject_teacher){
+            $subject_teacher->subject->progress = DB::table('subject_progress')
+                ->where('subject_id', $subject_teacher->subject_pyp_id)
+                ->first();
+
+            $subject_teacher->subject->atls = DB::table('sub_atl_myp')
+            ->where('subject_id', $subject_teacher->subject_pyp_id)
+            ->get();
+
+            foreach($subject_teacher->subject->atls as $atl){
+                $atl->progress = DB::table('sub_atl_progress_myp')
+                ->where('sub_atl_id', $atl->id)
+                ->first();
+            }
+        }
         
         // Attendance
         $attendance = DB::table('attendance_pyp')
@@ -50,6 +67,8 @@ class ReportController extends Controller
         $comment = DB::table('homeroom_teacher_comment')
         ->where('student_id', $student->nim_pyp)
         ->first();
+
+        
 
         $html = view('reports.report-myp', compact('student', 'subject_teacher_s', 'attendance', 'comment'))->render();
 

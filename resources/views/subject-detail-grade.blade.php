@@ -149,12 +149,8 @@
     </table>
 
     <h5 style="padding:20px;">Homeroom Teacher Comments</h5>
-    <textarea name="teacher_com" id="teacher_com" style="height:100px;width:1000px;margin-left:50px;"></textarea>
+    <textarea name="teacher_com" id="teacher_com" style="height:100px;width:1000px;margin-left:50px;">@if(isset($subject->progress->teacher_comment)){{ $subject->progress->teacher_comment }}@endif</textarea>
     </form>
-
-
-
-
 
 
 
