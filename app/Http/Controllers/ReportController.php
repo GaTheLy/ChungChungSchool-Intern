@@ -90,6 +90,81 @@ class ReportController extends Controller
         return $pdf->stream('report.pdf');
     }
 
+    public function previewReportConversionMYP($id){
+
+        $student = StudentPyp::with(['class.homeroom.teacher'])->findOrFail($id);
+
+        // Subjects
+        $sub_teacherIds = DB::table('subject_class_teacher')
+            ->where('class_id', $student->class->first()->class_id)
+            ->distinct()
+            ->pluck('subject_teacher_id');
+
+        $subjectIds = DB::table('sub_teacher')
+            ->whereIn('sub_teacher_id', $sub_teacherIds)
+            ->pluck('subject_pyp_id');
+
+        $subjects = SubjectModel::findOrFail($subjectIds);
+
+        //Grades
+        $subject_teacher_s = SubjectTeacher::whereIn('sub_teacher_id', $sub_teacherIds)
+            ->with(['subject.mypCriteria.mypCriteriaGrades' => function ($query) use ($id) {
+                $query->where('student_id', $id);
+            }])
+            ->get();
+
+        // Fetch the conversion data
+        $conversions = ConversionMYP::get();
+
+        // Subject Progress
+        foreach($subject_teacher_s as $subject_teacher){
+            $subject_teacher->subject->progress = DB::table('subject_progress')
+                ->where('subject_id', $subject_teacher->subject_pyp_id)
+                ->first();
+
+            $subject_teacher->subject->atls = DB::table('sub_atl_myp')
+            ->where('subject_id', $subject_teacher->subject_pyp_id)
+            ->get();
+
+            foreach($subject_teacher->subject->atls as $atl){
+                $atl->progress = DB::table('sub_atl_progress_myp')
+                ->where('sub_atl_id', $atl->id)
+                ->first();
+            }
+        }
+        
+        // Attendance
+        $attendance = DB::table('attendance_pyp')
+            ->where('student_id', $student->nim_pyp)
+            ->selectRaw('SUM(present) as total_present, SUM(late) as total_late, SUM(absent) as total_absent, SUM(sick) as total_sick, SUM(excused) as total_excused')
+            ->first();
+
+        // Teacher Comment
+        $comment = DB::table('homeroom_teacher_comment')
+        ->where('student_id', $student->nim_pyp)
+        ->first();
+
+        // dd($units);
+        $custom = CustomReport::where('id', 2)->first();
+
+        $filename = $custom ? $custom->logopath : 'ccs-logo.jpg'; // default to 'ccs-logo.jpg' if not set
+        $greetings = $custom->greetings;
+
+        $filenameSign = $custom ? $custom->signpath : 'ccs-logo.jpg'; // default to 'ccs-logo.jpg' if not set
+
+        
+
+        $html = view('reports.conversion-report-myp', compact('student', 'subject_teacher_s', 'attendance', 'comment', 'filename', 'greetings','filenameSign', 'custom', 'conversions'))->render();
+
+        $pdf = PDF::loadHtml($html);
+
+        // Return the PDF for download or inline display
+
+        // dd($subject_teacher_s);
+
+        return $pdf->stream('report.pdf');
+    }
+
     public function previewReportPyp($id){
         $student = StudentPyp::with(['class.homeroom.teacher'])->findOrFail($id);
 
@@ -241,8 +316,19 @@ class ReportController extends Controller
             $newdata->achievement_descriptors = $request->input('achievement_desc');
 
         
-            $conversion = ConversionMYP::get();
-            $conversion->ib_grade();
+            $conversions = $request->input('conversions');
+
+        foreach ($conversions as $id => $data) {
+            // Validate the local_grade for each conversion
+            // $request->validate([
+            //     "conversions.$id.local_grade" => 'required|numeric',
+            // ]);
+
+            // Find the record by ID and update the local_grade
+            $conversion = ConversionMYP::findOrFail($id);
+            $conversion->local_grade = $data['local_grade'];
+            $conversion->save();
+        }
     
         if ($role == 0 && $newdata->save()) { // admin
             return redirect()->route('mypCustom.show', ['userId' => $authUserId]);

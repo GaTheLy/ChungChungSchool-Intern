@@ -215,7 +215,7 @@
                     </div>
                 </div>
 
-                
+                <br/>
 
                 <table class="table table-striped table-bordered" style="width: 80%;">
                     <thead>
@@ -227,10 +227,15 @@
                     </thead>
                     <tbody>
                         
-                    @foreach ($conversion as $c )
+                        @foreach ($conversion as $c )
+
                         <tr>
                             <td>{{$c->ib_grade}}</td>
-                            <td>{{$c->local_grade}}</td>
+                            <td>
+                            <input type="hidden" name="conversions[{{ $c->id }}][ib_grade]" value="{{ $c->ib_grade }}">
+                            <input type="hidden" name="conversions[{{ $c->id }}][mark]" value="{{ $c->mark }}">
+                            <input type="text" name="conversions[{{ $c->id }}][local_grade]" value="{{ $c->local_grade }}">
+                            </td>
                             <td>{{$c->mark}}</td>
                         </tr>
                         

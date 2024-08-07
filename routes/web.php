@@ -246,6 +246,7 @@ Route::get('/get-homeroom-comments/{classId}', [HomeroomController::class, 'getC
 
 // Report Preview
 Route::get('/report-myp/{studentId}', [ReportController::class, 'previewReport'])->name('report.myp');
+Route::get('/report-myp-conversion/{studentId}', [ReportController::class, 'previewReportConversionMYP'])->name('report-convert.myp');
 
 Route::get('/report-pyp/{studentId}', [ReportController::class, 'previewReportPyp'])->name('report.pyp');
 
