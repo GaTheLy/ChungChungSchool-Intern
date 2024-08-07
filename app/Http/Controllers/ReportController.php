@@ -79,7 +79,7 @@ class ReportController extends Controller
 
         
 
-        $html = view('reports.report-myp', compact('student', 'subject_teacher_s', 'attendance', 'comment', 'filename', 'greetings','filenameSign', 'custom'))->render();
+        $html = view('reports.report-myp', compact('student', 'subject_teacher_s', 'attendance', 'comment', 'filename', 'greetings','filenameSign', 'custom'));
 
         $pdf = PDF::loadHtml($html);
 
@@ -87,7 +87,8 @@ class ReportController extends Controller
 
         // dd($subject_teacher_s);
 
-        return $pdf->stream('report.pdf');
+        //return $pdf->stream('report.pdf');
+		return $html;
     }
 
     public function previewReportConversionMYP($id){
@@ -154,7 +155,7 @@ class ReportController extends Controller
 
         
 
-        $html = view('reports.conversion-report-myp', compact('student', 'subject_teacher_s', 'attendance', 'comment', 'filename', 'greetings','filenameSign', 'custom', 'conversions'))->render();
+        $html = view('reports.conversion-report-myp', compact('student', 'subject_teacher_s', 'attendance', 'comment', 'filename', 'greetings','filenameSign', 'custom', 'conversions'));
 
         $pdf = PDF::loadHtml($html);
 
@@ -162,7 +163,9 @@ class ReportController extends Controller
 
         // dd($subject_teacher_s);
 
-        return $pdf->stream('report.pdf');
+        // return $pdf->stream('report.pdf');
+		
+		return $html;
     }
 
     public function previewReportPyp($id){
@@ -233,11 +236,13 @@ class ReportController extends Controller
 
         $filenameSign = $custom ? $custom->signpath : 'ccs-logo.jpg'; // default to 'ccs-logo.jpg' if not set
 
-        $html = view('reports.report-pyp', compact('student', 'subject_teacher_s', 'attendance', 'comment', 'units', 'filename', 'greetings','filenameSign', 'custom','atls'))->render();
+        $html = view('reports.report-pyp', compact('student', 'subject_teacher_s', 'attendance', 'comment', 'units', 'filename', 'greetings','filenameSign', 'custom','atls'));
 
         $pdf = PDF::loadHtml($html);
 
-        return $pdf->stream('report.pdf');
+        // return $pdf->stream('report.pdf');
+		
+		return $html;
 
     }
 
