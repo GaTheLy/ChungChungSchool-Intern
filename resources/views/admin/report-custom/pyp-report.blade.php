@@ -82,6 +82,13 @@
 
                     <div class="col-6" >
                         <select name="attendance" id="attendance">
+                        <option value="{{$custom->attendance}}">
+                            @if ($custom->attendance == 0)
+                            off
+                            @elseif ($custom->attendance == 1)
+                            on
+                            @endif
+                            </option>    
                             <option value="1">on</option>
                             <option value="0">off</option>
                         </select>
@@ -95,7 +102,16 @@
 
                     <div class="col-6" >
                         <select name="central-idea" id="central-idea">
-                            <option value="1">on</option>
+                            
+                        <option value="{{$custom->central_idea}}">
+                            @if ($custom->central_idea == 0)
+                            off
+                            @elseif ($custom->central_idea == 1)
+                            on
+                            @endif
+                            </option> 
+                        
+                        <option value="1">on</option>
                             <option value="0">off</option>
                         </select>
                     </div>
@@ -108,6 +124,14 @@
 
                     <div class="col-6" >
                         <select name="loi" id="loi">
+                        <option value="{{$custom->lines_of_inquiry}}">
+                            @if ($custom->lines_of_inquiry == 0)
+                            off
+                            @elseif ($custom->lines_of_inquiry == 1)
+                            on
+                            @endif
+                            </option> 
+                            
                             <option value="1">on</option>
                             <option value="0">off</option>
                         </select>
@@ -121,7 +145,16 @@
 
                     <div class="col-6" >
                         <select name="key-concepts" id="key-concepts">
-                            <option value="1">on</option>
+                            
+                        <option value="{{$custom->key_concepts}}">
+                            @if ($custom->key_concepts == 0)
+                            off
+                            @elseif ($custom->key_concepts == 1)
+                            on
+                            @endif
+                            </option> 
+                        
+                        <option value="1">on</option>
                             <option value="0">off</option>
                         </select>
                     </div>
@@ -134,12 +167,60 @@
 
                     <div class="col-6" >
                         <select name="atl" id="atl">
+                        <option value="{{$custom->atl}}">
+                            @if ($custom->atl == 0)
+                            off
+                            @elseif ($custom->atl == 1)
+                            on
+                            @endif
+                            </option> 
+
+                        
+                            <option value="1">on</option>
+                            <option value="0">off</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <h5>Subjects</h5>
+                    </div> 
+
+                    <div class="col-6" >
+                        <select name="subjects" id="subjects">
+                           <option value="{{$custom->subjects}}">
+                            @if ($custom->subjects == 0)
+                            off
+                            @elseif ($custom->subjects == 1)
+                            on
+                            @endif
+                            </option>
+                            <option value="1">on</option>
+                            <option value="0">off</option>
+                        </select>
+                    </div>
+
+                    <div class="row">
+                    <div class="col-3">
+                        <h5>Homeroom's Comment </h5>
+                    </div> 
+
+                    <div class="col-6" >
+                        <select name="homeroom_comments" id="homeroom_comments">
+                            <option value="{{$custom->homeroom_comments}}">
+                            @if ($custom->homeroom_comments == 0)
+                            off
+                            @elseif ($custom->homeroom_comments == 1)
+                            on
+                            @endif
+                            </option>
                             <option value="1">on</option>
                             <option value="0">off</option>
                         </select>
                     </div>
                 </div>
 
+                </div>
 
                 <br>
             <button  class="btn btn-primary" >Save</button>

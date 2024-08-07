@@ -31,7 +31,7 @@
         <br/>
         <br/>
 {{-- html report custom form --}}
-            <form method="POST" action="{{ route('pypCustom.edit', ['userId' => $teacher->user_id]) }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('mypCustom.edit', ['userId' => $teacher->user_id]) }}" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-3">
@@ -76,12 +76,19 @@
 
 
                 <div class="row">
-                    <div class="col-3">
+                    <div class="col-6">
                         <h5>Attendance</h5>
                     </div> 
 
                     <div class="col-6" >
                         <select name="attendance" id="attendance">
+                            <option value="{{$custom->attendance}}">
+                            @if ($custom->attendance == 0)
+                            off
+                            @elseif ($custom->attendance == 1)
+                            on
+                            @endif
+                            </option>
                             <option value="1">on</option>
                             <option value="0">off</option>
                         </select>
@@ -89,17 +96,125 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-3">
-                        <h5>Approaches to Learning</h5>
+                    <div class="col-6">
+                        <h5>Homeroom's Comment </h5>
                     </div> 
 
                     <div class="col-6" >
-                        <select name="atl" id="atl">
+                        <select name="homeroom_comments" id="homeroom_comments">
+                            <option value="{{$custom->homeroom_comments}}">
+                            @if ($custom->homeroom_comments == 0)
+                            off
+                            @elseif ($custom->homeroom_comments == 1)
+                            on
+                            @endif
+                            </option>
                             <option value="1">on</option>
                             <option value="0">off</option>
                         </select>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <h5>Summary Subjects Progresses</h5>
+                    </div> 
+
+                    <div class="col-6" >
+                        <select name="summary_progress" id="summary_progress">
+                            <option value="{{$custom->summary_progress}}">
+                            @if ($custom->summary_progress == 0)
+                            off
+                            @elseif ($custom->summary_progress == 1)
+                            on
+                            @endif
+                            </option>
+                            <option value="1">on</option>
+                            <option value="0">off</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <h5>Subjects</h5>
+                    </div> 
+
+                    <div class="col-6" >
+                        <select name="subjects" id="subjects">
+                           <option value="{{$custom->subjects}}">
+                            @if ($custom->subjects == 0)
+                            off
+                            @elseif ($custom->subjects == 1)
+                            on
+                            @endif
+                            </option>
+                            <option value="1">on</option>
+                            <option value="0">off</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-6">
+                        <h5>Approaches to Learning</h5>
+                    </div> 
+
+                    <div class="col-6" >
+                        <select name="atl" id="atl">
+                        <option value="{{$custom->atl}}">
+                            @if ($custom->atl == 0)
+                            off
+                            @elseif ($custom->atl == 1)
+                            on
+                            @endif
+                            </option>                            
+                            <option value="1">on</option>
+                            <option value="0">off</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <h5>Grade Boundaries</h5>
+                    </div> 
+
+                    <div class="col-6" >
+                        <select name="boundaries" id="boundaries">
+                            <option value="{{$custom->grade_boundaries}}">
+                            @if ($custom->grade_boundaries == 0)
+                            off
+                            @elseif ($custom->grade_boundaries == 1)
+                            on
+                            @endif
+                            </option>
+                            <option value="1">on</option>
+                            <option value="0">off</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <h5>Achievement Level descriptors</h5>
+                    </div> 
+
+                    <div class="col-6" >
+                        <select name="achievement_desc" id="achievement_desc">
+                            <option value="{{$custom->achievement_descriptors}}">
+                            @if ($custom->achievement_descriptors == 0)
+                            off
+                            @elseif ($custom->achievement_descriptors == 1)
+                            on
+                            @endif
+                            </option>
+                            <option value="1">on</option>
+                            <option value="0">off</option>
+                        </select>
+                    </div>
+                </div>
+                
 
 
                 <br>

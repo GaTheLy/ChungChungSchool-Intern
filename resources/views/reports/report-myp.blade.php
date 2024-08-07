@@ -315,7 +315,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <img src="{{ asset('assets-image/ccs-logo.jpg') }}" alt="School Logo">
+            <img src="{{ asset('assets-image/'. $filename) }}" alt="School Logo">
             <div>
                 <h1>Middle School Report</h1>
                 <p>Chung Chung Christian School</p>
@@ -343,14 +343,24 @@
             </div>
 
             <p>Dear Parents, </p>
+
+            <p>{{$greetings}}</p>
             
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laudantium beatae eum adipisci suscipit molestiae aut, modi excepturi necessitatibus quidem nostrum quia voluptatibus expedita tempora alias, nesciunt atque nihil natus temporibus facilis nulla saepe eligendi qui? Obcaecati architecto sequi recusandae odio ducimus, blanditiis corporis exercitationem voluptatibus hic, officiis sint possimus deserunt?</p>
 
             <p>Kind regards,</p>
-            <img src="{{ public_path('images/image2.png') }}" alt="Signature">
-            <p>Principal's Name</p>
+            <div class="principal-signature">
+                <div>
+                    <img src="{{ asset('assets-image/'. $filenameSign) }}" alt="Principal Signature" style="max-height: 50px;">
+                </div>
+                <div>
+                    <strong>Laura Carolina</strong><br>
+                    MYP Principal
+                </div>
+            </div>
 
             <div class="page-break"></div>
+
+            @if ($custom->summary_progress==1)
 
             <div class="section">
                 <h2>Summary of Semester 1 Student Progress</h2>
@@ -416,6 +426,9 @@
                      @endforeach
                 </table>
             </div>
+            @endif
+
+            @if ($custom->attendance==1)
             <div class="section">
                 <h3>Attendance</h3>
                 <div class="attendance-summary">
@@ -430,6 +443,7 @@
                     <p>{{$comment->description}}</p>
                 </div>
             </div>
+            @endif
 
             <div class="page-break"></div>
 
@@ -440,6 +454,8 @@
                 @foreach($subject_teacher_s as $sub_teacher)
                 <table class="table subject-table">
                     <thead>
+                    @if ($custom->subjects==1)
+
                         <tr>
                             <th colspan="2">
                                 <img src="path-to-icon.png" alt="Subject Icon" style="width:24px; vertical-align:middle;">
@@ -522,7 +538,13 @@
                             </td>
                         </tr>
                         <tr>
+
+                        @endif
+
+
                             <td colspan="7" class="grade-boundaries">
+                                
+                        @if ($custom->grade_boundaries==1)
                                 <table class="boundaries-table">
                                     <tr>
                                         <td>Grade</td>
@@ -545,12 +567,16 @@
                                         <td>28 – 32</td>
                                     </tr>
                                 </table>
+                                
+                            @endif
                             </td>
                         </tr>
 
                         <tr>
     <td colspan="7">
         <h3>Approaches to Learning</h3>
+        @if ($custom->atl==1)
+
         <table class="table table-bordered atl-table">
             <thead>
                 <tr>
@@ -585,6 +611,7 @@
                 @endforeach
             </tbody>
         </table>
+        @endif
     </td>
 </tr>
 
@@ -595,6 +622,8 @@
                 @endforeach
             </div>
 
+        
+            @if ($custom->achievement_descriptors==1)
             <div class="achievement-descriptors">
                 <h2>Achievement Level Descriptors</h2>
                 <hr>
@@ -651,6 +680,8 @@
                     </tbody>
                 </table>
             </div>
+            
+            @endif
             
             <!--  -->
         </div>

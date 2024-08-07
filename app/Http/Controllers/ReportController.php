@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ConversionMYP;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -13,7 +14,7 @@ use App\Models\User;
 use App\Models\StudentPyp;
 use App\Models\SubjectTeacher;
 use App\Models\SubjectModel;
-use App\Models\CustomPypReport;
+use App\Models\CustomReport;
 
 class ReportController extends Controller
 {
@@ -68,9 +69,17 @@ class ReportController extends Controller
         ->where('student_id', $student->nim_pyp)
         ->first();
 
+        // dd($units);
+        $custom = CustomReport::where('id', 2)->first();
+
+        $filename = $custom ? $custom->logopath : 'ccs-logo.jpg'; // default to 'ccs-logo.jpg' if not set
+        $greetings = $custom->greetings;
+
+        $filenameSign = $custom ? $custom->signpath : 'ccs-logo.jpg'; // default to 'ccs-logo.jpg' if not set
+
         
 
-        $html = view('reports.report-myp', compact('student', 'subject_teacher_s', 'attendance', 'comment'))->render();
+        $html = view('reports.report-myp', compact('student', 'subject_teacher_s', 'attendance', 'comment', 'filename', 'greetings','filenameSign', 'custom'))->render();
 
         $pdf = PDF::loadHtml($html);
 
@@ -142,7 +151,7 @@ class ReportController extends Controller
         ->get();
 
         // dd($units);
-        $custom = CustomPypReport::where('id', 1)->first();
+        $custom = CustomReport::where('id', 1)->first();
 
         $filename = $custom ? $custom->logopath : 'ccs-logo.jpg'; // default to 'ccs-logo.jpg' if not set
         $greetings = $custom->greetings;
@@ -171,7 +180,7 @@ class ReportController extends Controller
 
         $teacher = $user->teacher;
         
-        $custom = CustomPypReport::where('id', 1)->first();
+        $custom = CustomReport::where('id', 2)->first();
 
         $filename = $custom ? $custom->logopath : 'ccs-logo.jpg'; // default to 'ccs-logo.jpg' if not set
 
@@ -184,10 +193,61 @@ class ReportController extends Controller
         $role = User::find($authUserId)->role;
 
         if ($role == 0) { // admin
-            return view('admin/report-custom/myp-report', compact('teacher', 'filename', 'greetings', 'filenameSign'));
+            return view('admin/report-custom/myp-report', compact('teacher', 'filename', 'greetings', 'filenameSign','custom'));
         }
 
     }
+
+    public function editMypCustom(Request $request, $userId)
+    {
+        // Validate the uploaded file
+        $authUserId = Auth::id();
+
+        if ($authUserId != $userId) {
+            return redirect()->route('dashboard', ['userId' => $authUserId]);
+        }
+    
+        $user = Auth::user();
+        $teacher = $user->teacher;
+        $role = User::find($authUserId)->role;
+        $newdata = CustomReport::where('id', 2)->first();
+        $filename=$newdata->logopath;
+        $filenameSign=$newdata->signpath;
+        if ($request->hasFile('logo')) {
+            $logoFile = $request->file('logo');
+            $extension = $logoFile->getClientOriginalExtension();
+            $filename = 'custom-logo-' . $authUserId . '.' . $extension;
+            $path = public_path('assets-image/');
+            $logoFile->move($path, $filename);
+        }
+
+        if ($request->hasFile('sign')){
+            $signFile = $request->file('sign');
+            $extension = $signFile->getClientOriginalExtension();
+            $filenameSign = 'custom-sign-' . $authUserId . '.' . $extension;
+            $path = public_path('assets-image/');
+            $signFile->move($path, $filenameSign);
+        }
+        
+            $newdata->logopath = $filename;
+            $newdata->greetings = $request->greetings;
+            $newdata->signpath = $filenameSign;
+            $newdata->attendance = $request->input('attendance');
+            $newdata->atl = $request->input('atl');
+            $newdata->subjects = $request->input('subjects');
+            $newdata->summary_progress = $request->input('summary_proggress');
+            $newdata->grade_boundaries = $request->input('boundaries');
+            $newdata->achievement_descriptors = $request->input('achievement_desc');
+
+        
+            $conversion = ConversionMYP::get();
+            $conversion->ib_grade()
+    
+        if ($role == 0 && $newdata->save()) { // admin
+            return redirect()->route('mypCustom.show', ['userId' => $authUserId]);
+        }
+    }
+
 
     public function pypCustom($userId){
         $authUserId = Auth::id();
@@ -200,7 +260,7 @@ class ReportController extends Controller
 
         // Fetch the authenticated user
         $user = Auth::user();
-        $custom = CustomPypReport::where('id', 1)->first();
+        $custom = CustomReport::where('id', 1)->first();
 
         $filename = $custom ? $custom->logopath : 'ccs-logo.jpg'; // default to 'ccs-logo.jpg' if not set
 
@@ -213,7 +273,7 @@ class ReportController extends Controller
         $role = User::find($authUserId)->role;
 
         if ($role == 0) { // admin
-            return view('admin/report-custom/pyp-report', compact('teacher', 'filename', 'greetings', 'filenameSign'));
+            return view('admin/report-custom/pyp-report', compact('teacher', 'filename', 'greetings', 'filenameSign','custom'));
         }
 
     }
@@ -230,7 +290,7 @@ class ReportController extends Controller
         $user = Auth::user();
         $teacher = $user->teacher;
         $role = User::find($authUserId)->role;
-        $newdata = CustomPypReport::where('id', 1)->first();
+        $newdata = CustomReport::where('id', 1)->first();
         $filename=$newdata->logopath;
         $filenameSign=$newdata->signpath;
         if ($request->hasFile('logo')) {
@@ -257,6 +317,8 @@ class ReportController extends Controller
             $newdata->key_concepts = $request->input('key-concepts');
             $newdata->attendance = $request->input('attendance');
             $newdata->atl = $request->input('atl');
+            $newdata->subjects = $request->input('subjects');
+
 
         
     

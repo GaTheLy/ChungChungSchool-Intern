@@ -125,7 +125,6 @@ class HomeroomController extends Controller
     public function saveAtlProg(Request $request)
     {
 
-        \Log::info('Received ATL Progress Data:', $request->json()->all());
 
         $atlProgressData = $request->json()->all();
 
@@ -147,7 +146,6 @@ class HomeroomController extends Controller
     public function getAtlProgress($atlId, $classId)
     {
 
-        \Log::info('Fetching ATL Progress', ['atlId' => $atlId, 'classId' => $classId]);
         $atlProgress = DB::table('atl_progress')
             ->join('student_pyp', 'atl_progress.student_id', '=', 'student_pyp.nim_pyp')
             ->where('atl_progress.atl_id', $atlId)
@@ -156,10 +154,8 @@ class HomeroomController extends Controller
             ->get();
 
         // Debug the SQL query
-        \Log::info('ATL Progress Query', ['query' => DB::getQueryLog()]);
 
         // Debug the result
-        \Log::info('ATL Progress Result', ['result' => $atlProgress]);
 
         return response()->json($atlProgress);
     }

@@ -96,7 +96,8 @@ Route::post('/pyp-report-custom-edit/{userId}', [ReportController::class, 'editP
 
 Route::get('/myp-report-custom/{userId}', [ReportController::class, 'mypCustom'])
 ->middleware(['auth', 'verified'])->name('mypCustom.show');
-
+Route::post('/myp-report-custom-edit/{userId}', [ReportController::class, 'editMypCustom'])
+->middleware(['auth', 'verified'])->name('mypCustom.edit');
 
 
 
