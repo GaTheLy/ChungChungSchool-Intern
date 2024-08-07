@@ -188,12 +188,13 @@ class ReportController extends Controller
 
         $filenameSign = $custom ? $custom->signpath : 'ccs-logo.jpg'; 
 
+        $conversion = ConversionMYP::get();
         $teacher = $user->teacher;
         
         $role = User::find($authUserId)->role;
 
         if ($role == 0) { // admin
-            return view('admin/report-custom/myp-report', compact('teacher', 'filename', 'greetings', 'filenameSign','custom'));
+            return view('admin/report-custom/myp-report', compact('teacher', 'filename', 'greetings', 'filenameSign','custom','conversion'));
         }
 
     }
@@ -241,7 +242,7 @@ class ReportController extends Controller
 
         
             $conversion = ConversionMYP::get();
-            $conversion->ib_grade()
+            $conversion->ib_grade();
     
         if ($role == 0 && $newdata->save()) { // admin
             return redirect()->route('mypCustom.show', ['userId' => $authUserId]);

@@ -214,6 +214,30 @@
                         </select>
                     </div>
                 </div>
+
+                
+
+                <table class="table table-striped table-bordered" style="width: 80%;">
+                    <thead>
+                        <tr>
+                            <td><b>IB Grades</b></td>
+                            <td><b>Local Grades</b></td>
+                            <td><b>Mark</b></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    @foreach ($conversion as $c )
+                        <tr>
+                            <td>{{$c->ib_grade}}</td>
+                            <td>{{$c->local_grade}}</td>
+                            <td>{{$c->mark}}</td>
+                        </tr>
+                        
+                        @endforeach
+
+                    </tbody>
+                </table>
                 
 
 
