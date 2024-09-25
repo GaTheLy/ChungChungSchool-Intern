@@ -77,8 +77,6 @@ class ReportController extends Controller
 
         $filenameSign = $custom ? $custom->signpath : 'ccs-logo.jpg'; // default to 'ccs-logo.jpg' if not set
 
-        
-
         $html = view('reports.report-myp', compact('student', 'subject_teacher_s', 'attendance', 'comment', 'filename', 'greetings','filenameSign', 'custom'));
 
         $pdf = PDF::loadHtml($html);
@@ -87,8 +85,8 @@ class ReportController extends Controller
 
         // dd($subject_teacher_s);
 
-        //return $pdf->stream('report.pdf');
-		return $html;
+        // return $pdf->stream('report.pdf');
+        return $pdf->stream('report.pdf');
     }
 
     public function previewReportConversionMYP($id){

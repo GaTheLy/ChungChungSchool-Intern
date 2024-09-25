@@ -66,19 +66,19 @@
     <table id="example" class="table table-striped table-bordered" style="width:100%">
         <thead>
             <tr>
+                <th>NIP</th>
                 <th>Name</th>
-                <th>Joined At</th>
                 <th>Teaching</th>
+                <th>Position</th>
                 <th>Phone</th>
-                <th>Address</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
             @foreach($teachers as $teach)
                 <tr>
+                    <td style="white-space:nowrap;">{{ $teach->nip_text }}</td>
                     <td>{{ $teach->first_name }} {{ $teach->last_name }}</td>
-                    <td>{{ $teach->joined_at}} </td>
                     <td>
                     @if($teach->is_myp == 0 && $teach->is_pyp == 1)
                         PYP
@@ -88,8 +88,9 @@
                         PYP & MYP
                     @endif
                     </td>
+                    <td>{{ $teach->position }}</td>
+
                     <td>{{ $teach->phone }}</td>
-                    <td>{{ $teach->address }}</td>
 
 
                     <td>
@@ -108,16 +109,6 @@
                 </tr>
             @endforeach
         </tbody>
-        <tfoot>
-            <tr>
-                <th>Name</th>
-                <th>Joined At</th>
-                <th>Teaching</th>
-                <th>Phone</th>
-                <th>Address</th>
-                <th>Action</th>
-            </tr>
-        </tfoot>
     </table>
 
     {{-- delete confirmation modal --}}

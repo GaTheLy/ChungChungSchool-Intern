@@ -20,7 +20,7 @@
                     </a>
                 </li>
 
-                
+                {{--  
                 <li class="sidebar-item">
                     <a href="{{ route('subject', ['userId' => $teacher->user_id]) }}" class="sidebar-link">
                     <img src="{{ asset('assets-icon/icon-listsubject-white.png') }}" alt="Icon" class="icon" />
@@ -38,14 +38,17 @@
                         <span>Classroom</span>
                     </a>
                 </li>
+                --}}
             </ul>
 
 
             <div class="sidebar-footer">
+                {{--  
                     <a href="{{ route('profile-admin.show', ['userId' => $teacher->user_id, 'teacherId' => $teacher->nip_pyp]) }}" class="sidebar-link">
                         <i class="lni lni-user"></i>
                         <span>Profile</span>
                     </a>
+                    --}}
                 
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf

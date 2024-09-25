@@ -20,7 +20,7 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
-
+{{-- 
                 
                 <li class="sidebar-item">
                     <a href="/subject-teacher-pyp" class="sidebar-link">
@@ -39,7 +39,10 @@
                         <span>Classroom</span>
                     </a>
                 </li>
+                --}}
             </ul>
+
+             
 
 
             <div class="sidebar-footer">

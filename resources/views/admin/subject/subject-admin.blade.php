@@ -64,6 +64,8 @@
 
     <br>
 
+    <span style="text-align:center;margin-bottom:-40px;"> halo </span>
+
     <table id="example" class="table table-striped table-bordered" style="width:100%">
         <thead>
             <tr>
@@ -86,7 +88,7 @@
                     <td>
                         <a href="{{ route('subject.detail', ['userId' => $teacher->user_id, 'subjectId' => $subject->id]) }}" style="color:black;">Detail</a>
                         <a href="{{ route('subject.edit', ['userId' => $teacher->user_id, 'subjectId' => $subject->id]) }}" style="color:black;">Edit</a>
-                        <button onclick="showModal({{$subject->id}})" style="text-decoration:none;border:0px;background:none;">Delete</button>
+                        <button onclick="showModal({{ $subject->id }})" style="text-decoration:none;border:0px;background:none;">Delete</button>
                         <form id="delete-form-{{ $subject->id }}" action="{{ route('subject.delete', ['userId' => $teacher->user_id, 'subjectId' => $subject->id]) }}" method="post" style="display:none;">
                             @csrf
                         </form>

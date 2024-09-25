@@ -106,6 +106,7 @@ class StudentController extends Controller
         $authUserId = Auth::id();
 
         // Check if the authenticated user's ID matches the requested user ID
+        log($authUserId);
         if ($authUserId != $userId) {
             // Redirect to the authenticated user's dashboard
             return redirect()->route('dashboard', ['userId' => $authUserId]);
