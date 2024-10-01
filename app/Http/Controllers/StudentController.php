@@ -81,8 +81,11 @@ class StudentController extends Controller
         $newStudent = new StudentPyp();
 
         $newStudent->nim_pyp = $request->nim_pyp;
+        $newStudent->nisn = $request->nisn;
         $newStudent->first_name = $request->first_name;
+        $newStudent->middle_name = $request->mid_name;
         $newStudent->last_name = $request->last_name; 
+        $newStudent->nickname = $request->nick_name;
         $newStudent->dob = $request->dob; 
         $newStudent->fathers_name = $request->dad_name;
         $newStudent->mothers_name = $request->mom_name; 
@@ -174,8 +177,11 @@ class StudentController extends Controller
         $newStudent = StudentPyp::find($studentId);
 
         $newStudent->nim_pyp = $request->nim_pyp;
+        $newStudent->nisn = $request->nisn;
         $newStudent->first_name = $request->first_name;
+        $newStudent->middle_name = $request->mid_name;
         $newStudent->last_name = $request->last_name; 
+        $newStudent->nickname = $request->nick_name;
         $newStudent->dob = $request->dob; 
         $newStudent->fathers_name = $request->dad_name;
         $newStudent->mothers_name = $request->mom_name; 

@@ -91,13 +91,13 @@
                 <td>
                      
                     <a href="{{ route('student.detail', ['userId'=>$teacher->user_id, 'studentId'=>$student->nim_pyp]) }}" style="color:black;">Detail</a>
-                    {{--
+                    
                     <a href="{{route('student.edit', ['userId' => $teacher->user_id, 'studentId' => $student->nim_pyp])}}" style="color:black;">Edit</a>
                     <button onclick="showModal({{$student->nim_pyp}})" style="text-decoration:none;border:0px;background:none;">Delete</button>
                     <form id="delete-form-{{ $student->nim_pyp }}" action="{{route('student.delete', ['userId' => $teacher->user_id, 'studentId' => $student->nim_pyp])}}" method="post">
                         @csrf
                     </form>
-                     --}}
+                     
                 </td>
             </tr>
         @endforeach

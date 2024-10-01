@@ -51,20 +51,40 @@
                     <input type="text" value="{{$selectedStudent->first_name}}" name="first_name" id="first_name" style="height:40px;width:500px;"></input>
                     </div>
                 </div>
+                <br>
+                <div class="row">
+                    <div class="col-3">
+                        <h5>3. Middle Name</h5>
+                    </div> 
+
+                    <div class="col-6" >
+                    <input placeholder="nullable" type="text" value="{{$selectedStudent->middle_name}}" name="mid_name" id="mid_name" style="height:40px;width:500px;"></input>
+                    </div>
+                </div>
         <br>
                 <div class="row">
                     <div class="col-3">
-                        <h5>3. Last Name</h5>
+                        <h5>4. Last Name</h5>
                     </div> 
 
                     <div class="col-6" >
                     <input type="text" value="{{$selectedStudent->last_name}}" name="last_name" id="last_name" style="height:40px;width:500px;"></input>
                     </div>
                 </div>
+                <br>
+                <div class="row">
+                    <div class="col-3">
+                        <h5>5. Nick Name</h5>
+                    </div> 
+
+                    <div class="col-6" >
+                    <input placeholder="nullable" type="text" value="{{$selectedStudent->nickname}}" name="nick_name" id="nick_name" style="height:40px;width:500px;"></input>
+                    </div>
+                </div>
         <br>
                 <div class="row">
                     <div class="col-3">
-                        <h5>4. Date of Birth</h5>
+                        <h5>6. Date of Birth</h5>
                     </div> 
 
                     <div class="col-6" >
@@ -74,7 +94,7 @@
         <br>
                 <div class="row">
                     <div class="col-3">
-                        <h5>5. Father's Name</h5>
+                        <h5>7. Father's Name</h5>
                     </div> 
 
                     <div class="col-6" >
@@ -84,7 +104,7 @@
         <br>
                 <div class="row">
                     <div class="col-3">
-                        <h5>6. Father's Phone</h5>
+                        <h5>8. Father's Phone</h5>
                     </div> 
 
                     <div class="col-6" >
@@ -94,7 +114,7 @@
         <br>
                 <div class="row">
                     <div class="col-3">
-                        <h5>7. Mother's Name</h5>
+                        <h5>9. Mother's Name</h5>
                     </div> 
 
                     <div class="col-6" >
@@ -104,7 +124,7 @@
         <br>
                 <div class="row">
                     <div class="col-3">
-                        <h5>8. Mother's Phone</h5>
+                        <h5>10. Mother's Phone</h5>
                     </div> 
 
                     <div class="col-6" >
@@ -114,7 +134,7 @@
         <br>
                 <div class="row">
                     <div class="col-3">
-                        <h5>9. Parent's Email</h5>
+                        <h5>11. Parent's Email</h5>
                     </div> 
 
                     <div class="col-6" >
@@ -124,7 +144,7 @@
         <br>
                 <div class="row">
                     <div class="col-3">
-                        <h5>10. Address</h5>
+                        <h5>12. Address</h5>
                     </div> 
 
                     <div class="col-6" >
@@ -134,17 +154,17 @@
         <br>
                 <div class="row">
                     <div class="col-3">
-                        <h5>11. Previous School</h5>
+                        <h5>13. Previous School</h5>
                     </div> 
 
                     <div class="col-6" >
-                    <input type="text" value="{{$selectedStudent->previous_school}}" name="prev_school" id="prev_school" style="height:80px;width:500px;"></inpu>
+                    <input placeholder="nullable" type="text" value="{{$selectedStudent->previous_school}}" name="prev_school" id="prev_school" style="height:80px;width:500px;"></inpu>
                     </div>
                 </div>
         <br>
                 <div class="row">
                     <div class="col-3">
-                        <h5>12. Level</h5>
+                        <h5>14. Level</h5>
                     </div>
                     <div class="col-3">
                     <select name="option" id="option">
@@ -157,11 +177,21 @@
         <br>
                 <div class="row">
                     <div class="col-3">
-                        <h5>13. Entry Date</h5>
+                        <h5>15. Entry Date</h5>
                     </div> 
 
                     <div class="col-6">
                     <input type="date" value="{{$selectedStudent->entry_date}}" name="entry_date" id="entry_date" style="height:40px;width:500px;"></input>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-3">
+                        <h5>16. NISN</h5>
+                    </div> 
+
+                    <div class="col-6" >
+                    <input placeholder="nullable" type="text" value="{{$selectedStudent->nisn}}" name="nisn" id="nisn" style="height:40px;width:500px;"></input>
                     </div>
                 </div>
 
