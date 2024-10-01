@@ -451,7 +451,13 @@ class TeachController extends Controller
         }
         $newUser->save();
 
-        $newTeacher->nip_pyp = $request->nip;
+        $lastNip = 1;
+        while (TeacherPyp::where('nip_pyp', $lastNip)->exists()) {
+            $lastNip++;
+        }
+        $newTeacher->nip_pyp = $lastNip;
+        $newTeacher->nip_text = $request->nip;
+        $newTeacher->position = $request->position;
         $newTeacher->first_name = $request->first_name;
         $newTeacher->last_name = $request->last_name; 
         $newTeacher->phone = $request->phone; 
@@ -663,9 +669,10 @@ class TeachController extends Controller
         }
         $newUser->save();
 
-        $newTeacher->nip_pyp = $request->nip;
+        $newTeacher->nip_text = $request->nip;
         $newTeacher->first_name = $request->first_name;
         $newTeacher->last_name = $request->last_name; 
+        $newTeacher->position = $request->position;
         $newTeacher->phone = $request->phone; 
         $newTeacher->address = $request->address; 
         $newTeacher->joined_at = $request->joined_at; 

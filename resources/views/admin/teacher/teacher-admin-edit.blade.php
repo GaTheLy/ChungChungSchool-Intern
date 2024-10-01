@@ -171,11 +171,22 @@
                     </select>
                 </div>
                 </div>
+                <br>
+                <div class="row">
+                    <div class="col-3">
+                        <h5>9. Position</h5>
+                    </div> 
+
+                    <div class="col-6">
+                    <input style="height:40px;width:500px;" type="text" name="position" id="position" ></input>
+                    </div>
+                </div>
+                
 
                 <br/>
                 <div class="row">
                     <div class="col-3">
-                        <h5>9. Change Password</h5>
+                        <h5>10. Change Password</h5>
                     </div> 
 
                     <div class="col-6">

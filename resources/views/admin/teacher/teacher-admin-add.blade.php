@@ -117,6 +117,17 @@
                     </select>
                 </div>
                 </div>
+                <br>
+                <div class="row">
+                    <div class="col-3">
+                        <h5>9. Position</h5>
+                    </div> 
+
+                    <div class="col-6">
+                    <input style="height:40px;width:500px;" type="text" name="position" id="position" ></input>
+                    </div>
+                </div>
+                <br>
 
             <button  class="btn btn-primary" >Save</button>
 

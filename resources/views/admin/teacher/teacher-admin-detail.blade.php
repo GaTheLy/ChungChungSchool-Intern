@@ -118,9 +118,20 @@
                     }
                 @endphp
 
-                    <input style="height:40px;width:500px;" disabled value="{{ $level }}">
+                    <input style="height:40px;width:500px;" disabled value="{{ $selectedTeacher->level }}">
                 </div>  
                 </div>
+                <br>
+                <div class="row">
+                    <div class="col-3">
+                        <h5>9. Position</h5>
+                    </div> 
+
+                    <div class="col-6">
+                    <input style="height:40px;width:500px;" disabled value="{{ $selectedTeacher->position }}" ></input>
+                    </div>
+                </div>
+                <br>
 
 
 
