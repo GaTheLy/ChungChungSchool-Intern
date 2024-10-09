@@ -127,9 +127,13 @@ class ClassController extends Controller
         $user = Auth::user();
 
         $teacher = $user->teacher;
-        $teachers = TeacherPyp::get();
-        $students = StudentPyp::get();
-
+        
+        $assignedTeacherIds = Homeroom::pluck('teacher_pyp_id')->toArray();
+        $teachers = TeacherPyp::whereNotIn('nip_pyp', $assignedTeacherIds)->get();
+        // $teachers = TeacherPyp::get();
+        // $students = StudentPyp::get();
+        $assignedStudentIds = StudentClass::pluck('nim_pyp')->toArray();
+        $students = StudentPyp::whereNotIn('nim_pyp', $assignedStudentIds)->get();
 
         $role = User::find($authUserId)->role;
 
@@ -234,8 +238,14 @@ class ClassController extends Controller
         $selectedClass = ClassModel::with(['students' => function ($query) {
             $query->orderBy('first_name')->orderBy('middle_name')->orderBy('last_name');
         }])->find($classId);
-        $teachers = TeacherPyp::get();
-        $students = StudentPyp::get();
+
+        $assignedTeacherIds = Homeroom::pluck('teacher_pyp_id')->toArray();
+        $teachers = TeacherPyp::whereNotIn('nip_pyp', $assignedTeacherIds)->get();
+        // $teachers = TeacherPyp::get();
+        // $students = StudentPyp::get();
+        
+        $assignedStudentIds = StudentClass::pluck('nim_pyp')->toArray();
+        $students = StudentPyp::whereNotIn('nim_pyp', $assignedStudentIds)->get();
 
         $role = User::find($authUserId)->role;
 

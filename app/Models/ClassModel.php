@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ClassModel extends Model
 {
     protected $table = 'class';
+    public $timestamps = false;
 
     // Define the primary key if it's not 'id'
     protected $primaryKey = 'class_id';

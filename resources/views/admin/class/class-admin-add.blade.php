@@ -8,44 +8,59 @@
 
 <script>
     $(document).ready(function() {
-        var studentsArray =[];
-        $('#add-student-btn').click(function() {
-            var selectedStudent = $('#students').find(':selected');
-            var studentId = selectedStudent.attr('id');
-            var studentName = selectedStudent.val();
-            
-            if(studentId) {
-                // Add the student to the list
+    var studentsArray = [];
+
+    $('#add-student-btn').click(function() {
+        var selectedStudent = $('#students').find(':selected');
+        var studentId = selectedStudent.attr('id');
+        var studentName = selectedStudent.val();
+        
+        if (studentId) {
+            // Check if the student is already in the selected list
+            if (!studentsArray.includes(studentId)) {
+                // Add the student to the selected students list
                 $('#selected-students').append('<li>' + studentName + ' <button type="button" class="btn btn-danger btn-sm remove-student" data-id="' + studentId + '">Remove</button></li>');
-                
-                // Disable the selected option
+
+                // Disable the selected option in the dropdown
                 selectedStudent.prop('disabled', true);
                 
                 // Add the student ID to the hidden input array
                 studentsArray.push(studentId);
                 $('#students-array').val(JSON.stringify(studentsArray));
             }
-            console.log(studentsArray);
-        });
-
-        // Remove student from the list
-        $(document).on('click', '.remove-student', function() {
-            var studentId = $(this).data('id');
-            
-            // Enable the option back in the dropdown
-            $('#students option[id="' + studentId + '"]').prop('disabled', false);
-            
-            // Remove the student from the list
-            $(this).parent().remove();
-            
-            // Remove the student ID from the hidden input array
-            studentsArray = studentsArray.filter(id => id != studentId);
-            $('#students-array').val(JSON.stringify(studentsArray));
-            console.log(studentsArray);
-        });
-
-       
+        }
+        console.log(studentsArray);
     });
+
+    // Remove student from the selected list and return them to the dropdown list
+    $(document).on('click', '.remove-student', function() {
+        var studentId = $(this).data('id');
+        
+        // Re-enable the option in the dropdown
+        $('#students option[id="' + studentId + '"]').prop('disabled', false);
+        
+        // Remove the student from the selected list
+        $(this).parent().remove();
+        
+        // Remove the student ID from the hidden input array
+        studentsArray = studentsArray.filter(id => id != studentId);
+        $('#students-array').val(JSON.stringify(studentsArray));
+        console.log(studentsArray);
+    });
+
+    // Update the dropdown list when the student is added or removed
+    $('#students').on('change', function() {
+        $(this).find('option').each(function() {
+            // If the student is in the selected array, disable the option
+            if (studentsArray.includes($(this).attr('id'))) {
+                $(this).prop('disabled', true);
+            } else {
+                $(this).prop('disabled', false);
+            }
+        });
+    });
+});
+
 </script>
 
 <style>
