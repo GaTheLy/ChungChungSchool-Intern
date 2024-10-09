@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Subject;
 use App\Models\SubjectTeacher;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class StudentController extends Controller
@@ -216,9 +217,30 @@ class StudentController extends Controller
         // Get the teacher associated with the user
         $teacher = $user->teacher;
         $delStudent = StudentPyp::find($studentId); 
-
-        // $delSub = SubjectModel::find($subjectId);
-
+        $tables = [
+            'attendance_myp',
+            'attendance_pyp',
+            'atl_progress',
+            'student_class',
+            'sub_atl_progress_myp',
+            'subject_crit_grade_myp',
+            'subject_crit_progress',
+            'subject_progress',
+            'unit_progress'
+        ];
+        
+        foreach ($tables as $table) {
+            if($table == 'student_class'){
+                $column = 'nim_pyp';
+            }else{
+                $column = 'student_id';
+            }
+            $exists = DB::table(table: $table)->where($column, $studentId)->exists();
+        
+            if ($exists) {
+                DB::table($table)->where($column, $studentId)->delete();
+            }
+        }
         $delStudent->delete();
 
         $role = User::find($authUserId)->role;
