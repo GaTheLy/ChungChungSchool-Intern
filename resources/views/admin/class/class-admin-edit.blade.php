@@ -54,19 +54,32 @@ $(document).ready(function() {
         $('#students-array').val(JSON.stringify(studentsArray));
         console.log(studentsArray);
     });
-
-    // Update the dropdown list when the student is added or removed
-    $('#students').on('change', function() {
-        $(this).find('option').each(function() {
-            // If the student is in the selected array, disable the option
-            if (studentsArray.includes($(this).attr('id'))) {
-                $(this).prop('disabled', true);
-            } else {
-                $(this).prop('disabled', false);
-            }
-        });
-    });
 });
+
+// Function to show the confirmation modal with dynamic student and class information
+function showModal(studentId, studentName, classId, className) {
+    // Update the modal with student and class information
+    $('#modalStudentName').text(studentName);
+    $('#modalClassName').text(className);
+
+    // Set the student ID to a data attribute for later use
+    $('#confirmDeleteModal').data('student-id', studentId);
+
+    // Show the modal
+    $('#confirmDeleteModal').modal('show');
+}
+
+// Function to confirm and proceed with the student removal
+function confirmDelete() {
+    // Get the student ID from the modal's data attribute
+    const studentId = $('#confirmDeleteModal').data('student-id');
+
+    // Find the form corresponding to the student ID and submit it
+    $('#delete-form-' + studentId).submit();
+
+    // Hide the modal after submission
+    $('#confirmDeleteModal').modal('hide');
+}
 </script>
 
 <style>
@@ -76,7 +89,6 @@ $(document).ready(function() {
     }
     h5 {
         padding-left: 10px;
-        padding-top: -20px;
         font-family: 'Lexend Deca';
         font-weight: 400;
         font-size: 25px;
@@ -96,7 +108,6 @@ $(document).ready(function() {
 
 <br>
 
-<br>
 <form method="POST" action="{{route('class.edit.submit',['userId' => $teacher->user_id, 'classId' => $selectedClass->class_id])}}">
     @csrf
     <div class="row">
@@ -115,7 +126,7 @@ $(document).ready(function() {
         <div class="col-6">
             <select name="homeroom" id="homeroom" style="height:40px;width:500px;">
                 <option value="{{ $selectedClass->homeroom ? $selectedClass->homeroom->teacher->nip_pyp : 'N/A' }}">
-                {{ $selectedClass->homeroom ? $selectedClass->homeroom->teacher->first_name . ' ' . $selectedClass->homeroom->teacher->last_name : 'N/A' }}
+                    {{ $selectedClass->homeroom ? $selectedClass->homeroom->teacher->first_name . ' ' . $selectedClass->homeroom->teacher->last_name : 'N/A' }}
                 </option>
                 @foreach ($teachers as $teacher)
                     <option value="{{ $teacher->nip_pyp }}">{{ $teacher->first_name . ' ' . $teacher->last_name }}</option>
@@ -130,9 +141,9 @@ $(document).ready(function() {
         </div> 
         <div class="col-6">
             <select name="class_level" id="class_level" style="height:40px;width:500px;">
-                    <option value="{{$selectedClass->class_level}}"></option>
-                    <option value="PYP" name="PYP">PYP</option>
-                    <option value="MYP" name="MYP">MYP</option>
+                <option value="{{$selectedClass->class_level}}"></option>
+                <option value="PYP">PYP</option>
+                <option value="MYP">MYP</option>
             </select>
         </div>
     </div>
@@ -175,65 +186,55 @@ $(document).ready(function() {
     </div>
 </form>
 
-    <br />
-    <div class="col-10" style="margin-left:100px;">
-            <table id="example" class="table table-striped table-bordered" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>NIM</th>
-                        <th>Student</th>
-                        <th>Action</th>
+<br />
+<div class="col-10" style="margin-left:100px;">
+    <table id="example" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>NIM</th>
+                <th>Student</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php $index = 1; ?>
+            @foreach ($selectedClass->students as $student)
+                <tr>
+                    <td>{{ $index }}</td>
+                    <td>{{ $student->nim_pyp }}</td>
+                    <td>{{ $student->first_name }} {{ $student->middle_name }} {{ $student->last_name }}</td>
+                    <td>
+                        <button onclick="showModal('{{ $student->nim_pyp }}', '{{ $student->first_name }} {{ $student->middle_name }} {{ $student->last_name }}', '{{ $selectedClass->class_id }}', '{{ $selectedClass->class_name }}')" style="text-decoration:none;border:0;background:none;color:red;">Remove</button>
+                        <form id="delete-form-{{ $student->nim_pyp }}" action="{{ route('class.delete.student', ['userId' => $teacher->user_id, 'classId' => $selectedClass->class_id, 'studentId' => $student->nim_pyp]) }}" method="post" style="display:none;">
+                            @csrf
+                        </form>
+                    </td>
+                </tr>
+                <?php $index += 1; ?>
+            @endforeach
+        </tbody>
+    </table>
+</div>
 
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                        $index = 1;
-                    ?>
-                    @foreach ($selectedClass->students as $student)
-                        <tr>
-                            <td>{{ $index }}</td>
-                            <td>{{ $student->nim_pyp }}</td>
-                            <td>{{ $student->first_name }} {{ $student->middle_name }} {{ $student->last_name }}</td>
-                            <td>
-                                <button onclick="showModal('{{ $student->nim_pyp }}', '{{ $student->first_name }} {{ $student->middle_name }} {{ $student->last_name }}', '{{ $selectedClass->class_id }}', '{{ $selectedClass->class_name }}')" style="text-decoration:none;border:0px;background:none;color:red;">Remove</button>
-                                <form id="delete-form-{{ $student->nim_pyp }}" action="{{ route('class.delete.student', ['userId' => $teacher->user_id, 'classId' => $selectedClass->class_id, 'studentId' => $student->nim_pyp]) }}" method="post" style="display:none;">
-                                    @csrf
-                                </form> 
-                            </td>
-                        </tr>
-                        <?php $index += 1; ?>
-                    @endforeach
-
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th>#</th>
-                        <th>NIM</th>
-                        <th>Student</th>
-                        <th>Action</th>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-
-        {{-- delete confirmation modal --}}
-        <div class="modal fade" id="confirmDeleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="confirmDeleteModalLabel">Confirm Delete</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        Are you sure you want to remove <span id="modalStudentName"></span> from <span id="modalClassName"></span>?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-danger" onclick="confirmDelete()">Delete</button>
-                    </div>
-                </div>
+<!-- Confirmation Modal -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Remove Student</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to remove <strong id="modalStudentName"></strong> from the class <strong id="modalClassName"></strong>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" onclick="confirmDelete()">Remove</button>
             </div>
         </div>
+    </div>
+</div>
 @endsection
