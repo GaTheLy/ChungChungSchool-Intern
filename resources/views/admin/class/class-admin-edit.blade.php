@@ -126,7 +126,20 @@ $(document).ready(function() {
     <br>
     <div class="row">
         <div class="col-3">
-            <h5>3. Students</h5>
+            <h5>3. Level</h5>
+        </div> 
+        <div class="col-6">
+            <select name="class_level" id="class_level" style="height:40px;width:500px;">
+                    <option value="{{$selectedClass->class_level}}"></option>
+                    <option value="PYP" name="PYP">PYP</option>
+                    <option value="MYP" name="MYP">MYP</option>
+            </select>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-3">
+            <h5>4. Students</h5>
         </div>
         <div class="col-3">
             <select name="student" id="students" style="height:40px;width:500px;">

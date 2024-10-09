@@ -161,14 +161,25 @@ class ClassController extends Controller
 
         $role = User::find($authUserId)->role;
 
-         // Create the class
+        // Fetch the latest class_id and increment it
+        $latestClassId = ClassModel::max('class_id');
+        $newClassId = $latestClassId ? $latestClassId + 1 : 1; // Start from 1 if no classes exist
+
+        // Create the class with the new class_id
         $class = new ClassModel();
-        $class->class_name= $request->class_name;
+        $class->class_id = $newClassId; // Assign the incremented class_id
+        $class->class_name = $request->class_name;
+        $class->class_level = $request->class_level;
         $class->save();
+
+         // Create the class
+        // $class = new ClassModel();
+        // $class->class_name= $request->class_name;
+        // $class->save();
 
         // Assign homeroom
         $homeroom = new Homeroom();
-        $homeroom->class_id = $class->class_id;
+        $homeroom->class_id = $newClassId;
         $homeroom->teacher_pyp_id = $request->input('homeroom'); 
         $homeroom->save();
 
@@ -176,7 +187,7 @@ class ClassController extends Controller
         if (is_array($studentIds)) {
             foreach ($studentIds as $studentId) {
                 StudentClass::create([
-                    'class_id' => $class->class_id,
+                    'class_id' => $newClassId,
                     'nim_pyp' => $studentId
                 ]);
             }
