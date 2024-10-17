@@ -232,6 +232,9 @@ class YearProgramController extends Controller
                     foreach ($request->input('key') as $keyInput) {
                         $key = new KeyConcept();
                         $key->topic = $keyInput['name'] ?? null;
+                        $key->question = $keyInput['question'] ?? null;
+                        $key->definition = $keyInput['definition'] ?? null;
+
                         $key->unit_id = $unit->unit_id;
                         $key->save();
                     }

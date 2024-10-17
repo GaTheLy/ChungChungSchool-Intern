@@ -103,11 +103,12 @@
                                             @foreach ($unit->keyConcepts as $kc)
                                                 <li>
                                                     <strong>Topic:</strong> {{ $kc->topic }}<br>
-                                                    {{-- 
                                                     <strong>Question:</strong> {{ $kc->question }}<br>
                                                     <strong>Definition:</strong> {{ $kc->definition }}<br>
+                                                    {{--  
                                                     <strong>Icon:</strong> {{ $kc->icon }}
-                                                     --}}
+                                                    --}}
+
                                                 </li>
                                             @endforeach
                                         </ul>
@@ -1138,7 +1139,10 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-6">
-                                <input type="text" name="key[${newInputNumber}][name]" id="key[${newInputNumber}][name]">
+                                <strong>Topic:</strong> <input type="text" name="key[${newInputNumber}][name]" id="key[${newInputNumber}][name]"><br>
+                                <strong>Question:</strong> <input type="text" name="key[${newInputNumber}][question]" id="key[${newInputNumber}][question]"><br>
+                                <strong>Definition:</strong> <input type="text" name="key[${newInputNumber}][definition]" id="key[${newInputNumber}][definition]"><br>
+                                
                                 <span class="delete-btn"><i class="lni lni-trash-can"></i></span>
                             </div>
                         </div>
