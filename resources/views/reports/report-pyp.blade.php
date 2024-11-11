@@ -371,7 +371,7 @@
                                 @foreach($unit->key_concepts as $key_concept)
                                 <tr>
                                     <td>
-                                    <img src="{{asset('icons/'. 'math.png')}}" alt="key_icon" style="width:50px;height:50px;">
+                                    <img src="{{asset('icons/'. $key_concept->icon)}}" alt="key_icon" style="width:50px;height:50px;">
                                     <br>
                                     {{$key_concept->topic}}</td>
                                     <td><strong>{{$key_concept->question}}</strong>  <br>

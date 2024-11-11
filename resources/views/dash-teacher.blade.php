@@ -74,12 +74,13 @@
     </div>
 @endif
 
-{{-- View only all subjects and classes sections 
+{{-- View only all subjects and classes sections --}}
 
-@if ($role == 2)
+@if ($viewAll == true)
+<h1>haloooo</h1>
 
 @endif
---}}
+
 
 {{-- No Data Available --}}
 @if ($homerooms->isEmpty() && $subjects->isEmpty())

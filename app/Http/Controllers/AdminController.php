@@ -43,6 +43,12 @@ class TeachController extends Controller
 
         $subjects = SubjectTeacher::with(['teacher', 'subject'])->get();
 
-        return view('dash-teacher', compact('teacher', 'homerooms', 'subjects'));
+        if( $teacher->nip_pyp == 23001 || $teacher->nip_pyp == 22002 || $teacher->nip_pyp == 22004){
+            $viewAll = true;
+        }else{
+            $viewAll = false;
+        }
+
+        return view('dash-teacher', compact('teacher', 'homerooms', 'subjects', 'viewAll'));
     }
 }
