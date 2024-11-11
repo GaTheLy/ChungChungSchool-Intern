@@ -223,7 +223,7 @@ Route::get('/attendance-myp/{studentId}', [ClassController::class, 'getAttendanc
 // New Attendance
 Route::post('/new-attendance/save', [HomeroomController::class, 'savePyp'])->name('new.attendance.save.pyp');
 
-Route::post('/attendance-by-date/{classId}', [HomeroomController::class, 'getAttendanceByDate']);
+Route::post('/attendance-by-date/{classId}', action: [HomeroomController::class, 'getAttendanceByDate']);
 
 Route::get('/students-by-class/{classId}', [HomeroomController::class, 'getStudentsByClass']);
 

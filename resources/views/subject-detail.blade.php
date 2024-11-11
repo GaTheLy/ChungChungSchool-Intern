@@ -36,17 +36,14 @@
         <h1>{{ $subject->subject_name }} ({{ $class->class_name }})</h1>
         <h5>{{ $teacher->first_name }} {{ $teacher->last_name }}</h5>
         <br>
-            <div style="text-align:right;margin-right:50px;">
-                <button type="button" class="btn btn-primary" id="liveAlertBtn">Save</button>
-            </div>
 
 
         <table id="example" class="table table-striped" style="width:100%">
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Joined At</th>
                 <th>Action</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody>
@@ -54,14 +51,14 @@
             @foreach($students as $student)
             <tr>
                 <td>{{ $student->first_name}} {{ $student->last_name}}</td>
-                <td>January 1, 2024</td>
                 <td>
                     @if ($subject->subject_level == 'PYP')
-                        <a href="{{ route('subject.grade', ['teacherId' => $teacher->nip_pyp, 'subjectId' => $subject->id, 'classId' => $class->class_id, 'studentId' => $student->nim_pyp]) }}">Grade</a>
+                        <a style="text-decoration:none;" href="{{ route('subject.grade', ['teacherId' => $teacher->nip_pyp, 'subjectId' => $subject->id, 'classId' => $class->class_id, 'studentId' => $student->nim_pyp]) }}">Grade</a>
                     @elseif ($subject->subject_level == 'MYP')
-                        <a href="{{ route('subject.grade.myp', ['teacherId' => $teacher->nip_pyp, 'subjectId' => $subject->id, 'classId' => $class->class_id, 'studentId' => $student->nim_pyp]) }}">Grade</a>
+                        <a style="text-decoration:none;" href="{{ route('subject.grade.myp', ['teacherId' => $teacher->nip_pyp, 'subjectId' => $subject->id, 'classId' => $class->class_id, 'studentId' => $student->nim_pyp]) }}">Grade</a>
                     @endif
                 </td>
+                <td>graded / not graded</td>
 
             </tr>
             @endforeach
@@ -70,8 +67,8 @@
         <tfoot>
             <tr>
                 <th>Name</th>
-                <th>Joined At</th>
                 <th>Action</th>
+                <th>Status</th>
             </tr>
         </tfoot>
     </table>

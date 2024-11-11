@@ -8,12 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class SubjectClass extends Model
 {
     use HasFactory;
-    protected $table = 'subject_class';
+    public $timestamps = false;
 
-    // Define the primary key if it's not 'id'
-    protected $primaryKey = 'subject_class_id';
+    protected $table = 'subject_class_teacher';
+
+    // Define the primary key if it's not 'id', it is id
 
     // Define the fillable fields
-    protected $fillable = ['subject_pyp_id', 'class_id'];
+    protected $fillable = ['subject_teacher_id', 'class_id'];
 
 }

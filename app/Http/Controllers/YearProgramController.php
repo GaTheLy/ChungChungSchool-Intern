@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ATLPYP;
 use App\Models\LinesOfInquiry;
+use App\Models\SubjectClass;
 use App\Models\StudentPyp;
 use App\Models\TeacherPyp;
 use App\Models\Homeroom;
@@ -64,7 +65,7 @@ class YearProgramController extends Controller
             //     $query->where('level', 'PYP');
             // })->get();
 
-
+            // dd($detailClassPYP);
 
             if ($role == 0){  //admin
                 return view('/admin/yearProgram/yp-admin', compact('teacher', 'yearProgramMYP', 'subjectMYP', 'teacherMYP','class','detailSubMYP','detailClassMYP', 'boundaries'
@@ -310,9 +311,19 @@ class YearProgramController extends Controller
             $detailSubject->yp_pyp_id = $ypId;
             $detailSubject->subject_pyp_id =  $request->input('subject');
             $detailSubject->teacher_id = $request->input('teacher');
-            $detailSubject->teacher_id = "PYP";
+            $detailSubject->level = "PYP";
+            $detailSubject->save();
 
-            if ($detailSubject->save()) {
+            $classIds = DetailClassPYP::where('year_program_pyp_id', $ypId)->pluck('class_id');
+
+            foreach($classIds as $classId){
+                $subClassTeach = new SubjectClass();
+                $subClassTeach->class_id = $classId;
+                $subClassTeach->subject_teacher_id = $detailSubject->sub_teacher_id;
+                $subClassTeach->save();
+            }
+
+            if ( $detailSubject->save() ) {
                 if ($role == 0) { // admin
                     return redirect()->route('yearProgram', ['userId' => $teacher->user_id])->with('status', 'Year Program added successfully!');
                 }
@@ -376,6 +387,15 @@ class YearProgramController extends Controller
             $detailClass->class_id =  $request->input('class');
             $detailClass->start_date = $request->start_date;
             $detailClass->end_date = $request->end_date;
+
+            $subIds = SubjectTeacher::where('yp_pyp_id', $ypId)->pluck('subject_pyp_id');
+
+            foreach($subIds as $subId){
+                $subClassTeach = new SubjectClass();
+                $subClassTeach->class_id = $request->input('class');
+                $subClassTeach->subject_id = $subId;
+                $subClassTeach->save();
+            }
 
             if ($detailClass->save()) {
                 

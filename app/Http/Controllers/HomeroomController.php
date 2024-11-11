@@ -38,6 +38,7 @@ class HomeroomController extends Controller
             ->where('student_pyp.class_id', $classId)
             ->get();
 
+        dd($attendanceRecords);
         return response()->json($attendanceRecords);
     }
 
