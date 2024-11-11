@@ -66,7 +66,7 @@
                     ]) }} " style="text-decoration:none;color:black;">
                         <div class="card-body">
                             {{ $subject->subject->subject_name }} ({{ $class->class_name }})
-                        </div>
+                        </div>  
                     </a>
                 </div>
             @endforeach
