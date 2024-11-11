@@ -74,14 +74,6 @@
     </div>
 @endif
 
-{{-- View only all subjects and classes sections 
-
-@if ($viewAll == true)
-<h1>haloooo</h1>
-
-@endif
---}}
-
 {{-- No Data Available --}}
 @if ($homerooms->isEmpty() && $subjects->isEmpty())
     <p>No homeroom or teaching assignments are available for you at the moment.</p>
