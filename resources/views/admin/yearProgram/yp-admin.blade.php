@@ -75,6 +75,7 @@
                 </h2>
                 <div id="collapse{{$index}}PYP" class="accordion-collapse collapse">
                 <div class="accordion-body">
+                    
                     {{-- fill --}}
                     <table id="units" class="table table-bordered" style="width:90%;">
                             <thead>
@@ -86,37 +87,159 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @foreach ($units as $unit)
-                            @if ($unit->year_program_pyp_id == $ypPYP->id)
-                                <tr>
-                                    <td>{{ $unit->name }}</td>
-                                    <td>{{ $unit->central_idea }}</td>
-                                    <td>
-                                        <ul>
-                                            @foreach ($unit->linesOfInquiry as $loi)
-                                                <li>{{ $loi->description }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </td>
-                                    <td>
-                                        <ul>
-                                            @foreach ($unit->keyConcepts as $kc)
-                                                <li>
-                                                    <strong>Topic:</strong> {{ $kc->topic }}<br>
-                                                    <strong>Question:</strong> {{ $kc->question }}<br>
-                                                    <strong>Definition:</strong> {{ $kc->definition }}<br>
-                                                    {{--  
-                                                    <strong>Icon:</strong> {{ $kc->icon }}
-                                                    --}}
+    @foreach ($units as $unit)
+    @if ($unit->year_program_pyp_id == $ypPYP->id)
+        <tr>
+            <td>{{ $unit->name }}</td>
+            <td>{{ $unit->central_idea }}</td>
+            <td>
+                <ul>
+                    @foreach ($unit->linesOfInquiry as $loi)
+                        <li>{{ $loi->description }}</li>
+                    @endforeach
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    @foreach ($unit->keyConcepts as $kc)
+                        <li>
+                            <strong>Key:</strong> {{ $kc->topic }}<br>
+                            <strong>Question:</strong> {{ $kc->question }}<br>
+                            <strong>Definition:</strong> {{ $kc->definition }}<br>
+                        </li>
+                    @endforeach
+                </ul>
+            </td>
+            {{--  
+            <td>
+                <a href="javascript:void(0);" class="btn btn-primary" onclick="editUnit({{ $unit->unit_id }})">Edit</a>
+                <button onclick="showModal({{ $unit->unit_id }})" class="btn btn-danger">Delete</button>
+                
+                <form id="delete-form-{{ $unit->id }}" action="{{ route('unit.delete', ['userId' => $teacher->user_id, 'unitId' => $unit->unit_id]) }}" method="post" style="display:none;">
+                    @csrf
+                    @method('DELETE')
+                </form>
+            </td>
+            --}}
+        </tr>
+    @endif
+    @endforeach
+</tbody>
 
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    </td>
-                                </tr>
-                            @endif
-                            @endforeach
-                            </tbody>
+<!-- Edit Modal -->
+<div class="modal fade" id="editUnitModal" tabindex="-1" aria-labelledby="editUnitModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="editUnitForm" method="post" action=" action="{{ route('unit.update', ['userId' => $teacher->user_id, 'unitId' => $unit->unit_id]) }}">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editUnitModalLabel"><b>Edit Unit</b></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="unit_id" id="unitId">
+                    <div class="mb-3">
+                        <label for="unitName" class="form-label"><b>Unit Name</b> </label>
+                        <input type="text" class="form-control" id="unitName" name="unit_name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="centralIdea" class="form-label"><b>Central Idea</b></label>
+                        <input type="text" class="form-control" id="centralIdea" name="central_idea" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="loi" class="form-label"><b>Lines Of Inquiry</b></label>
+                        <div id="loiFields">
+                            <!-- Fields for key concepts (topic, question, definition, line of inquiry) will be dynamically added here -->
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="keyConcepts" class="form-label"><b>Key Concepts</b></label>
+                        <div id="keyConceptsFields">
+                            <!-- Fields for key concepts (topic, question, definition, line of inquiry) will be dynamically added here -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this unit?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <button type="button" class="btn btn-danger" onclick="confirmDelete()">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showModal(unitId) {
+        $('#confirmDeleteModal').data('unit-id', unitId).modal('show');
+    }
+
+    function editUnit(unitId) {
+        // Fetch the unit data via an AJAX request and populate the edit form
+        $.get("{{ url('/unit/edit') }}/" + unitId, function (data) {
+            $('#unitId').val(data.id);
+            $('#unitName').val(data.name);
+            $('#centralIdea').val(data.central_idea);
+            
+            // Populate key concepts
+            $('#keyConceptsFields').empty();
+            data.key_concepts.forEach(function(kc, index) {
+                $('#keyConceptsFields').append(`
+                    <div class="mb-3">
+                        <label>Topic ${index + 1}</label>
+                        <input type="text" class="form-control" name="key_concepts[${index}][topic]" value="${kc.topic}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Question ${index + 1}</label>
+                        <input type="text" class="form-control" name="key_concepts[${index}][question]" value="${kc.question}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Definition ${index + 1}</label>
+                        <input type="text" class="form-control" name="key_concepts[${index}][definition]" value="${kc.definition}" required>
+                    </div>
+                `);
+            });
+{{--  
+            $('#loiFields').empty();
+            data.line_of_inquiry.forEach(function(loi, index) {
+                $('#loiFields').append(`
+                    <div class="mb-3">
+                        <label>Line of Inquiry ${index + 1}</label>
+                        <input type="text" class="form-control" name="loi[${index}][desc]" value="${loi.des}" required>
+                    </div>
+                `);
+            });
+            --}}
+
+            $('#editUnitModal').modal('show');
+        });
+    }
+
+    function confirmDelete() {
+        var unitId = $('#confirmDeleteModal').data('unit-id');
+        $('#delete-form-' + unitId).submit();
+    }
+</script>
+
+
                     </table>
                         <div class="row">
                             <div class="col" style="text-align:right;margin-right:10px;margin-top:10px;">

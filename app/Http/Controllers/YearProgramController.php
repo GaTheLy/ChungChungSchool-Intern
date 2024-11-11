@@ -435,4 +435,77 @@ class YearProgramController extends Controller
             }
         }
 
+        public function editUnit($unitId)
+        {
+            $unit = Unit::with('keyConcepts')->find($unitId);
+            if (!$unit) {
+                return response()->json(['error' => 'Unit not found'], 404);
+            }
+
+            return response()->json($unit);
+        }
+
+        public function updateUnit(Request $request, $unitId, $userId)
+        {
+            $unit = Unit::find($unitId);
+            if (!$unit) {
+                return back()->withErrors(['error' => 'Unit not found']);
+            }
+
+            $authUserId = Auth::id();
+    
+            // Check if the authenticated user's ID matches the requested user ID
+            if ($authUserId != $userId) {
+                // Redirect to the authenticated user's dashboard
+                return redirect()->route('dashboard', ['userId' => $authUserId]);
+            }
+    
+            // Fetch the authenticated user
+            $user = Auth::user();
+    
+            $teacher = $user->teacher;
+            $role = User::find($authUserId)->role;
+            
+
+            $unit->name = $request->input('unit_name');
+            $unit->central_idea = $request->input('central_idea');
+            $unit->save();
+
+            // Update Key Concepts
+            foreach ($request->input('key_concepts') as $keyConceptData) {
+                $keyConcept = KeyConcept::where('unit_id', $unitId)->first();
+                $keyConcept->topic = $keyConceptData['topic'];
+                $keyConcept->question = $keyConceptData['question'];
+                $keyConcept->definition = $keyConceptData['definition'];
+                $keyConcept->save();
+            }
+
+            // update line of inquiries
+            foreach ($request->input('loi') as $loiData) {
+                $loi = LinesOfInquiry::where('unit_id', $unitId)->first();
+                $loi->description = $loiData['desc'];
+                $loi->save();
+            }
+
+            if ($role == 0) { // admin
+                return redirect()->route('yearProgram', ['userId' => $teacher->user_id])->with('status', 'Year Program added successfully!');
+            }
+            else {
+                return back()->withInput()->withErrors(['error' => 'Failed to add year program. Please try again.']);
+            }        
+        }
+
+        public function deleteUnit($userId, $unitId)
+        {
+            $unit = Unit::find($unitId);
+            if (!$unit) {
+                return back()->withErrors(['error' => 'Unit not found']);
+            }
+
+            $unit->delete();
+
+            return redirect()->route('yearProgram', ['userId' => $userId])->with('status', 'Unit deleted successfully');
+        }
+
+
 }

@@ -32,16 +32,16 @@
     <div class="row" id="homeroom-list" style="margin-left:10px">
         @foreach($homerooms as $homeroom)
             @if ($homeroom->class->class_level == 'PYP')
-                <div class="card text-center mb-3" style="width: 18rem;">
-                    <a href="{{ route('class.show', ['id' => $homeroom->class_id]) }}">
+                <div class="card text-center mb-3" style="width: 18rem; height: 10rem; font-size:xx-large;font-family:Space Grotesk;font-weight:bold;margin:20px;">
+                    <a href="{{ route('class.show', ['id' => $homeroom->class_id]) }}" style="text-decoration:none;color:black;">
                         <div class="card-body">
                             {{ $homeroom->class->class_name }}
                         </div>
                     </a>
                 </div>
             @elseif ($homeroom->class->class_level == 'MYP')
-                <div class="card text-center mb-3" style="width: 18rem;">
-                    <a href="{{ route('class.show.myp', ['id' => $homeroom->class_id]) }}">
+                <div class="card text-center mb-3" style="width: 18rem; height: 10rem; font-size:xx-large;font-family:Space Grotesk;font-weight:bold;margin:20px;">
+                    <a href="{{ route('class.show.myp', ['id' => $homeroom->class_id]) }}" style="text-decoration:none;color:black;">
                         <div class="card-body">
                             {{ $homeroom->class->class_name }}
                         </div>
@@ -58,12 +58,12 @@
     <div class="row" id="teaching-list" style="margin-left:10px">
         @foreach($subjects as $subject)
             @foreach($subject->classes as $class)
-                <div class="card text-center mb-3" style="width: 18rem;">
+                <div class="card text-center mb-3" style="width: 18rem; height: 11rem; font-size:xx-large;font-family:Space Grotesk;font-weight:bold;margin:20px;">
                     <a href="{{ route('subject.show', [
                         'teacher_id' => $teacher->nip_pyp,
                         'sub_id' => $subject->subject->id,
                         'class_id' => $class->class_id
-                    ]) }}">
+                    ]) }} " style="text-decoration:none;color:black;">
                         <div class="card-body">
                             {{ $subject->subject->subject_name }} ({{ $class->class_name }})
                         </div>
@@ -73,6 +73,12 @@
         @endforeach
     </div>
 @endif
+
+{{-- View only all subjects and classes sections 
+@if ()
+
+@endif
+--}}
 
 {{-- No Data Available --}}
 @if ($homerooms->isEmpty() && $subjects->isEmpty())

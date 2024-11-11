@@ -7,7 +7,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeachController;
 use App\Http\Controllers\ClassController;
-use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\SubjectController; 
 use App\Http\Controllers\YearProgramController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\HomeroomController;
@@ -152,7 +152,14 @@ Route::post('/year-program-add-class/{userId}/{ypId}', [YearProgramController::c
 Route::post('/year-program-add-classPYP/{userId}/{ypId}', [YearProgramController::class, 'addClassPYP'])
 ->middleware(['auth', 'verified'])->name('yearProgram-add.classPYP');
 
+// new
+Route::post('/year-program-edit-PYP/{userId}/{ypId}', [YearProgramController::class, 'editPYP'])
+->middleware(['auth', 'verified'])->name('yearProgram-edit.PYP');
 
+// yp pyp unit edit 
+Route::get('/unit/edit/{unitId}', [YearProgramController::class, 'editUnit'])->name('unit.edit');
+Route::post('/unit/update/{unitId}', [YearProgramController::class, 'updateUnit'])->name('unit.update');
+Route::post('/unit/delete/{userId}/{unitId}', [YearProgramController::class, 'deleteUnit'])->name('unit.delete');
 
 
 //class make route

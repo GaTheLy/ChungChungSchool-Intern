@@ -306,7 +306,7 @@
             </div>
             <br>
 
-            <div class="principal-signature">
+            <div class="principal-signature" style="display:block;">
                 <div>
                     <img src="{{ asset('assets-image/'. $filenameSign) }}" alt="Principal Signature" style="max-height: 50px;">
                 </div>
@@ -370,7 +370,10 @@
                             <tbody>
                                 @foreach($unit->key_concepts as $key_concept)
                                 <tr>
-                                    <td>{{$key_concept->topic}}</td>
+                                    <td>
+                                    <img src="{{asset('icons/'. 'math.png')}}" alt="key_icon" style="width:50px;height:50px;">
+                                    <br>
+                                    {{$key_concept->topic}}</td>
                                     <td><strong>{{$key_concept->question}}</strong>  <br>
                                     {{$key_concept->definition}}</td>
                                 </tr>
@@ -395,7 +398,7 @@
                         <div class="atl-body">
                                @foreach($atls as $atl)
                                     <div class="atl-row">
-                                        <img src="path/to/subject-icon.png" alt="Subject Icon">
+                                        <img src="{{ asset('icons/'. $atl->icon) }}" alt="Subject Icon" style="width: 24px; height:24px;">
                                         <span class="atl-title">{{ $atl->description }}</span>
                                         <span class="atl-progress">{{ $atl->atl_progress_description }}</span>
                                     </div>
