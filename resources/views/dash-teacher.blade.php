@@ -75,7 +75,8 @@
 @endif
 
 {{-- View only all subjects and classes sections 
-@if ()
+
+@if ($role == 2)
 
 @endif
 --}}

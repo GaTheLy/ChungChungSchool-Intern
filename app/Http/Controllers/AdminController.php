@@ -37,6 +37,7 @@ class TeachController extends Controller
         // $user = User::findOrFail($userId);
 
         $teacher = $user->teacher;
+        $role = $user->role;
 
         $homerooms = Homeroom::with(['teacher', 'class'])->get();
 

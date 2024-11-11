@@ -310,7 +310,7 @@ class YearProgramController extends Controller
             $detailSubject->yp_pyp_id = $ypId;
             $detailSubject->subject_pyp_id =  $request->input('subject');
             $detailSubject->teacher_id = $request->input('teacher');
-            $detailSubject->teacher_id = "PYP";
+            $detailSubject->level = "PYP";
 
             if ($detailSubject->save()) {
                 if ($role == 0) { // admin
