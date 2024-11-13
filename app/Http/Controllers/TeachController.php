@@ -109,6 +109,7 @@ class TeachController extends Controller
 
         $role = User::find($authUserId)->role;
 
+        
         // if ($role == 0){  //admin
             // return view('dash-admin', compact('teacher','homerooms', 'subjects','role'));
         // }else if ($role == 1){ //myp

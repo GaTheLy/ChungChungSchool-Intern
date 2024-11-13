@@ -36,27 +36,55 @@
         height: 50px;
     }
 </style>
-<div class="container" name="table-atl-pyp" style="display:none;" id="unit-content">
-    <h1>Unit Progress PYP Only</h1>
+    <div class="container" name="table-atl-pyp" style="display:none;" id="unit-content">
+        <h1>Unit Progress</h1>
 
-    <div style="text-align:right;">
+        <div style="text-align:right;">
         Select Unit :
         <select name="unit" id="unit-select">
-        <option value="" selected="selected" hidden="hidden">Choose here</option>
+            <option value="" selected="selected" hidden="hidden">Choose here</option>
             @foreach($units as $unit)
-                <option value="{{ $unit->unit_id }}">{{ $unit->name }}</option>
+                <option value="{{ $unit->unit_id }}"
+                    data-central-idea="{{ $unit->central_idea }}"
+                    data-lines-of-inquiry="{{ json_encode($unit->linesOfInquiry->pluck('description')) }}"
+                    data-key-concepts="{{ json_encode($unit->keyConcepts->toArray()) }}">
+                    {{ $unit->name }}
+                </option>
             @endforeach
         </select>
-    </div>
+        </div>
 
-    <table id="" class="table table-striped" style="width:100%">
+        <div>
+            <h4>Central Idea</h4>
+            <div id="central-idea-display"> Select a unit to see the details.</div>
+
+            <h4>Lines of Inquiry</h4>
+            <ul id="loi-display">Select a unit to see the details.</ul>
+
+            <h4>Key Concepts</h4>
+            <table id="kc-display">
+                <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>Question & Definition</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="2">Select a unit to see the details.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    <table id="unit" class="table table-striped" style="width:100%">
         <thead>
             <tr>
                 <th>Name</th>
                 <th>Progress</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="progress">
             @foreach($students as $student)
             <tr>
                 <td>{{ $student->first_name }} {{ $student->last_name }}</td>
@@ -92,6 +120,9 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        
+        
+        
         // Handle save button click
         document.getElementById('save-unit-progress-btn').addEventListener('click', function() {
             const unitId = document.getElementById('unit-select').value;
@@ -130,33 +161,97 @@
                 console.error('Error sending data:', error);
             });
         });
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const classId = '{{ $class->class_id }}';
+        
 
         // Handle unit selection change
-        document.getElementById('unit-select').addEventListener('change', function() {
+        const classId = '{{ $class->class_id }}';
+        const unitSelect = document.getElementById('unit-select');
+        const centralIdeaDisplay = document.getElementById('central-idea-display');
+        const loiDisplay = document.getElementById('loi-display');
+        const kcDisplay = document.getElementById('kc-display').getElementsByTagName('tbody')[0];
+
+        // Combined event listener for unit selection change
+        unitSelect.addEventListener('change', function() {
             const unitId = this.value;
+            const selectedOption = unitSelect.options[unitSelect.selectedIndex];
             
+            // Extract data attributes from the selected option
+            const centralIdea = selectedOption.getAttribute('data-central-idea');
+            const linesOfInquiry = JSON.parse(selectedOption.getAttribute('data-lines-of-inquiry') || '[]');
+            const keyConcepts = JSON.parse(selectedOption.getAttribute('data-key-concepts') || '[]');
+
+            // Update the Central Idea display
+            if (centralIdea) {
+                centralIdeaDisplay.textContent = centralIdea;
+            } else {
+                centralIdeaDisplay.textContent = 'Central Idea: Select a unit to see the details.';
+            }
+
+            // Update the Lines of Inquiry list
+            loiDisplay.innerHTML = ''; // Clear any existing items
+            if (linesOfInquiry.length > 0) {
+                linesOfInquiry.forEach(function(loi) {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = loi;
+                    loiDisplay.appendChild(listItem);
+                });
+            } else {
+                loiDisplay.innerHTML = '<li>No Lines of Inquiry available for this unit.</li>';
+            }
+
+            // Update the Key Concepts table
+            kcDisplay.innerHTML = ''; // Clear any existing rows
+            if (keyConcepts.length > 0) {
+                keyConcepts.forEach(function(kc) {
+                    const row = kcDisplay.insertRow();
+                    const keyCell = row.insertCell(0);
+                    const descriptionCell = row.insertCell(1);
+
+                    // Set the "Key" column (topic)
+                    keyCell.textContent = kc.topic;
+
+                    // Set the "Description" column (question + definition)
+                    descriptionCell.innerHTML = kc.question + '<br>' + kc.definition;
+                });
+            } else {
+                const row = kcDisplay.insertRow();
+                const cell = row.insertCell(0);
+                cell.colSpan = 2;
+                cell.textContent = 'No Key Concepts available for this unit.';
+            }
+
             // Fetch progress data for the selected unit
             fetch(`/unit-progress/${unitId}/${classId}`)
                 .then(response => response.json())
                 .then(data => {
                     console.log('Fetched unit progress data:', data);
-                    updateTable(data);
+                    updateTable(data); // Call your function to update the table with the fetched data
                 })
                 .catch(error => console.error('Error fetching data:', error));
         });
 
         function updateTable(data) {
-            const tbody = document.querySelector('#unit-content tbody');
-            tbody.innerHTML = ''; // Clear the existing table rows
+            // Ensure the table is visible before updating it
+            const unitContent = document.getElementById('unit-content');
+            unitContent.style.display = 'block';  // Show the table
 
+            // Get the tbody element
+            const tbody = document.querySelector('#unit-content tbody#progress');
+            
+            // Check if the tbody exists
+            if (!tbody) {
+                console.error('Error: tbody element not found.');
+                return;
+            }
+            
+            // Clear the existing table rows
+            tbody.innerHTML = '';
+
+            // Populate the table with new data
             data.forEach(progress => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${progress.first_name} ${progress.last_name} </td>
+                    <td>${progress.first_name} ${progress.last_name}</td>
                     <td>
                         <input type="radio" id="exceeding_${progress.student_id}" name="performance_${progress.student_id}" value="EXCEEDING" ${progress.description === 'EXCEEDING' ? 'checked' : ''}>
                         <label for="exceeding_${progress.student_id}">EXCEEDING</label>
@@ -174,6 +269,7 @@
                 tbody.appendChild(row);
             });
         }
+
 
     });
 

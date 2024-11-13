@@ -32,11 +32,12 @@
         <input type="date" id="attendance-date" class="form-control d-inline-block w-auto">
     </div>
 
-    <table class="table table-striped" style="width:100%">
+    <table class="table table-striped" style="width:100%" id="attendance">
         <thead>
             <tr>
                 <th>Name</th>
                 <th>Attendance</th>
+                <th>Total Attendance</th>
             </tr>
         </thead>
         <tbody>
@@ -51,9 +52,6 @@
                         <input type="radio" class="btn-check" name="attendance_{{ $student->nim_pyp }}" id="late-{{ $student->nim_pyp }}" autocomplete="off">
                         <label class="btn btn-outline-primary" for="late-{{ $student->nim_pyp }}">LATE</label>
 
-                        <input type="radio" class="btn-check" name="attendance_{{ $student->nim_pyp }}" id="sick-{{ $student->nim_pyp }}" autocomplete="off">
-                        <label class="btn btn-outline-primary" for="sick-{{ $student->nim_pyp }}">SICK</label>
-
                         <input type="radio" class="btn-check" name="attendance_{{ $student->nim_pyp }}" id="absent-{{ $student->nim_pyp }}" autocomplete="off">
                         <label class="btn btn-outline-primary" for="absent-{{ $student->nim_pyp }}">ABSENT</label>
 
@@ -61,6 +59,7 @@
                         <label class="btn btn-outline-primary" for="excused-{{ $student->nim_pyp }}">EXCUSED</label>
                     </div>
                 </td>
+                <td>total attendance</td>
             </tr>
             @endforeach
         </tbody>
@@ -68,6 +67,7 @@
             <tr>
                 <th>Name</th>
                 <th>Attendance</th>
+                <td>total attendance</td>
             </tr>
         </tfoot>
     </table>
@@ -90,6 +90,7 @@
         function fetchStudents() {
             return fetch(`/students-by-class/${classId}`)
                 .then(response => response.json())
+                console.log(response)
                 .catch(error => {
                     console.error('Error fetching students data:', error);
                     return [];
@@ -98,12 +99,14 @@
 
         // Function to fetch attendance data and update the table
         function fetchAttendanceData(date) {
+            console.log(date);
             if (!date) {
                 // If no date, clear the table or show a message if needed
                 updateAttendanceTable([]);
                 return;
             }
 
+            
             fetch(`/attendance-by-date/${classId}`, {
                 method: 'POST',
                 headers: {
@@ -111,11 +114,12 @@
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
                 body: JSON.stringify({ date })
+                
             })
             .then(response => response.json())
             .then(data => {
                 if (data.length != 0) {
-                    console.log('Yes');
+                    console.log('attendance data =', data);
                     updateAttendanceTable(data);
                 } else {
                     fetchStudents().then(students => {
@@ -145,9 +149,6 @@
                             <input type="radio" class="btn-check" name="attendance_${record.student_id}" id="late-${record.student_id}" value="LATE" ${record.late ? 'checked' : ''} autocomplete="off">
                             <label class="btn btn-outline-primary" for="late-${record.student_id}">LATE</label>
 
-                            <input type="radio" class="btn-check" name="attendance_${record.student_id}" id="sick-${record.student_id}" value="SICK" ${record.sick ? 'checked' : ''} autocomplete="off">
-                            <label class="btn btn-outline-primary" for="sick-${record.student_id}">SICK</label>
-
                             <input type="radio" class="btn-check" name="attendance_${record.student_id}" id="absent-${record.student_id}" value="ABSENT" ${record.absent ? 'checked' : ''} autocomplete="off">
                             <label class="btn btn-outline-primary" for="absent-${record.student_id}">ABSENT</label>
 
@@ -176,9 +177,6 @@
 
                             <input type="radio" class="btn-check" name="attendance_${student.nim_pyp}" id="late-${student.nim_pyp}" autocomplete="off">
                             <label class="btn btn-outline-primary" for="late-${student.nim_pyp}">LATE</label>
-
-                            <input type="radio" class="btn-check" name="attendance_${student.nim_pyp}" id="sick-${student.nim_pyp}" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="sick-${student.nim_pyp}">SICK</label>
 
                             <input type="radio" class="btn-check" name="attendance_${student.nim_pyp}" id="absent-${student.nim_pyp}" autocomplete="off">
                             <label class="btn btn-outline-primary" for="absent-${student.nim_pyp}">ABSENT</label>
@@ -214,7 +212,6 @@
                     date: selectedDate,
                     present: row.querySelector(`#present-${studentNim}`)?.checked ? 1 : 0,
                     late: row.querySelector(`#late-${studentNim}`)?.checked ? 1 : 0,
-                    sick: row.querySelector(`#sick-${studentNim}`)?.checked ? 1 : 0,
                     absent: row.querySelector(`#absent-${studentNim}`)?.checked ? 1 : 0,
                     excused: row.querySelector(`#excused-${studentNim}`)?.checked ? 1 : 0,
                 };

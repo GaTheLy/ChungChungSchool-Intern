@@ -18,7 +18,6 @@ class HomeroomController extends Controller
                 [
                     'present' => $attendance['present'],
                     'late' => $attendance['late'],
-                    'sick' => $attendance['sick'],
                     'absent' => $attendance['absent'],
                     'excused' => $attendance['excused']
                 ]
@@ -33,12 +32,21 @@ class HomeroomController extends Controller
         $date = $request->input('date');
 
         $attendanceRecords = DB::table('attendance_pyp')
+            ->join('student_class', 'attendance_pyp.student_id', '=', 'student_class.nim_pyp')
             ->join('student_pyp', 'attendance_pyp.student_id', '=', 'student_pyp.nim_pyp')
             ->where('date', $date)
-            ->where('student_pyp.class_id', $classId)
+            ->where('student_class.class_id', $classId)
             ->get();
+        
+        if (!$attendanceRecords){
+            $attendanceRecords = DB::table('attendance_pyp')
+            ->join('student_class', 'attendance_pyp.student_id', '=', 'student_class.nim_pyp')
+            ->join('student_pyp', 'attendance_pyp.student_id', '=', 'student_pyp.nim_pyp')
+            ->where('student_class.class_id', $classId)
+            ->get();
+        }
 
-        dd($attendanceRecords);
+        // dd($attendanceRecords);
         return response()->json($attendanceRecords);
     }
 
@@ -66,9 +74,10 @@ class HomeroomController extends Controller
     public function getUnitProgress($unitId, $classId)
     {
         $unitProgress = DB::table('unit_progress')
+        ->join('student_class', 'unit_progress.student_id', '=', 'student_class.nim_pyp')
         ->join('student_pyp', 'unit_progress.student_id', '=', 'student_pyp.nim_pyp')
         ->where('unit_progress.unit_id', $unitId)
-        ->where('student_pyp.class_id', $classId)
+        ->where('student_class.class_id', $classId)
         ->select('unit_progress.*', 'student_pyp.first_name', 'student_pyp.last_name')
         ->get();
         // dd($unitProgress);
@@ -81,8 +90,9 @@ class HomeroomController extends Controller
     {
         // Fetch students based on classId
         $students = DB::table('student_pyp')
+            ->join('student_class', 'student_pyp.nim_pyp', '=', 'student_class.nim_pyp')
             ->where('class_id', $classId)
-            ->get(['nim_pyp', 'first_name', 'last_name']); // Modify fields as needed
+            ->get(['first_name', 'last_name']); // Modify fields as needed
 
         return response()->json($students);
     }
@@ -100,27 +110,7 @@ class HomeroomController extends Controller
         }
 
         return response()->json(['success' => true]);
-    }
-
-    public function getComments($classId) {
-        \Log::info('getComments called with classId: ' . $classId);
-
-        try {
-            $comments = DB::table('homeroom_teacher_comment')
-                        ->join('student_pyp', 'homeroom_teacher_comment.student_id', '=', 'student_pyp.nim_pyp')
-                        ->where('student_pyp.class_id', $classId)
-                        ->select('homeroom_teacher_comment.description', 'student_pyp.nim_pyp')
-                        ->get();
-
-            \Log::info('Comments fetched: ', $comments->toArray());
-
-            return response()->json($comments);
-        } catch (\Exception $e) {
-            \Log::error('Error fetching comments: ' . $e->getMessage());
-            return response()->json(['error' => 'Error fetching comments'], 500);
-        }
-    }
-
+    } 
 
     // ATL Progress
     public function saveAtlProg(Request $request)
@@ -148,15 +138,12 @@ class HomeroomController extends Controller
     {
 
         $atlProgress = DB::table('atl_progress')
-            ->join('student_pyp', 'atl_progress.student_id', '=', 'student_pyp.nim_pyp')
+            ->join('student_class', 'atl_progress.student_id', '=', 'student_class.nim_pyp')
             ->where('atl_progress.atl_id', $atlId)
-            ->where('student_pyp.class_id', $classId)
-            ->select('atl_progress.*', 'student_pyp.first_name', 'student_pyp.last_name')
+            ->where('student_class.class_id', $classId)
+            ->select('atl_progress.*')
             ->get();
 
-        // Debug the SQL query
-
-        // Debug the result
 
         return response()->json($atlProgress);
     }

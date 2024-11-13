@@ -32,47 +32,45 @@ class YearProgramController extends Controller
         public function yearProgram($userId)
         {
             $authUserId = Auth::id();
-
+        
             // Check if the authenticated user's ID matches the requested user ID
             if ($authUserId != $userId) {
-                // Redirect to the authenticated user's dashboard
                 return redirect()->route('dashboard', ['userId' => $authUserId]);
             }
-
+        
             // Fetch the authenticated user
             $user = Auth::user();
-
             $teacher = $user->teacher;
-
-            $role = User::find($authUserId)->role;
-
+            $role = $user->role;
+        
+            // Fetch required data
             $yearProgramMYP = YearProgramMYP::get();
             $subjectMYP = SubjectModel::where('subject_level', 'MYP')->get();
             $teacherMYP = TeacherPyp::where('is_myp', 1)->get();
             $class = ClassModel::get();
             $detailSubMYP = SubjectTeacher::where('level', 'MYP')->with(['subject.atls', 'teacher'])->get();
-            $detailClassMYP = DetailClassMYP::with(['class', 'homeroom.teacher'])->get();
             $boundaries = Boundaries::get();
-
-            //pyp
+        
+            // Fetch MYP details with multiple homeroom teachers
+            $detailClassMYP = DetailClassMYP::with(['class.homerooms.teacher'])->get();
+            // PYP Section
             $yearProgramPYP = YearProgramPYP::with('atlpyp')->get();
             $units = Unit::with(['linesOfInquiry', 'keyConcepts'])->get();
             $subjectPYP = SubjectModel::where('subject_level', 'PYP')->get();
             $teacherPYP = TeacherPyp::where('is_pyp', 1)->get();
             $detailSubPYP = SubjectTeacher::where('level', 'PYP')->with(['subject', 'teacher'])->get();
-            $detailClassPYP = DetailClassPYP::with(['class', 'homeroom.teacher'])->get();
-            // ->whereHas('homeroom.teacher', function ($query) {
-            //     $query->where('level', 'PYP');
-            // })->get();
-
-            // dd($detailClassPYP);
-
-            if ($role == 0){  //admin
-                return view('/admin/yearProgram/yp-admin', compact('teacher', 'yearProgramMYP', 'subjectMYP', 'teacherMYP','class','detailSubMYP','detailClassMYP', 'boundaries'
-                                                                    ,'units','yearProgramPYP', 'subjectPYP', 'teacherPYP','detailSubPYP','detailClassPYP'));
+        
+            // Fetch PYP details with multiple homeroom teachers
+            $detailClassPYP = DetailClassPYP::with(['class.homerooms.teacher'])->get();
+        
+            if ($role == 0) {  // admin
+                return view('/admin/yearProgram/yp-admin', compact(
+                    'teacher', 'yearProgramMYP', 'subjectMYP', 'teacherMYP', 'class', 'detailSubMYP', 'detailClassMYP',
+                    'boundaries', 'units', 'yearProgramPYP', 'subjectPYP', 'teacherPYP', 'detailSubPYP', 'detailClassPYP'
+                ));
             }
-            
         }
+    
 
         public function add(Request $request, $userId)
         {

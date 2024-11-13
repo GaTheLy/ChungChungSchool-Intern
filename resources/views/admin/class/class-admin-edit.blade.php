@@ -122,11 +122,11 @@ function confirmDelete() {
     <div class="row">
         <div class="col-3">
             <h5>2. Homeroom</h5>
-        </div> 
+        </div>
         <div class="col-6">
             <select name="homeroom" id="homeroom" style="height:40px;width:500px;">
-                <option value="{{ $selectedClass->homeroom ? $selectedClass->homeroom->teacher->nip_pyp : 'N/A' }}">
-                    {{ $selectedClass->homeroom ? $selectedClass->homeroom->teacher->first_name . ' ' . $selectedClass->homeroom->teacher->last_name : 'N/A' }}
+                <option value="{{ $assignedHomerooms->get('main') && $assignedHomerooms->get('main')->first()->teacher->nip_pyp }}">
+                    {{ $assignedHomerooms->get('main') ? $assignedHomerooms->get('main')->first()->teacher->first_name . ' ' . $assignedHomerooms->get('main')->first()->teacher->last_name : 'N/A' }}
                 </option>
                 @foreach ($teachers as $teacher)
                     <option value="{{ $teacher->nip_pyp }}">{{ $teacher->first_name . ' ' . $teacher->last_name }}</option>
@@ -137,7 +137,42 @@ function confirmDelete() {
     <br>
     <div class="row">
         <div class="col-3">
-            <h5>3. Level</h5>
+            <h5>3. Co-Homeroom</h5>
+        </div>
+        <div class="col-6">
+            <select name="co-homeroom" id="co-homeroom" style="height:40px;width:500px;">
+                <option value="{{ $assignedHomerooms->get('co') && $assignedHomerooms->get('co')->first()->teacher->nip_pyp }}">
+                    {{ $assignedHomerooms->get('co') ? $assignedHomerooms->get('co')->first()->teacher->first_name . ' ' . $assignedHomerooms->get('co')->first()->teacher->last_name : '--Select--' }}
+                </option>
+                <option value="0">Not Assigned</option>
+                @foreach ($teachers as $teacher)
+                    <option value="{{ $teacher->nip_pyp }}">{{ $teacher->first_name . ' ' . $teacher->last_name }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-3">
+            <h5>4. Substitute Homeroom</h5>
+        </div>
+        <div class="col-6">
+            <select name="subs-homeroom" id="subs-homeroom" style="height:40px;width:500px;">
+                <option value="{{ $assignedHomerooms->get('subs') && $assignedHomerooms->get('subs')->first()->teacher->nip_pyp }}">
+                    {{ $assignedHomerooms->get('subs') ? $assignedHomerooms->get('subs')->first()->teacher->first_name . ' ' . $assignedHomerooms->get('subs')->first()->teacher->last_name : '--Select--' }}
+                </option>
+                <option value="0">Not Assigned</option>
+                @foreach ($teachers as $teacher)
+                    <option value="{{ $teacher->nip_pyp }}">{{ $teacher->first_name . ' ' . $teacher->last_name }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+
+    <br>
+    <div class="row">
+        <div class="col-3">
+            <h5>5. Level</h5>
         </div> 
         <div class="col-6">
             <select name="class_level" id="class_level" style="height:40px;width:500px;">
@@ -150,7 +185,7 @@ function confirmDelete() {
     <br>
     <div class="row">
         <div class="col-3">
-            <h5>4. Students</h5>
+            <h5>6. Students</h5>
         </div>
         <div class="col-3">
             <select name="student" id="students" style="height:40px;width:500px;">

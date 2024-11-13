@@ -76,25 +76,31 @@
         </thead>
         <tbody>
             @foreach($classes as $class)
-                <tr>
-                    <td>{{ $class->class_name }}</td>
-                    <td>{{ $class->homeroom ? $class->homeroom->teacher->first_name . ' ' . $class->homeroom->teacher->last_name : 'N/A' }}</td>
-                    <td>{{ $class->students->count() }}</td>
-                    <td>
-                        
-                        <a href="{{ route('class.detail', ['userId' => $teacher->user_id, 'classId' => $class->class_id]) }}" style="color:black;">Detail</a>
-                        <a href="{{ route('class.edit', ['userId' => $teacher->user_id, 'classId' => $class->class_id]) }}" style="color:black;">Edit</a>
-                        
-                        <button onclick="showModal({{$class->class_id}})" style="text-decoration:none;border:0px;background:none;">Delete</button>
-                        <form id="delete-form-{{ $class->class_id }}" action="{{ route('class.delete', ['userId' => $teacher->user_id, 'classId' => $class->class_id]) }}" method="post" style="display:none;">
-                            @csrf
-                        </form>
-                        
-                    </td>
-
-
-                </tr>
+            <tr>
+                <td>{{ $class->class_name }}</td>
+                <td>
+                    @if($class->homerooms->isEmpty())
+                        N/A
+                    @else
+                    <ul>
+                        @foreach($class->homerooms as $homeroom)
+                            <li>{{ $homeroom->teacher->first_name }} {{ $homeroom->teacher->last_name }}</li>
+                        @endforeach
+                    </ul>
+                    @endif
+                </td>
+                <td>{{ $class->students->count() }}</td>
+                <td>
+                    <a href="{{ route('class.detail', ['userId' => $teacher->user_id, 'classId' => $class->class_id]) }}" style="color:black;">Detail</a>
+                    <a href="{{ route('class.edit', ['userId' => $teacher->user_id, 'classId' => $class->class_id]) }}" style="color:black;">Edit</a>
+                    <button onclick="showModal({{ $class->class_id }})" style="text-decoration:none;border:0px;background:none;">Delete</button>
+                    <form id="delete-form-{{ $class->class_id }}" action="{{ route('class.delete', ['userId' => $teacher->user_id, 'classId' => $class->class_id]) }}" method="post" style="display:none;">
+                        @csrf
+                    </form>
+                </td>
+            </tr>
             @endforeach
+
         </tbody>
         <tfoot>
             <tr>

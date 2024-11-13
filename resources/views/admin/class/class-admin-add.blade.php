@@ -118,10 +118,38 @@
             </select>
         </div>
     </div>
+    <br>        
+    <div class="row">
+        <div class="col-3">
+            <h5>3. Co-Homeroom</h5>
+        </div> 
+        <div class="col-6">
+            <select name="co-homeroom" id="co-homeroom" style="height:40px;width:500px;">
+                <option value="0">Not Assigned</option>
+                @foreach ($teachers as $teacher)
+                    <option value="{{ $teacher->nip_pyp }}">{{ $teacher->first_name . ' ' . $teacher->last_name }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    <br>        
+    <div class="row">
+        <div class="col-3">
+            <h5>4. Substitute Homeroom</h5>
+        </div> 
+        <div class="col-6">
+            <select name="subs-homeroom" id="subs-homeroom" style="height:40px;width:500px;">
+                <option value="0">Not Assigned</option>
+                @foreach ($teachers as $teacher)
+                    <option value="{{ $teacher->nip_pyp }}">{{ $teacher->first_name . ' ' . $teacher->last_name }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
     <br>
     <div class="row">
         <div class="col-3">
-            <h5>3. Level</h5>
+            <h5>5. Level</h5>
         </div> 
         <div class="col-6">
             <select name="class_level" id="class_level" style="height:40px;width:500px;">
@@ -134,7 +162,7 @@
     <br>
     <div class="row">
         <div class="col-3">
-            <h5>4. Students</h5>
+            <h5>6. Students</h5>
         </div>
         <div class="col-3">
             <select name="student" id="students" style="height:40px;width:500px;">

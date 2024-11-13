@@ -27,9 +27,5 @@ class DetailClassPYP extends Model
         return $this->belongsTo(ClassModel::class, 'class_id');
     }
 
-    public function homeroom()
-    {
-        return $this->hasOne(Homeroom::class, 'class_id', 'class_id');
-    }
 
 }

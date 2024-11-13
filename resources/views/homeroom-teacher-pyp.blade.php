@@ -1,21 +1,8 @@
 @extends('base.base')
 
     @section('content')
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
-    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
-    <script>
-        $(document).ready(function() {
-            $('#example').DataTable();
-        });
-    </script>
-
-    
     <style>
         h1{
             font-family:'Space Grotesk';
@@ -37,7 +24,25 @@
                 <h5>{{ $class->class_name }}</h5>
             </div>
             <div class="col-6" style="text-align:right;">
-                <h5> {{ $class->homeroom->teacher->first_name }} {{ $class->homeroom->teacher->last_name }}</h5>
+                <h5><b>Homeroom:</b> 
+                    @if($homeroom)
+                        {{ $homeroom->teacher->first_name }} {{ $homeroom->teacher->last_name }}
+                    @else
+                        <span>Not Assigned</span>
+                    @endif
+                </h5>
+
+                @if($coHomeroom)
+                    <h5><b>Co-Homeroom:</b> 
+                        {{ $coHomeroom->teacher->first_name }} {{ $coHomeroom->teacher->last_name }}
+                    </h5>
+                @endif
+
+                @if($substituteHomeroom)
+                    <h5><b>Substitute:</b> 
+                        {{ $substituteHomeroom->teacher->first_name }} {{ $substituteHomeroom->teacher->last_name }}
+                    </h5>
+                @endif
             </div>
         </div>
 
@@ -235,7 +240,7 @@
 
             <div class="row" style="text-align:left;">
                 <select id="inputState" class="form-select">
-                <option selected><b>Select Criteria</b></option>
+                <option selected>Select Criteria</option>
                 <option>Beginning</option>
                 <option>Developing</option>
                 <option>Achieving</option>

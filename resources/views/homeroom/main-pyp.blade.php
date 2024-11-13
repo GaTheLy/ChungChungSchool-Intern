@@ -1,9 +1,9 @@
 <div class="container" name="main-pyp" style="display:block;" id="main-pyp-content">
-    <table id="example" class="table table-striped" style="width:100%">
+    <table id="mainPyp" class="table table-striped" style="width:100%">
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Joined At</th>
+                <th>Birth Date</th>
                 <th>Progress</th>
                 <th>Report</th>
             </tr>
@@ -28,7 +28,7 @@
         <tfoot>
             <tr>
                 <th>Name</th>
-                <th>Joined At</th>
+                <th>Birth Date</th>
                 <th>Progress</th>
                 <th>Report</th>
             </tr>
