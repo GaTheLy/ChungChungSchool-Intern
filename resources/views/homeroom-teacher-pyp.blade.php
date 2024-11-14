@@ -109,7 +109,8 @@
             <tr>
                     <td>{{ $student->first_name }} {{ $student->last_name }}</td>
                     <td>{{ $student->dob }}</td>
-                    <td data-bs-toggle="modal"
+                    <td 
+                        data-bs-toggle="modal"
                         data-bs-target="#fillAttendance"
                         data-bs-whatever="{{ $student->first_name }} {{ $student->last_name }}"
                         data-student-id="{{ $student->nim_pyp }}"

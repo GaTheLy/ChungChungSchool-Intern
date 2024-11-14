@@ -66,10 +66,13 @@ class ClassController extends Controller
             // Fetch existing attendance data for the student
             $attendance = DB::table('attendance_pyp')
                 ->where('student_id', $student->nim_pyp)
-                ->first(); // Assuming only one attendance record per student
+                ->first(); // Assuming only one attendance record per student per date
     
         $student->attendance = $attendance; // Assigning attendance data to each student
         }
+
+
+
 
         $comments = HomeroomComments::get();
         // dd($comments);
@@ -88,6 +91,7 @@ class ClassController extends Controller
             ->where('role', 'subs') // role 2 = substitute homeroom
             ->first();
 
+        
         return view('homeroom-teacher-pyp', compact('class', 'students', 'units', 'atls', 'teacher','comments','lines_of_inquiry', 'homeroom', 'coHomeroom', 'substituteHomeroom'));
     }
 

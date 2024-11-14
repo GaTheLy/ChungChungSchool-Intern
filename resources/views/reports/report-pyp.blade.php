@@ -439,16 +439,19 @@
                                     @php
                                         $grade = $criterion->pypCriteriaProgress->first();
                                     @endphp
-                                    <div class="subject-row">
-                                        <span class="subject-title">• {{$criterion->crit_name}}</span>
-                                        <span class="student-progress">{{$criterion->pypCriteriaProgress->first()->description}}</span>
-                                    </div>
+                                    @if ($criterion->pypCriteriaProgress->first()->description != 'Criteria Not Used')    
+                                        <div class="subject-row">
+                                            <span class="subject-title">• {{$criterion->crit_name}}</span>
+                                            <span class="student-progress">{{$criterion->pypCriteriaProgress->first()->description}}</span>
+                                        </div>
+                                    @endif
                                 @endforeach
                         </div>
                     </div>
                 @endforeach
             </div>   
             @endif
+            
 
             <hr>
 
