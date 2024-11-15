@@ -327,58 +327,6 @@
             }
         });
 
-
-
-        const exampleModal = document.getElementById('fillAttendance');
-
-        if (exampleModal) {
-            exampleModal.addEventListener('show.bs.modal', event => {
-                // Button that triggered the modal
-                const button = event.relatedTarget;
-
-                // Extract necessary data from data-bs-* attributes
-                const studentName = button.getAttribute('data-bs-whatever');
-                const studentId = button.getAttribute('data-student-id');
-                const absent = button.getAttribute('data-absent') || '';
-                const present = button.getAttribute('data-present') || '';
-                const late = button.getAttribute('data-late') || '';
-
-                // Update the modal's content
-                const modalTitle = exampleModal.querySelector('.modal-title');
-                modalTitle.textContent = `Fill Attendance for ${studentName}`;
-
-                // Update the student name input
-                const studentNameInput = exampleModal.querySelector('#data-student-name');
-                studentNameInput.value = studentName;
-
-                const studentIdInput = exampleModal.querySelector('#studentId');
-                studentIdInput.value = studentId;
-
-                // Update the attendance inputs
-                const inputAbsent = exampleModal.querySelector('#data-absent');
-                inputAbsent.value = absent;
-
-                const inputPresent = exampleModal.querySelector('#data-present');
-                inputPresent.value = present;
-
-                const inputLate = exampleModal.querySelector('#data-late');
-                inputLate.value = late;
-
-                axios.get('/attendance/' + studentId)
-                .then(function (response) {
-                    var attendanceData = response.data;
-                    document.getElementById('data-absent').value = attendanceData.absent;
-                    document.getElementById('data-present').value = attendanceData.present;
-                    document.getElementById('data-late').value = attendanceData.late;
-                })
-                .catch(function (error) {
-                    console.error('Error fetching attendance data:', error);
-                });
-            });
-        }
-
-
-
         const exampleModalunit = document.getElementById('unitProgress')
             if (exampleModalunit) {
                 exampleModalunit.addEventListener('show.bs.modal', event => {

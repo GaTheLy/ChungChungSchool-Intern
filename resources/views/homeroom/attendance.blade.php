@@ -60,15 +60,7 @@
                     </div>
                 </td>
                 <td>
-                    <button
-                        type="button"
-                        class="btn btn-primary"
-                        data-bs-toggle="modal"
-                        data-bs-target="#fillAttendance"
-                        data-bs-whatever="{{ $student->first_name }} {{ $student->last_name }}"
-                        data-student-id="{{ $student->nim_pyp }}">
-                        Fill Attendance
-                    </button>
+                Fill Attendance // coming soon...
                 </td>
             </tr>
             @endforeach
@@ -87,76 +79,10 @@
     </div>
 </div>
 
-{{-- modal fill Attendance --}}
-    <div class="modal fade" id="fillAttendance" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="fillAttendanceLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h1 class="modal-title fs-5" id="fillAttendanceLabel">Fill Attendance for {{ $student->first_name }} {{ $student->last_name }}</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form id="attendanceForm" action="{{ route('attendance.save.pyp') }}" method="POST">
-            @csrf
-            <div class="mb-3">
-                <label for="data-student-name" class="col-form-label"><b>Student's Name</b></label>
-                <input type="text" name='student_name' class="form-control" id="data-student-name" disabled>
-            </div>
-            <input type="hidden" id="studentId" name="student_id">
-            <label for="message-text" class="col-form-label"><b>Attendance</b></label>
-
-            <div class="row" style="text-align: center;">
-                <div class="col-md-2">
-                    <label for="data-absent" class="col-form-label center-align">Absent</label>
-                    <input type="text" class="form-control" id="data-absent" name='absent' >
-                </div>
-
-                <div class="col-md-2">
-                    <label for="data-present" class="col-form-label center-align">Present</label>
-                    <input type="text" class="form-control" id="data-present" name='present' >
-                </div>
-
-                <div class="col-md-2">
-                    <label for="data-late" class="col-form-label center-align">Late</label>
-                    <input type="text" class="form-control" id="data-late" name='late' >
-                </div>
-
-                <div class="col-md-2">
-                    <label for="data-excused" class="col-form-label center-align">Excused</label>
-                    <input type="text" class="form-control" id="data-excused" name='excused' >
-                </div>
-            </div>
-            
-            
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-            <button type="submit" class="btn btn-primary">Yes</button>
-        </div>
-        </form>
-        </div>
-    </div>
-    </div>
-    
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
 
-        const fillAttendanceModal = document.getElementById('fillAttendance');
-        fillAttendanceModal.addEventListener('show.bs.modal', function (event) {
-            const button = event.relatedTarget; // Button that triggered the modal
-            const studentName = button.getAttribute('data-bs-whatever'); // Extract info from data-* attributes
-            const studentId = button.getAttribute('data-student-id');
-
-            // Update the modal's content.
-            const modalTitle = fillAttendanceModal.querySelector('.modal-title');
-            const studentNameInput = fillAttendanceModal.querySelector('#data-student-name');
-            const studentIdInput = fillAttendanceModal.querySelector('#studentId');
-
-            modalTitle.textContent = `Fill Attendance for ${studentName}`;
-            studentNameInput.value = studentName;
-            studentIdInput.value = studentId;
-        });
 
         const dateInput = document.getElementById('attendance-date');
         const classId = '{{ $class->class_id }}';
@@ -202,6 +128,7 @@
                     updateAttendanceTable(data);
                 } else {
                     fetchStudents().then(students => {
+                        console.log('students data =', students);
                         updateAttendanceTableForAllStudents(students);
                     });
                 }
@@ -236,20 +163,13 @@
                         </div>
                     </td>
                     <td>
-                    <button
-                        type="button"
-                        class="btn btn-primary"
-                        data-bs-toggle="modal"
-                        data-bs-target="#fillAttendance"
-                        data-bs-whatever="${record.first_name } ${ $record.last_name }"
-                        data-student-id="${record.nim_pyp }">
-                        Fill Attendance
-                    </button>
-                    </td>
-
+                    Fill Attendance // coming soon...
+                    </td>                  
+            
                 `;
                 tbody.appendChild(row);
             });
+
         }
 
         // Function to update the table with all students' radio buttons
@@ -277,16 +197,8 @@
                         </div>
                     </td>
                     <td>
-                    <button
-                        type="button"
-                        class="btn btn-primary"
-                        data-bs-toggle="modal"
-                        data-bs-target="#fillAttendance"
-                        data-bs-whatever="${student.first_name } ${student.last_name }"
-                        data-student-id="${student.nim_pyp }">
-                        Fill Attendance
-                    </button>
-                    </td>
+                        Fill Attendance // coming soon...
+                    </td>                                
 
                 `;
                 tbody.appendChild(row);
@@ -332,11 +244,12 @@
                 },
                 body: JSON.stringify(attendanceData)
             }).then(() => {
-                alert('Attendance data sent to the server.');
+                alert('Attendance data saved.');
             }).catch(error => {
                 console.error('Error sending data:', error);
             });
         });
+        
     });
 </script>
 
