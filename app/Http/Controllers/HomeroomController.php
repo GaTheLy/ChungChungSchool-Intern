@@ -19,7 +19,8 @@ class HomeroomController extends Controller
                     'present' => $attendance['present'],
                     'late' => $attendance['late'],
                     'absent' => $attendance['absent'],
-                    'excused' => $attendance['excused']
+                    'excused' => $attendance['excused'],
+                    'sick' => 0,
                 ]
             );
         }
@@ -92,7 +93,9 @@ class HomeroomController extends Controller
         $students = DB::table('student_pyp')
             ->join('student_class', 'student_pyp.nim_pyp', '=', 'student_class.nim_pyp')
             ->where('class_id', $classId)
-            ->get(['first_name', 'last_name']); // Modify fields as needed
+            ->get(); // Modify fields as needed
+        
+            logger()->info('Fetched students:', ['students' => $students]);
 
         return response()->json($students);
     }

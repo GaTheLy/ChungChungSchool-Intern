@@ -87,15 +87,29 @@
         dateInput.value = today;
 
         // Function to fetch all students for the class
+        // function fetchStudents() {
+        //     return fetch(`/students-by-class/${classId}`)
+        //         .then(response => response.json())
+        //         console.log("fetch students by class: ", response)
+        //         .catch(error => {
+        //             console.error('Error fetching students data:', error);
+        //             return [];
+        //         });
+        // }
+
         function fetchStudents() {
             return fetch(`/students-by-class/${classId}`)
-                .then(response => response.json())
-                console.log(response)
+                .then(response => response.json()) // This needs to be awaited or chained correctly
+                .then(data => {
+                    console.log("fetch students by class: ", data); // Fix: Log `data`, not `response`
+                    return data; // Return parsed JSON data
+                })
                 .catch(error => {
                     console.error('Error fetching students data:', error);
                     return [];
                 });
         }
+
 
         // Function to fetch attendance data and update the table
         function fetchAttendanceData(date) {
@@ -122,9 +136,15 @@
                     console.log('attendance data =', data);
                     updateAttendanceTable(data);
                 } else {
+                    // fetchStudents().then(students => {
+                    //     console.log("students: ", data); 
+                    //     updateAttendanceTableForAllStudents(students);
+                    // });
                     fetchStudents().then(students => {
+                        console.log("students: ", students); 
                         updateAttendanceTableForAllStudents(students);
                     });
+
                 }
             })
             .catch(error => {
@@ -132,63 +152,69 @@
             });
         }
 
-        // Function to update the table with attendance data
-        function updateAttendanceTable(data) {
-            const tbody = document.querySelector('#attendance-content tbody');
-            tbody.innerHTML = ''; // Clear the existing table rows
+// Update the attendance table dynamically
+function updateAttendanceTable(data) {
+    const tbody = document.querySelector('#attendance-content tbody');
+    tbody.innerHTML = ''; // Clear the existing table rows
 
-            data.forEach(record => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${record.first_name} ${record.last_name}</td>
-                    <td>
-                        <div class="btn-group" role="group" aria-label="Attendance">
-                            <input type="radio" class="btn-check" name="attendance_${record.student_id}" id="present-${record.student_id}" value="PRESENT" ${record.present ? 'checked' : ''} autocomplete="off">
-                            <label class="btn btn-outline-primary" for="present-${record.student_id}">PRESENT</label>
+    data.forEach(record => {
+        const studentId = record.student_id;
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${record.first_name} ${record.last_name}</td>
+            <td>
+                <div class="btn-group" role="group" aria-label="Attendance">
+                    <input type="radio" class="btn-check" name="attendance_${studentId}" id="present-${studentId}" value="PRESENT" ${record.present ? 'checked' : ''} autocomplete="off">
+                    <label class="btn btn-outline-primary" for="present-${studentId}">PRESENT</label>
 
-                            <input type="radio" class="btn-check" name="attendance_${record.student_id}" id="late-${record.student_id}" value="LATE" ${record.late ? 'checked' : ''} autocomplete="off">
-                            <label class="btn btn-outline-primary" for="late-${record.student_id}">LATE</label>
+                    <input type="radio" class="btn-check" name="attendance_${studentId}" id="late-${studentId}" value="LATE" ${record.late ? 'checked' : ''} autocomplete="off">
+                    <label class="btn btn-outline-primary" for="late-${studentId}">LATE</label>
 
-                            <input type="radio" class="btn-check" name="attendance_${record.student_id}" id="absent-${record.student_id}" value="ABSENT" ${record.absent ? 'checked' : ''} autocomplete="off">
-                            <label class="btn btn-outline-primary" for="absent-${record.student_id}">ABSENT</label>
+                    <input type="radio" class="btn-check" name="attendance_${studentId}" id="absent-${studentId}" value="ABSENT" ${record.absent ? 'checked' : ''} autocomplete="off">
+                    <label class="btn btn-outline-primary" for="absent-${studentId}">ABSENT</label>
 
-                            <input type="radio" class="btn-check" name="attendance_${record.student_id}" id="excused-${record.student_id}" value="EXCUSED" ${record.excused ? 'checked' : ''} autocomplete="off">
-                            <label class="btn btn-outline-primary" for="excused-${record.student_id}">EXCUSED</label>
-                        </div>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
+                    <input type="radio" class="btn-check" name="attendance_${studentId}" id="excused-${studentId}" value="EXCUSED" ${record.excused ? 'checked' : ''} autocomplete="off">
+                    <label class="btn btn-outline-primary" for="excused-${studentId}">EXCUSED</label>
+                </div>
+            </td>
+            <td></td>
+        `;
+        tbody.appendChild(row);
+    });
+}
 
-        // Function to update the table with all students' radio buttons
-        function updateAttendanceTableForAllStudents(students) {
-            const tbody = document.querySelector('#attendance-content tbody');
-            tbody.innerHTML = ''; // Clear the existing table rows
+// When updating the table with all students
+function updateAttendanceTableForAllStudents(students) {
+    const tbody = document.querySelector('#attendance-content tbody');
+    tbody.innerHTML = ''; // Clear the existing table rows
 
-            students.forEach(student => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${student.first_name} ${student.last_name}</td>
-                    <td>
-                        <div class="btn-group" role="group" aria-label="Attendance">
-                            <input type="radio" class="btn-check" name="attendance_${student.nim_pyp}" id="present-${student.nim_pyp}" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="present-${student.nim_pyp}">PRESENT</label>
+    students.forEach(student => {
+        const studentId = student.nim_pyp;
+        console.log(studentId);
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${student.first_name} ${student.last_name}</td>
+            <td>
+                <div class="btn-group" role="group" aria-label="Attendance">
+                    <input type="radio" class="btn-check" name="attendance_${studentId}" id="present-${studentId}" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="present-${studentId}">PRESENT</label>
 
-                            <input type="radio" class="btn-check" name="attendance_${student.nim_pyp}" id="late-${student.nim_pyp}" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="late-${student.nim_pyp}">LATE</label>
+                    <input type="radio" class="btn-check" name="attendance_${studentId}" id="late-${studentId}" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="late-${studentId}">LATE</label>
 
-                            <input type="radio" class="btn-check" name="attendance_${student.nim_pyp}" id="absent-${student.nim_pyp}" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="absent-${student.nim_pyp}">ABSENT</label>
+                    <input type="radio" class="btn-check" name="attendance_${studentId}" id="absent-${studentId}" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="absent-${studentId}">ABSENT</label>
 
-                            <input type="radio" class="btn-check" name="attendance_${student.nim_pyp}" id="excused-${student.nim_pyp}" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="excused-${student.nim_pyp}">EXCUSED</label>
-                        </div>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
+                    <input type="radio" class="btn-check" name="attendance_${studentId}" id="excused-${studentId}" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="excused-${studentId}">EXCUSED</label>
+                </div>
+            </td>
+            <td></td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
 
         // Fetch attendance data for today's date on page load
         fetchAttendanceData(today);
@@ -229,7 +255,7 @@
                 },
                 body: JSON.stringify(attendanceData)
             }).then(() => {
-                alert('Attendance data sent to the server.');
+                alert('Attendance data sent.');
             }).catch(error => {
                 console.error('Error sending data:', error);
             });

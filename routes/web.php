@@ -225,7 +225,7 @@ Route::post('/new-attendance/save', [HomeroomController::class, 'savePyp'])->nam
 
 Route::post('/attendance-by-date/{classId}', action: [HomeroomController::class, 'getAttendanceByDate']);
 
-Route::get('/students-by-class/{classId}', [HomeroomController::class, 'getStudentsByClass']);
+Route::get('/students-by-class/{classId}', action: [HomeroomController::class, 'getStudentsByClass']);
 
 
 // Unit Progress
