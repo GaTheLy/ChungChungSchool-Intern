@@ -189,24 +189,22 @@
                             </thead>
                             <tbody>
                                 @foreach ($detailClassPYP as $classDetail)
-                                    @if ($classDetail->year_program_pyp_id == $ypPYP->id)
+                                @if ($classDetail->year_program_pyp_id == $ypPYP->id)
+
                                         <tr>
                                             <td>{{ $classDetail->class->class_name }}</td>
                                             <td>
-                                                @if ($classDetail->class->homerooms && $classDetail->class->homerooms->isNotEmpty())
-                                                    @foreach ($classDetail->class->homerooms as $homeroom)
-                                                        {{ $homeroom->teacher->first_name }} {{ $homeroom->teacher->last_name }}<br>
-                                                    @endforeach
+                                                @if ($classDetail->homeroom && $classDetail->homeroom->teacher)
+                                                    {{ $classDetail->homeroom->teacher->first_name }} {{ $classDetail->homeroom->teacher->last_name }}
                                                 @else
-                                                    N/A
+                                                    No Homeroom Teacher
                                                 @endif
                                             </td>
                                             <td>{{ $classDetail->end_date }}</td>
                                             <td>{{ $classDetail->class->students()->count() }}</td>
                                         </tr>
-                                    @endif
+                                @endif
                                 @endforeach
-
                             </tbody>
                         </table>
                         <div class="row">
@@ -382,22 +380,21 @@
                             </thead>
                             <tbody>
                                 @foreach ($detailClassMYP as $classDetail)
-                                    @if ($classDetail->year_program_myp_id == $yp->id)
-                                        <tr>
-                                            <td>{{ $classDetail->class->class_name }}</td>
-                                            <td>
-                                                @if ($classDetail->class->homerooms)
-                                                    @foreach ($classDetail->class->homerooms as $homeroom)
-                                                        {{ $homeroom->teacher->first_name }} {{ $homeroom->teacher->last_name }}<br>
-                                                    @endforeach
-                                                @else
-                                                    No Homeroom Teacher
-                                                @endif
-                                            </td>
-                                            <td>{{ $classDetail->end_date }}</td>
-                                            <td>{{ $classDetail->class->students()->count() }}</td>
-                                        </tr>
-                                    @endif
+                                @if ($classDetail->year_program_myp_id == $yp->id)
+
+                                    <tr>
+                                        <td>{{ $classDetail->class->class_name }}</td>
+                                        <td>
+                                            @if ($classDetail->homeroom && $classDetail->homeroom->teacher)
+                                                {{ $classDetail->homeroom->teacher->first_name }} {{ $classDetail->homeroom->teacher->last_name }}
+                                            @else
+                                                No Homeroom Teacher
+                                            @endif
+                                        </td>
+                                        <td>{{ $classDetail->end_date }}</td>
+                                        <td>{{ $classDetail->class->students()->count() }}</td>
+                                    </tr>
+                                @endif
                                 @endforeach
                             </tbody>
                         </table>

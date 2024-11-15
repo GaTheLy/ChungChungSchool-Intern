@@ -109,7 +109,6 @@ class TeachController extends Controller
 
         $role = User::find($authUserId)->role;
 
-        
         // if ($role == 0){  //admin
             // return view('dash-admin', compact('teacher','homerooms', 'subjects','role'));
         // }else if ($role == 1){ //myp
@@ -723,28 +722,25 @@ class TeachController extends Controller
     {
         // Log::info('Request Data: ', $request->all());
         // Validate the incoming request
-
         $validated = $request->validate([
-            'student_id' => ['required', 'exists:student_pyp,nim_pyp'],
+            'student_id' => 'required|exists:student_pyp,nim_pyp',
             'absent' => 'required|integer|min:0',
             'present' => 'required|integer|min:0',
             'late' => 'required|integer|min:0',
-            'excused' => 'required|integer|min:0',
+            'excused' => 'required|integer|min:0',            
         ]);
-        
-        // Insert attendance record
-        DB::table('attendance_pyp')->insert([
-            'student_id' => $validated['student_id'],
-            'absent' => $validated['absent'],
-            'present' => $validated['present'],
-            'late' => $validated['late'],
-            'sick' => 0,
-            'excused' => $validated['excused'],
-            'date' => '2024-11-10',
-        ]);
-        
-        // return response()->json(data: $validated);
 
+        // Insert or update attendance record
+        DB::table('attendance_pyp')->updateOrInsert(
+            ['student_id' => $validated['student_id']],
+            [
+                'absent' => $validated['absent'],
+                'present' => $validated['present'],
+                'late' => $validated['late'],                
+                'excused' => $validated['excused'],
+                'date' => '2024-11-10',
+            ]
+        );
 
         // Redirect or return a response as needed
         return redirect()->back()->with('success', 'Attendance recorded successfully.');
@@ -752,6 +748,7 @@ class TeachController extends Controller
 
     public function saveAttendanceMyp(Request $request)
     {
+        Log::info('Request Data: ', $request->all());
         // Validate the incoming request
         $validated = $request->validate([
             'student_id' => 'required|exists:student_pyp,nim_pyp',

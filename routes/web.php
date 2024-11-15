@@ -83,8 +83,8 @@ Route::post('/profile-admin-edit/{userId}/{teacherId}', [TeachController::class,
 ->middleware(['auth', 'verified'])->name('profile-admin.edit');
 
 //teacher route profile
-Route::get('/profile/{userId}/{teacherId}', [TeachController::class, 'profile'])
-->middleware(['auth', 'verified'])->name('profile.show');
+// Route::get('/profile/{userId}/{teacherId}', [TeachController::class, 'profile'])
+// ->middleware(['auth', 'verified'])->name('profile.show');
 // Route::post('/profile-edit/{userId}/{teacherId}', [TeachController::class, 'editProfileAdmin'])
 // ->middleware(['auth', 'verified'])->name('profile.edit');
 
@@ -231,7 +231,7 @@ Route::get('/students-by-class/{classId}', [HomeroomController::class, 'getStude
 // Unit Progress
 Route::post('/save-unit-progress', [HomeroomController::class, 'saveUnitProg'])->name('homeroom.saveUnitProg');
 
-Route::get('/unit-progress/{unitId}/{classId}', action: [HomeroomController::class, 'getUnitProgress']);
+Route::get('/unit-progress/{unitId}/{classId}', [HomeroomController::class, 'getUnitProgress']);
 
 // ATL
 Route::post('/new-atl-progress/save', [HomeroomController::class, 'saveAtlProg']);
@@ -248,7 +248,7 @@ Route::get('/get-homeroom-comments/{classId}', [HomeroomController::class, 'getC
 Route::get('/report-myp/{studentId}', [ReportController::class, 'previewReport'])->name('report.myp');
 Route::get('/report-myp-conversion/{studentId}', [ReportController::class, 'previewReportConversionMYP'])->name('report-convert.myp');
 
-Route::get('/report-pyp/{studentId}', action: [ReportController::class, 'previewReportPyp'])->name('report.pyp');
+Route::get('/report-pyp/{studentId}', [ReportController::class, 'previewReportPyp'])->name('report.pyp');
 
 require __DIR__.'/auth.php';
 

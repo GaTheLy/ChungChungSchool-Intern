@@ -185,7 +185,7 @@ function confirmDelete() {
     <br>
     <div class="row">
         <div class="col-3">
-            <h5>6. Students</h5>
+            <h5>4. Students</h5>
         </div>
         <div class="col-3">
             <select name="student" id="students" style="height:40px;width:500px;">

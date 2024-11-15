@@ -31,31 +31,26 @@
     <h5 style="font-weight:200; font-size:25px">Homeroom</h5>
     <div class="row" id="homeroom-list" style="margin-left:10px">
         @foreach($homerooms as $homeroom)
-        <div class="card text-center mb-3 d-flex justify-content-center align-items-center" style="width: 18rem;height:11rem;font-weight:bold;font-size:large;margin:10px;">
-            <div class="card-body d-flex justify-content-center align-items-center" style="height:100%">
-
             @if ($homeroom->class->class_level == 'PYP')
-                    <a style="text-decoration:none;color:black;" href="{{ route('class.show', ['id' => $homeroom->class_id]) }}">
+                <div class="card text-center mb-3" style="width: 18rem;">
+                    <a href="{{ route('class.show', ['id' => $homeroom->class_id]) }}">
                         <div class="card-body">
                             {{ $homeroom->class->class_name }}
                         </div>
                     </a>
+                </div>
             @elseif ($homeroom->class->class_level == 'MYP')
-                    <a style="text-decoration:none;color:black;" href="{{ route('class.show.myp', ['id' => $homeroom->class_id]) }}">
+                <div class="card text-center mb-3" style="width: 18rem;">
+                    <a href="{{ route('class.show.myp', ['id' => $homeroom->class_id]) }}">
                         <div class="card-body">
                             {{ $homeroom->class->class_name }}
                         </div>
                     </a>
+                </div>
             @endif
-            </div>
-        </div>
-
         @endforeach
     </div>
-    <br><br>
 @endif
-
-
 
 {{-- Subjects Section --}}
 @if (!$subjects->isEmpty())
@@ -63,15 +58,14 @@
     <div class="row" id="teaching-list" style="margin-left:10px">
         @foreach($subjects as $subject)
             @foreach($subject->classes as $class)
-                <div class="card text-center mb-3 d-flex justify-content-center align-items-center" style="width: 18rem;height:11rem;font-weight:bold;font-size:large;">
+                <div class="card text-center mb-3" style="width: 18rem;">
                     <a href="{{ route('subject.show', [
                         'teacher_id' => $teacher->nip_pyp,
                         'sub_id' => $subject->subject->id,
                         'class_id' => $class->class_id
                     ]) }}">
-                        <div class="card-body d-flex justify-content-center align-items-center" style="height:100%">
-                        {{ $subject->subject->subject_name }}
-                        <br> ({{ $class->class_name }})
+                        <div class="card-body">
+                            {{ $subject->subject->subject_name }} ({{ $class->class_name }})
                         </div>
                     </a>
                 </div>
@@ -82,7 +76,7 @@
 
 {{-- No Data Available --}}
 @if ($homerooms->isEmpty() && $subjects->isEmpty())
-    <b>No homeroom or teaching assignments are available for you at the moment.</b>
+    <p>No homeroom or teaching assignments are available for you at the moment.</p>
 @endif
 
 @endsection

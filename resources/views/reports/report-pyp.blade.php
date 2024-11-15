@@ -292,28 +292,10 @@
                     Grade<br>
                     {{ $student->class->first()->class_name }}
                 </div>
-                
                 <div>
-                    <h5>Homeroom Teachers</h5>
-
-                    @if ($student->class->first()->homerooms->where('role', 'main')->isNotEmpty())
-                        <div>
-                            <b>Homeroom:</b>
-                            {{ $student->class->first()->homerooms->where('role', 'main')->first()->teacher->first_name }}
-                            {{ $student->class->first()->homerooms->where('role', 'main')->first()->teacher->last_name }}
-                        </div>
-                    @endif
-
-                    @if ($student->class->first()->homerooms->where('role', 'co')->isNotEmpty())
-                        <div>
-                            <b>Co-Homeroom:</b>
-                            {{ $student->class->first()->homerooms->where('role', 'co')->first()->teacher->first_name }}
-                            {{ $student->class->first()->homerooms->where('role', 'co')->first()->teacher->last_name }}
-                        </div>
-                    @endif
+                    Homeroom Teacher<br>
+                    {{ $student->class->first()->homeroom->teacher->first_name }} {{ $student->class->first()->homeroom->teacher->last_name }}
                 </div>
-
-
             </div>
 
             <div class="message mt-4">
@@ -324,7 +306,7 @@
             </div>
             <br>
 
-            <div class="principal-signature" style="display:block;">
+            <div class="principal-signature">
                 <div>
                     <img src="{{ asset('assets-image/'. $filenameSign) }}" alt="Principal Signature" style="max-height: 50px;">
                 </div>

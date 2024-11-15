@@ -17,9 +17,9 @@ class TeacherPyp extends Model
     protected $fillable = ['nip_pyp','first_name', 'last_name', 'user_id', 'phone', 'address', 'joined_at'];
 
     // Define the relationship with Homeroom
-    public function homeroom()
+    public function homerooms()
     {
-        return $this->hasOne(Homeroom::class, 'teacher_pyp_id');
+        return $this->hasMany(Homeroom::class, 'teacher_pyp_id');
     }
 
     public function user()

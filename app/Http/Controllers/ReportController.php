@@ -15,7 +15,6 @@ use App\Models\StudentPyp;
 use App\Models\SubjectTeacher;
 use App\Models\SubjectModel;
 use App\Models\CustomReport;
-use App\Models\Homeroom;
 
 class ReportController extends Controller
 {
@@ -168,13 +167,7 @@ class ReportController extends Controller
     }
 
     public function previewReportPyp($id){
-        $student = StudentPyp::with(['class.homerooms.teacher'])->findOrFail($id); // Use 'homerooms' here
-
-        // Retrieve all homerooms for the student's class
-        $homerooms = Homeroom::with('teacher')
-        ->where('class_id', $student->class->first()->class_id)
-        ->get()
-        ->groupBy('role');
+        $student = StudentPyp::with(['class.homeroom.teacher'])->findOrFail($id);
 
         //Grades/ Criteria Progress
         $sub_teacherIds = DB::table('subject_class_teacher')
@@ -241,7 +234,7 @@ class ReportController extends Controller
 
         $filenameSign = $custom ? $custom->signpath : 'ccs-logo.jpg'; // default to 'ccs-logo.jpg' if not set
 
-        $html = view('reports.report-pyp', compact('student', 'subject_teacher_s', 'attendance', 'comment', 'units', 'filename', 'greetings', 'filenameSign', 'custom', 'atls', 'homerooms'));
+        $html = view('reports.report-pyp', compact('student', 'subject_teacher_s', 'attendance', 'comment', 'units', 'filename', 'greetings','filenameSign', 'custom','atls'));
 
         $pdf = PDF::loadHtml($html);
 

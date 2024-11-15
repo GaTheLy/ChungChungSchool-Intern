@@ -58,32 +58,13 @@
             <h5>2. Homeroom</h5>
         </div> 
         <div class="col-6">
-            <input disabled value="{{ $mainHomeroom ? $mainHomeroom->teacher->first_name . ' ' . $mainHomeroom->teacher->last_name : 'N/A' }}" style="height:40px;width:500px;">
+            <input disabled value="{{ $selectedClass->homeroom ? $selectedClass->homeroom->teacher->first_name . ' ' . $selectedClass->homeroom->teacher->last_name : 'N/A' }}" style="height:40px;width:500px;">
         </div>
     </div>
     <br>
     <div class="row">
         <div class="col-3">
-            <h5>3. Co-Homeroom</h5>
-        </div> 
-        <div class="col-6">
-            <input disabled value="{{ $coHomeroom ? $coHomeroom->teacher->first_name . ' ' . $coHomeroom->teacher->last_name : 'N/A' }}" style="height:40px;width:500px;">
-        </div>
-    </div>
-    <br>
-    <div class="row">
-        <div class="col-3">
-            <h5>4. Substitute Homeroom</h5>
-        </div> 
-        <div class="col-6">
-            <input disabled value="{{ $subsHomeroom ? $subsHomeroom->teacher->first_name . ' ' . $subsHomeroom->teacher->last_name : 'N/A' }}" style="height:40px;width:500px;">
-        </div>
-    </div>
-
-    <br>
-    <div class="row">
-        <div class="col-3">
-            <h5>5. Students</h5>
+            <h5>3. Students</h5>
         </div>
         <div class="col">
             <p>total {{ $selectedClass->students->count() }} students</p>

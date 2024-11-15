@@ -34,11 +34,4 @@ class StudentClass extends Model
     {
         return $this->belongsTo(StudentPyp::class, 'nim_pyp');
     }
-
-    // In StudentClass model
-    public function homeroomComments()
-    {
-        return $this->hasMany(HomeroomComments::class, 'student_id', 'nim_pyp');
-    }
-
 }

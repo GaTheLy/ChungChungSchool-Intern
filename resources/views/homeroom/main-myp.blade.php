@@ -1,5 +1,5 @@
 <div class="container" name="main-myp" style="display:block;" id="main-myp-content">
-    <table id="main-myp" class="table table-striped" style="width:100%">
+    <table id="example" class="table table-striped" style="width:100%">
         <thead>
             <tr>
                 <th>Name</th>

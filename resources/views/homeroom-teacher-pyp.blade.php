@@ -1,8 +1,21 @@
 @extends('base.base')
 
     @section('content')
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
+    <script>
+        $(document).ready(function() {
+            $('#example').DataTable();
+        });
+    </script>
+
+    
     <style>
         h1{
             font-family:'Space Grotesk';
@@ -24,25 +37,7 @@
                 <h5>{{ $class->class_name }}</h5>
             </div>
             <div class="col-6" style="text-align:right;">
-                <h5><b>Homeroom:</b> 
-                    @if($homeroom)
-                        {{ $homeroom->teacher->first_name }} {{ $homeroom->teacher->last_name }}
-                    @else
-                        <span>Not Assigned</span>
-                    @endif
-                </h5>
-
-                @if($coHomeroom)
-                    <h5><b>Co-Homeroom:</b> 
-                        {{ $coHomeroom->teacher->first_name }} {{ $coHomeroom->teacher->last_name }}
-                    </h5>
-                @endif
-
-                @if($substituteHomeroom)
-                    <h5><b>Substitute:</b> 
-                        {{ $substituteHomeroom->teacher->first_name }} {{ $substituteHomeroom->teacher->last_name }}
-                    </h5>
-                @endif
+                <h5> {{ $class->homeroom->teacher->first_name }} {{ $class->homeroom->teacher->last_name }}</h5>
             </div>
         </div>
 
@@ -241,7 +236,7 @@
 
             <div class="row" style="text-align:left;">
                 <select id="inputState" class="form-select">
-                <option selected>Select Criteria</option>
+                <option selected><b>Select Criteria</b></option>
                 <option>Beginning</option>
                 <option>Developing</option>
                 <option>Achieving</option>
@@ -326,6 +321,58 @@
                 hcContent.style.display = 'none';
             }
         });
+
+
+
+        const exampleModal = document.getElementById('fillAttendance');
+
+        if (exampleModal) {
+            exampleModal.addEventListener('show.bs.modal', event => {
+                // Button that triggered the modal
+                const button = event.relatedTarget;
+
+                // Extract necessary data from data-bs-* attributes
+                const studentName = button.getAttribute('data-bs-whatever');
+                const studentId = button.getAttribute('data-student-id');
+                const absent = button.getAttribute('data-absent') || '';
+                const present = button.getAttribute('data-present') || '';
+                const late = button.getAttribute('data-late') || '';
+
+                // Update the modal's content
+                const modalTitle = exampleModal.querySelector('.modal-title');
+                modalTitle.textContent = `Fill Attendance for ${studentName}`;
+
+                // Update the student name input
+                const studentNameInput = exampleModal.querySelector('#data-student-name');
+                studentNameInput.value = studentName;
+
+                const studentIdInput = exampleModal.querySelector('#studentId');
+                studentIdInput.value = studentId;
+
+                // Update the attendance inputs
+                const inputAbsent = exampleModal.querySelector('#data-absent');
+                inputAbsent.value = absent;
+
+                const inputPresent = exampleModal.querySelector('#data-present');
+                inputPresent.value = present;
+
+                const inputLate = exampleModal.querySelector('#data-late');
+                inputLate.value = late;
+
+                axios.get('/attendance/' + studentId)
+                .then(function (response) {
+                    var attendanceData = response.data;
+                    document.getElementById('data-absent').value = attendanceData.absent;
+                    document.getElementById('data-present').value = attendanceData.present;
+                    document.getElementById('data-late').value = attendanceData.late;
+                })
+                .catch(function (error) {
+                    console.error('Error fetching attendance data:', error);
+                });
+            });
+        }
+
+
 
         const exampleModalunit = document.getElementById('unitProgress')
             if (exampleModalunit) {

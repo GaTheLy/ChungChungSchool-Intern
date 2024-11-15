@@ -32,12 +32,11 @@
         <input type="date" id="attendance-date" class="form-control d-inline-block w-auto">
     </div>
 
-    <table class="table table-striped" style="width:100%" id="attendance">
+    <table class="table table-striped" style="width:100%">
         <thead>
             <tr>
                 <th>Name</th>
                 <th>Attendance</th>
-                <th>24 July - 11 November Attendance</th>
             </tr>
         </thead>
         <tbody>
@@ -52,15 +51,15 @@
                         <input type="radio" class="btn-check" name="attendance_{{ $student->nim_pyp }}" id="late-{{ $student->nim_pyp }}" autocomplete="off">
                         <label class="btn btn-outline-primary" for="late-{{ $student->nim_pyp }}">LATE</label>
 
+                        <input type="radio" class="btn-check" name="attendance_{{ $student->nim_pyp }}" id="sick-{{ $student->nim_pyp }}" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="sick-{{ $student->nim_pyp }}">SICK</label>
+
                         <input type="radio" class="btn-check" name="attendance_{{ $student->nim_pyp }}" id="absent-{{ $student->nim_pyp }}" autocomplete="off">
                         <label class="btn btn-outline-primary" for="absent-{{ $student->nim_pyp }}">ABSENT</label>
 
                         <input type="radio" class="btn-check" name="attendance_{{ $student->nim_pyp }}" id="excused-{{ $student->nim_pyp }}" autocomplete="off">
                         <label class="btn btn-outline-primary" for="excused-{{ $student->nim_pyp }}">EXCUSED</label>
                     </div>
-                </td>
-                <td>
-                Fill Attendance // coming soon...
                 </td>
             </tr>
             @endforeach
@@ -69,7 +68,6 @@
             <tr>
                 <th>Name</th>
                 <th>Attendance</th>
-                <th>24 July - 11 November Attendance</th>
             </tr>
         </tfoot>
     </table>
@@ -79,10 +77,76 @@
     </div>
 </div>
 
+{{-- modal fill Attendance --}}
+    <div class="modal fade" id="fillAttendance" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="fillAttendanceLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="fillAttendanceLabel">Fill Attendance for {{ $student->first_name }} {{ $student->last_name }}</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form id="attendanceForm" action="{{ route('attendance.save.pyp') }}" method="POST">
+            @csrf
+            <div class="mb-3">
+                <label for="data-student-name" class="col-form-label"><b>Student's Name</b></label>
+                <input type="text" name='student_name' class="form-control" id="data-student-name" disabled>
+            </div>
+            <input type="hidden" id="studentId" name="student_id">
+            <label for="message-text" class="col-form-label"><b>Attendance</b></label>
+
+            <div class="row" style="text-align: center;">
+                <div class="col-md-2">
+                    <label for="data-absent" class="col-form-label center-align">Absent</label>
+                    <input type="text" class="form-control" id="data-absent" name='absent' >
+                </div>
+
+                <div class="col-md-2">
+                    <label for="data-present" class="col-form-label center-align">Present</label>
+                    <input type="text" class="form-control" id="data-present" name='present' >
+                </div>
+
+                <div class="col-md-2">
+                    <label for="data-late" class="col-form-label center-align">Late</label>
+                    <input type="text" class="form-control" id="data-late" name='late' >
+                </div>
+
+                <div class="col-md-2">
+                    <label for="data-excused" class="col-form-label center-align">Excused</label>
+                    <input type="text" class="form-control" id="data-excused" name='excused' >
+                </div>
+            </div>
+            
+            
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+            <button type="submit" class="btn btn-primary">Yes</button>
+        </div>
+        </form>
+        </div>
+    </div>
+    </div>
+    
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
 
+        const fillAttendanceModal = document.getElementById('fillAttendance');
+        fillAttendanceModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget; // Button that triggered the modal
+            const studentName = button.getAttribute('data-bs-whatever'); // Extract info from data-* attributes
+            const studentId = button.getAttribute('data-student-id');
+
+            // Update the modal's content.
+            const modalTitle = fillAttendanceModal.querySelector('.modal-title');
+            const studentNameInput = fillAttendanceModal.querySelector('#data-student-name');
+            const studentIdInput = fillAttendanceModal.querySelector('#studentId');
+
+            modalTitle.textContent = `Fill Attendance for ${studentName}`;
+            studentNameInput.value = studentName;
+            studentIdInput.value = studentId;
+        });
 
         const dateInput = document.getElementById('attendance-date');
         const classId = '{{ $class->class_id }}';
@@ -95,7 +159,6 @@
         function fetchStudents() {
             return fetch(`/students-by-class/${classId}`)
                 .then(response => response.json())
-                console.log(response)
                 .catch(error => {
                     console.error('Error fetching students data:', error);
                     return [];
@@ -104,14 +167,12 @@
 
         // Function to fetch attendance data and update the table
         function fetchAttendanceData(date) {
-            console.log(date);
             if (!date) {
                 // If no date, clear the table or show a message if needed
                 updateAttendanceTable([]);
                 return;
             }
 
-            
             fetch(`/attendance-by-date/${classId}`, {
                 method: 'POST',
                 headers: {
@@ -119,16 +180,14 @@
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
                 body: JSON.stringify({ date })
-                
             })
             .then(response => response.json())
             .then(data => {
                 if (data.length != 0) {
-                    console.log('attendance data =', data);
+                    console.log('Yes');
                     updateAttendanceTable(data);
                 } else {
                     fetchStudents().then(students => {
-                        console.log('students data =', students);
                         updateAttendanceTableForAllStudents(students);
                     });
                 }
@@ -155,6 +214,9 @@
                             <input type="radio" class="btn-check" name="attendance_${record.student_id}" id="late-${record.student_id}" value="LATE" ${record.late ? 'checked' : ''} autocomplete="off">
                             <label class="btn btn-outline-primary" for="late-${record.student_id}">LATE</label>
 
+                            <input type="radio" class="btn-check" name="attendance_${record.student_id}" id="sick-${record.student_id}" value="SICK" ${record.sick ? 'checked' : ''} autocomplete="off">
+                            <label class="btn btn-outline-primary" for="sick-${record.student_id}">SICK</label>
+
                             <input type="radio" class="btn-check" name="attendance_${record.student_id}" id="absent-${record.student_id}" value="ABSENT" ${record.absent ? 'checked' : ''} autocomplete="off">
                             <label class="btn btn-outline-primary" for="absent-${record.student_id}">ABSENT</label>
 
@@ -163,13 +225,20 @@
                         </div>
                     </td>
                     <td>
-                    Fill Attendance // coming soon...
-                    </td>                  
-            
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#fillAttendance"
+                        data-bs-whatever="${record.first_name } ${ $record.last_name }"
+                        data-student-id="${record.nim_pyp }">
+                        Fill Attendance
+                    </button>
+                    </td>
+
                 `;
                 tbody.appendChild(row);
             });
-
         }
 
         // Function to update the table with all students' radio buttons
@@ -189,6 +258,9 @@
                             <input type="radio" class="btn-check" name="attendance_${student.nim_pyp}" id="late-${student.nim_pyp}" autocomplete="off">
                             <label class="btn btn-outline-primary" for="late-${student.nim_pyp}">LATE</label>
 
+                            <input type="radio" class="btn-check" name="attendance_${student.nim_pyp}" id="sick-${student.nim_pyp}" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="sick-${student.nim_pyp}">SICK</label>
+
                             <input type="radio" class="btn-check" name="attendance_${student.nim_pyp}" id="absent-${student.nim_pyp}" autocomplete="off">
                             <label class="btn btn-outline-primary" for="absent-${student.nim_pyp}">ABSENT</label>
 
@@ -197,8 +269,16 @@
                         </div>
                     </td>
                     <td>
-                        Fill Attendance // coming soon...
-                    </td>                                
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#fillAttendance"
+                        data-bs-whatever="${student.first_name } ${student.last_name }"
+                        data-student-id="${student.nim_pyp }">
+                        Fill Attendance
+                    </button>
+                    </td>
 
                 `;
                 tbody.appendChild(row);
@@ -227,6 +307,7 @@
                     date: selectedDate,
                     present: row.querySelector(`#present-${studentNim}`)?.checked ? 1 : 0,
                     late: row.querySelector(`#late-${studentNim}`)?.checked ? 1 : 0,
+                    sick: row.querySelector(`#sick-${studentNim}`)?.checked ? 1 : 0,
                     absent: row.querySelector(`#absent-${studentNim}`)?.checked ? 1 : 0,
                     excused: row.querySelector(`#excused-${studentNim}`)?.checked ? 1 : 0,
                 };
@@ -244,12 +325,11 @@
                 },
                 body: JSON.stringify(attendanceData)
             }).then(() => {
-                alert('Attendance data saved.');
+                alert('Attendance data sent to the server.');
             }).catch(error => {
                 console.error('Error sending data:', error);
             });
         });
-        
     });
 </script>
 

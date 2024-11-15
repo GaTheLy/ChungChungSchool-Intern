@@ -26,7 +26,7 @@
 </style>
 
 <div class="container" name="table-atl-pyp" style="display:none;" id="atl-pyp-content">
-    <h1>Approaches To Learning Progress</h1>
+    <h1>ATL Progress PYP</h1>
 
     <div style="text-align:right;">
         Select Approaches to Learning :
@@ -38,7 +38,7 @@
         </select>
     </div>
 
-    <table id="atl-pyp" class="table table-striped" style="width:100%">
+    <table id="" class="table table-striped" style="width:100%">
         <thead>
             <tr>
                 <th>Name</th>
