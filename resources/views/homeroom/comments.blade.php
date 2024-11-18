@@ -1,3 +1,9 @@
+<script>
+    $(document).ready(function() {
+        $('#comments').DataTable();
+    });
+</script>
+
 <div class="container" name="table-comments" style="display:none;" id="comments-content">
     <h1>Homeroom Teacher Comment</h1>
     <form id="comments-form">

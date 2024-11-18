@@ -17,6 +17,15 @@
             font-size: 25px;
         }
     </style>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
     
         <h1>Homeroom</h1>
         <div class="row">
@@ -174,12 +183,12 @@
     </div>
     </div>
 
-    {{-- modal fill Attendance 
+    {{-- modal fill Attendance --}}
     <div class="modal fade" id="fillAttendance" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="fillAttendanceLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
         <div class="modal-header">
-            <h1 class="modal-title fs-5" id="fillAttendanceLabel">Fill Attendance for {{ $student->first_name }} {{ $student->last_name }}</h1>
+            <h1 class="modal-title fs-5" id="fillAttendanceLabel">Fill Attendance for student</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -194,18 +203,23 @@
 
             <div class="row" style="text-align: center;">
                 <div class="col-md-2">
-                    <label for="data-absent" class="col-form-label center-align">Absent</label>
-                    <input type="text" class="form-control" id="data-absent" name='absent' value="{{ old('absent') ?? $student->attendance->absent ?? '' }}">
-                </div>
-
-                <div class="col-md-2">
                     <label for="data-present" class="col-form-label center-align">Present</label>
-                    <input type="text" class="form-control" id="data-present" name='present' value="{{ old('present') ?? $student->attendance->present ?? '' }}">
+                    <input type="text" class="form-control" id="data-present" name='present' >
                 </div>
 
                 <div class="col-md-2">
                     <label for="data-late" class="col-form-label center-align">Late</label>
-                    <input type="text" class="form-control" id="data-late" name='late' value="{{ old('late') ?? $student->attendance->late ?? '' }}">
+                    <input type="text" class="form-control" id="data-late" name='late' >
+                </div>
+
+                <div class="col-md-2">
+                    <label for="data-absent" class="col-form-label center-align">Absent</label>
+                    <input type="text" class="form-control" id="data-absent" name='absent'>
+                </div>
+
+                <div class="col-md-2">
+                    <label for="data-excused" class="col-form-label center-align">Excused</label>
+                    <input type="text" class="form-control" id="data-excused" name='excused' >
                 </div>
             </div>
             
@@ -219,7 +233,7 @@
         </div>
     </div>
     </div>
-    --}}
+    
 
 
      {{-- modal unit progress --}}
@@ -341,6 +355,8 @@
                 const absent = button.getAttribute('data-absent') || '';
                 const present = button.getAttribute('data-present') || '';
                 const late = button.getAttribute('data-late') || '';
+                const excused = button.getAttribute('data-excused') || '';
+
 
                 // Update the modal's content
                 const modalTitle = exampleModal.querySelector('.modal-title');
@@ -354,25 +370,31 @@
                 studentIdInput.value = studentId;
 
                 // Update the attendance inputs
-                const inputAbsent = exampleModal.querySelector('#data-absent');
-                inputAbsent.value = absent;
+                // const inputAbsent = exampleModal.querySelector('#data-absent');
+                // inputAbsent.value = absent;
 
-                const inputPresent = exampleModal.querySelector('#data-present');
-                inputPresent.value = present;
+                // const inputPresent = exampleModal.querySelector('#data-present');
+                // inputPresent.value = present;
 
-                const inputLate = exampleModal.querySelector('#data-late');
-                inputLate.value = late;
+                // const inputLate = exampleModal.querySelector('#data-late');
+                // inputLate.value = late;
 
-                axios.get('/attendance/' + studentId)
-                .then(function (response) {
-                    var attendanceData = response.data;
-                    document.getElementById('data-absent').value = attendanceData.absent;
-                    document.getElementById('data-present').value = attendanceData.present;
-                    document.getElementById('data-late').value = attendanceData.late;
-                })
-                .catch(function (error) {
-                    console.error('Error fetching attendance data:', error);
-                });
+                
+                // const inputExcused = exampleModal.querySelector('#data-excused');
+                // inputExcused.value = excused;
+
+                // axios.get('/attendance/' + studentId)
+                // .then(function (response) {
+                //     var attendanceData = response.data;
+                //     document.getElementById('data-absent').value = attendanceData.absent;
+                //     document.getElementById('data-present').value = attendanceData.present;
+                //     document.getElementById('data-late').value = attendanceData.late;
+                //     document.getElementById('data-excused').value = attendanceData.excused;
+
+                // })
+                // .catch(function (error) {
+                //     console.error('Error fetching attendance data:', error);
+                // });
             });
         }
 

@@ -728,6 +728,7 @@ class TeachController extends Controller
             'absent' => 'required|integer|min:0',
             'present' => 'required|integer|min:0',
             'late' => 'required|integer|min:0',
+            'excused' => 'required|integer|min:0',
         ]);
 
         // Insert or update attendance record
@@ -737,7 +738,10 @@ class TeachController extends Controller
                 'absent' => $validated['absent'],
                 'present' => $validated['present'],
                 'late' => $validated['late'],
-            ]
+                'excused' => $validated['excused'],
+                'sick' =>0,
+                'date'=> '2024-11-11',
+                ]
         );
 
         // Redirect or return a response as needed

@@ -1,3 +1,10 @@
+
+<script>
+    $(document).ready(function() {
+        $('#mainPyp').DataTable();
+    });
+</script>
+
 <div class="container" name="main-pyp" style="display:block;" id="main-pyp-content">
     <table id="mainPyp" class="table table-striped" style="width:100%">
         <thead>

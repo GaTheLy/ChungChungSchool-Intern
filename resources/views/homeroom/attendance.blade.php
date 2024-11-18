@@ -24,6 +24,12 @@
     }
 </style>
 
+<script>
+    $(document).ready(function() {
+        $('#attendance').DataTable();
+    });
+</script>
+
 <div class="container mt-4" id="attendance-content" style="display: none;">
     <h1>Attendance</h1>
 
@@ -37,7 +43,7 @@
             <tr>
                 <th>Name</th>
                 <th>Attendance</th>
-                <th>Total Attendance</th>
+                <th>24 July - 11 November Attendance</th>
             </tr>
         </thead>
         <tbody>
@@ -59,7 +65,13 @@
                         <label class="btn btn-outline-primary" for="excused-{{ $student->nim_pyp }}">EXCUSED</label>
                     </div>
                 </td>
-                <td>total attendance</td>
+                <td 
+                    data-bs-toggle="modal"
+                    data-bs-target="#fillAttendance"
+                    data-bs-whatever="{{ $student->first_name }} {{ $student->last_name }}"
+                    data-student-id="{{ $student->nim_pyp }}">
+                        Fill Attendance
+                </td>
             </tr>
             @endforeach
         </tbody>
@@ -67,7 +79,7 @@
             <tr>
                 <th>Name</th>
                 <th>Attendance</th>
-                <td>total attendance</td>
+                <td>24 July - 11 November attendance</td>
             </tr>
         </tfoot>
     </table>
@@ -177,7 +189,13 @@ function updateAttendanceTable(data) {
                     <label class="btn btn-outline-primary" for="excused-${studentId}">EXCUSED</label>
                 </div>
             </td>
-            <td></td>
+            <td 
+                data-bs-toggle="modal"
+                data-bs-target="#fillAttendance"
+                data-bs-whatever="${record.first_name} ${record.last_name}"
+                data-student-id="${studentId}">
+                        Fill Attendance
+            </td>
         `;
         tbody.appendChild(row);
     });
@@ -209,7 +227,13 @@ function updateAttendanceTableForAllStudents(students) {
                     <label class="btn btn-outline-primary" for="excused-${studentId}">EXCUSED</label>
                 </div>
             </td>
-            <td></td>
+            <td 
+                data-bs-toggle="modal"
+                data-bs-target="#fillAttendance"
+                data-bs-whatever="${student.first_name} ${student.last_name}"
+                data-student-id="${studentId}">
+                        Fill Attendance
+            </td>
         `;
         tbody.appendChild(row);
     });

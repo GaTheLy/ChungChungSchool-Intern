@@ -36,6 +36,14 @@
         height: 50px;
     }
 </style>
+
+<script>
+    $(document).ready(function() {
+        $('#unit').DataTable();
+    });
+</script>
+
+
     <div class="container" name="table-atl-pyp" style="display:none;" id="unit-content">
         <h1>Unit Progress</h1>
 

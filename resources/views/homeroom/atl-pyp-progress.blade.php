@@ -25,6 +25,12 @@
     }
 </style>
 
+<script>
+    $(document).ready(function() {
+        $('#atl-pyp').DataTable();
+    });
+</script>
+
 <div class="container" name="table-atl-pyp" style="display:none;" id="atl-pyp-content">
     <h1>Approaches To Learning Progress</h1>
 
