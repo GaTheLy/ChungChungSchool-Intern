@@ -436,16 +436,17 @@
                         </div>
                         <div class="subject-body">
                                 @foreach($sub_teacher->subject->pypCriteria as $criterion)
-                                    @php
-                                        $grade = $criterion->pypCriteriaProgress->first();
-                                    @endphp
+                                @php
+                                    $grade = $criterion->pypCriteriaProgress->first();
+                                @endphp
 
-                                    @if($grade->description != 'Criteria Not Used')
+                                @if($grade && $grade->description != 'Criteria Not Used')
                                     <div class="subject-row">
                                         <span class="subject-title">• {{$criterion->crit_name}}</span>
-                                        <span class="student-progress">{{$criterion->pypCriteriaProgress->first()->description}}</span>
+                                        <span class="student-progress">{{$grade->description}}</span>
                                     </div>
-                                    @endif
+                                @endif
+
                                 @endforeach
                         </div>
                     </div>
