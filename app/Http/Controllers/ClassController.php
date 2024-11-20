@@ -88,6 +88,8 @@ class ClassController extends Controller
             ->where('role', 'subs') // role 2 = substitute homeroom
             ->first();
 
+        // if not main homeroom, return a var that is a homeroom....
+
         return view('homeroom-teacher-pyp', compact('class', 'students', 'units', 'atls', 'teacher','comments','lines_of_inquiry', 'homeroom', 'coHomeroom', 'substituteHomeroom'));
     }
 

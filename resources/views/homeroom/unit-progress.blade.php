@@ -131,27 +131,40 @@
         
         
         
-        // Handle save button click
         document.getElementById('save-unit-progress-btn').addEventListener('click', function() {
             const unitId = document.getElementById('unit-select').value;
             const unitProgressData = [];
 
             // Gather unit progress data from the table
-            document.querySelectorAll('#unit-content tbody tr').forEach(row => {
-                const studentNim = row.querySelector('input[type="radio"]').name.split('_')[1];
-                const progress = row.querySelector(`input[name="performance_${studentNim}"]:checked`);
-                if (progress) {
-                    unitProgressData.push({
-                        student_id: studentNim,
-                        unit_id: unitId,
-                        performance: progress.value
-                    });
+            const progressTableBody = document.getElementById('progress');
+
+            progressTableBody.querySelectorAll('tr').forEach(row => {
+                // Safely get the student ID from the first radio button in the row
+                const firstRadioButton = row.querySelector('input[type="radio"]');
+                if (!firstRadioButton) {
+                    console.warn('No radio buttons found in row:', row.innerHTML);
+                    return;
                 }
+
+                const studentNim = firstRadioButton.name.split('_')[1];
+                const progress = row.querySelector(`input[name="performance_${studentNim}"]:checked`);
+
+                // Handle case where no radio button is selected
+                if (!progress) {
+                    console.warn(`No progress selected for student ID: ${studentNim}`);
+                    return; // Skip this row or handle accordingly
+                }
+
+                unitProgressData.push({
+                    student_id: studentNim,
+                    unit_id: unitId,
+                    performance: progress.value
+                });
             });
 
             console.log('Sending unit progress data to the server:', unitProgressData);
 
-            // Forward data to the controller
+            // Send data to the server
             fetch('{{ route("homeroom.saveUnitProg") }}', {
                 method: 'POST',
                 headers: {
@@ -169,7 +182,7 @@
                 console.error('Error sending data:', error);
             });
         });
-        
+
 
         // Handle unit selection change
         const classId = '{{ $class->class_id }}';
@@ -228,16 +241,83 @@
                 cell.textContent = 'No Key Concepts available for this unit.';
             }
 
+            fetchUnitProgress(unitId, classId)
+            
+        });
+
+        function fetchUnitProgress(unitId, classId){
             // Fetch progress data for the selected unit
             fetch(`/unit-progress/${unitId}/${classId}`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Fetched unit progress data:', data);
-                    updateTable(data); // Call your function to update the table with the fetched data
+                    if(data.length != 0){
+                        console.log('Fetched unit progress data:', data);
+                        updateTable(data); // Call your function to update the table with the fetched data
+                    } else {
+                        fetchStudents().then(students => {
+                            console.log("students: ", students);
+                            updateUnitTableForStudents(students);
+                        });
+                    }
+                    
                 })
                 .catch(error => console.error('Error fetching data:', error));
-        });
+        }
 
+        function fetchStudents() {
+            return fetch(`/students-by-class/${classId}`)
+                .then(response => response.json()) // This needs to be awaited or chained correctly
+                .then(data => {
+                    console.log("fetch students by class: ", data); // Fix: Log `data`, not `response`
+                    return data; // Return parsed JSON data
+                })
+                .catch(error => {
+                    console.error('Error fetching students data:', error);
+                    return [];
+                });
+        }
+
+        function updateUnitTableForStudents(students){
+            // Ensure the table is visible before updating it
+            const unitContent = document.getElementById('unit-content');
+            unitContent.style.display = 'block';  // Show the table
+
+            // Get the tbody element
+            const tbody = document.querySelector('#unit-content tbody#progress');
+            
+            // Check if the tbody exists
+            if (!tbody) {
+                console.error('Error: tbody element not found.');
+                return;
+            }
+            
+            // Clear the existing table rows
+            tbody.innerHTML = '';
+            students.forEach(student => {
+                const studentId = student.nim_pyp;
+                // console.log(student.nim_pyp);
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${student.first_name} ${student.last_name}</td>
+
+                    <td>
+                        <input type="radio" id="exceeding_${studentId}" name="performance_${studentId}" value="EXCEEDING">
+                        <label for="exceeding_${studentId}">EXCEEDING</label>
+                            
+                        <input type="radio" id="achieving_${studentId}" name="performance_${studentId}" value="ACHIEVING">
+                        <label for="achieving_${studentId}">ACHIEVING</label>
+                            
+                        <input type="radio" id="developing_${studentId}" name="performance_${studentId}" value="DEVELOPING">
+                        <label for="developing_${studentId}">DEVELOPING</label>
+                            
+                        <input type="radio" id="beginning_${studentId}" name="performance_${studentId}" value="BEGINNING">
+                        <label for="beginning_${studentId}">BEGINNING</label>
+                    </td>    
+                `;
+                tbody.appendChild(row);
+            });
+
+        }
         function updateTable(data) {
             // Ensure the table is visible before updating it
             const unitContent = document.getElementById('unit-content');
@@ -255,29 +335,28 @@
             // Clear the existing table rows
             tbody.innerHTML = '';
 
-            // Populate the table with new data
-            data.forEach(progress => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${progress.first_name} ${progress.last_name}</td>
-                    <td>
-                        <input type="radio" id="exceeding_${progress.student_id}" name="performance_${progress.student_id}" value="EXCEEDING" ${progress.description === 'EXCEEDING' ? 'checked' : ''}>
-                        <label for="exceeding_${progress.student_id}">EXCEEDING</label>
-                        
-                        <input type="radio" id="achieving_${progress.student_id}" name="performance_${progress.student_id}" value="ACHIEVING" ${progress.description === 'ACHIEVING' ? 'checked' : ''}>
-                        <label for="achieving_${progress.student_id}">ACHIEVING</label>
-                        
-                        <input type="radio" id="developing_${progress.student_id}" name="performance_${progress.student_id}" value="DEVELOPING" ${progress.description === 'DEVELOPING' ? 'checked' : ''}>
-                        <label for="developing_${progress.student_id}">DEVELOPING</label>
-                        
-                        <input type="radio" id="beginning_${progress.student_id}" name="performance_${progress.student_id}" value="BEGINNING" ${progress.description === 'BEGINNING' ? 'checked' : ''}>
-                        <label for="beginning_${progress.student_id}">BEGINNING</label>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
+                // Populate the table with new data
+                data.forEach(progress => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${progress.first_name} ${progress.last_name}</td>
+                        <td>
+                            <input type="radio" id="exceeding_${progress.student_id}" name="performance_${progress.student_id}" value="EXCEEDING" ${progress.description === 'EXCEEDING' ? 'checked' : ''}>
+                            <label for="exceeding_${progress.student_id}">EXCEEDING</label>
+                            
+                            <input type="radio" id="achieving_${progress.student_id}" name="performance_${progress.student_id}" value="ACHIEVING" ${progress.description === 'ACHIEVING' ? 'checked' : ''}>
+                            <label for="achieving_${progress.student_id}">ACHIEVING</label>
+                            
+                            <input type="radio" id="developing_${progress.student_id}" name="performance_${progress.student_id}" value="DEVELOPING" ${progress.description === 'DEVELOPING' ? 'checked' : ''}>
+                            <label for="developing_${progress.student_id}">DEVELOPING</label>
+                            
+                            <input type="radio" id="beginning_${progress.student_id}" name="performance_${progress.student_id}" value="BEGINNING" ${progress.description === 'BEGINNING' ? 'checked' : ''}>
+                            <label for="beginning_${progress.student_id}">BEGINNING</label>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });   
         }
-
 
     });
 
