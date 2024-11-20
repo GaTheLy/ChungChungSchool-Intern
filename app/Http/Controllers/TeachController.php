@@ -12,6 +12,7 @@ use App\Models\SubjectModel;
 use App\Models\ClassModel;
 use App\Models\MYPCriteria;
 use App\Models\MYPCriteriaDetail;
+use App\Models\SubTeachCrit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -171,7 +172,7 @@ class TeachController extends Controller
     }
 
 
-
+//point
     public function subjectDetail($teacher_id, $sub_id, $class_id)
     {
         $user = Auth::user();
@@ -202,16 +203,45 @@ class TeachController extends Controller
     public function gradeStudent($teacherId, $subjectId, $classId, $studentId)
     {
         $teacher = TeacherPyp::findOrFail($teacherId);
+        // $subjectTeacher = SubjectTeacher::where('subject_pyp_id', $subjectId)
+        //     ->where('teacher_id', $teacher->nip_pyp)
+        //     ->where('yp_pyp_id',)
+        //     ->firstOrFail();
+
+        $yp = DB::table('detail_class_pyp')
+        ->where('class_id', $classId)
+        ->pluck('year_program_pyp_id'); // This returns a collection of yp_pyp_id values
+
+        // Assuming there's only one yp_pyp_id associated with this class,
+        // we pick the first one or handle the case where there's no result.
+        $ypId = $yp->first(); 
+
         $subjectTeacher = SubjectTeacher::where('subject_pyp_id', $subjectId)
             ->where('teacher_id', $teacher->nip_pyp)
+            ->where('yp_pyp_id', $ypId)
             ->firstOrFail();
+        
         $class = ClassModel::where('class_id', $classId)->firstOrFail();
+
         $student = StudentPyp::findOrFail($studentId);
 
-        // Fetch the criteria for the subject
-        $criteria = $subjectTeacher->subject->criteria;
+        // dd($subjectTeacher);
 
-        $subCrit = DB::table('sub_criteria_pyp');
+        // Fetch the criteria for the subject
+        // $criteria = $subjectTeacher->subject->criteria;
+
+
+        // Fetch the filtered criteria for the subject through sub_teach_criteria
+        $criteria = $subjectTeacher->criteria()
+        ->with('subCrit') 
+        ->get();
+
+        // $criteria = SubTeachCrit::where('sub_teach_id', $subjectTeacher->sub_teacher_id)->get();        
+        // dd($criteria);
+
+
+        // $criteria = SubTeachCrit::where('sub_teach_id', $subjectTeacher->sub_teacher_id)->get();
+    
 
         $studentProgress = DB::table('subject_crit_progress')
         ->where('student_id', $student->nim_pyp)
@@ -240,27 +270,25 @@ class TeachController extends Controller
         $studentId = $request->input('student_id');
         $criteriaData = $request->input('criteria');
 
+        // dd($criteriaData);
+
         // Iterate through criteria data pairs
-        foreach ($criteriaData as $key => $data) {
+        foreach ($criteriaData as $data) {
             // Check if current data is sc_pyp_id
-            if (isset($data['sc_pyp_id'])) {
+            if (isset($data['sc_pyp_id'], $data['description'])) {
                 $sc_pyp_id = $data['sc_pyp_id'];
-
-                // Retrieve corresponding description
-                if (isset($criteriaData[$key + 1]['description'])) {
-                    $description = $criteriaData[$key + 1]['description'];
-
-                    // Update or insert the grade for each criterion
-                    DB::table('subject_crit_progress')->updateOrInsert(
-                        [
-                            'student_id' => $studentId,
-                            'sc_pyp_id' => $sc_pyp_id,
-                        ],
-                        [
-                            'description' => $description,
-                        ]
-                    );
-                }
+                $description = $data['description'];
+    
+                // Update or insert the grade for each criterion
+                DB::table('subject_crit_progress')->updateOrInsert(
+                    [
+                        'student_id' => $studentId,
+                        'sc_pyp_id' => $sc_pyp_id,
+                    ],
+                    [
+                        'description' => $description,
+                    ]
+                );
             }
         }
 

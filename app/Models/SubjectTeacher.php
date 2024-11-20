@@ -36,6 +36,7 @@ class SubjectTeacher extends Model
         return $this->belongsTo(SubjectModel::class, 'subject_pyp_id', 'id');
     }
 
+
     // year program
     public function yearProgramPYP()
     {
@@ -61,10 +62,12 @@ class SubjectTeacher extends Model
     }
 
 
-    public function subTeach()
+    public function criteria()
     {
         return $this->hasMany(SubTeachCrit::class, 'sub_teach_id', 'sub_teacher_id');
     }
+
+    
 
 }
 

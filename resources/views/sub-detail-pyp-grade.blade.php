@@ -64,22 +64,22 @@
         </div>
 
         @foreach($criteria as $criterion)
-        <input type="hidden" name="criteria[{{ $criterion->crit_id }}][sc_pyp_id]" value="{{ $criterion->sc_pyp_id }}">
-            <div class="row" style="padding-left:50px;">
-                <div class="col-4">
-                    <p style="font-size: 25px;">{{ $criterion->crit_name }}</p>
-                </div> 
-                <div class="col-2" style="text-align:left;">
-                    <select name="criteria[{{ $criterion->crit_id }}][description]" class="form-select">
-                    <option value="Beginning" {{ isset($studentProgress[$criterion->sc_pyp_id]) && $studentProgress[$criterion->sc_pyp_id]->description == 'Criteria Not Used' ? 'selected' : '' }}>Criteria Not Used</option>
-                    <option value="Beginning" {{ isset($studentProgress[$criterion->sc_pyp_id]) && $studentProgress[$criterion->sc_pyp_id]->description == 'Beginning' ? 'selected' : '' }}>Beginning</option>
-                    <option value="Developing" {{ isset($studentProgress[$criterion->sc_pyp_id]) && $studentProgress[$criterion->sc_pyp_id]->description == 'Developing' ? 'selected' : '' }}>Developing</option>
-                    <option value="Achieving" {{ isset($studentProgress[$criterion->sc_pyp_id]) && $studentProgress[$criterion->sc_pyp_id]->description == 'Achieving' ? 'selected' : '' }}>Achieving</option>
-                    <option value="Exceeding" {{ isset($studentProgress[$criterion->sc_pyp_id]) && $studentProgress[$criterion->sc_pyp_id]->description == 'Exceeding' ? 'selected' : '' }}>Exceeding</option>
-                    </select>  
-                </div>      
-            </div>
+                <input type="hidden" name="criteria[{{ $criterion->subCrit->sc_pyp_id }}][sc_pyp_id]" value="{{ $criterion->subCrit->sc_pyp_id }}">
+                <div class="row" style="padding-left:50px;">
+                    <div class="col-4">
+                        <p style="font-size: 25px;">{{ $criterion->subCrit->crit_name }} {{ $criterion->subCrit->sc_pyp_id }}</p>
+                    </div> 
+                    <div class="col-2" style="text-align:left;">
+                        <select name="criteria[{{ $criterion->subCrit->sc_pyp_id }}][description]" class="form-select">
+                            <option value="Beginning" {{ isset($studentProgress[$criterion->subCrit->sc_pyp_id]) && $studentProgress[$criterion->subCrit->sc_pyp_id]->description == 'Beginning' ? 'selected' : '' }}>Beginning</option>
+                            <option value="Developing" {{ isset($studentProgress[$criterion->subCrit->sc_pyp_id]) && $studentProgress[$criterion->subCrit->sc_pyp_id]->description == 'Developing' ? 'selected' : '' }}>Developing</option>
+                            <option value="Achieving" {{ isset($studentProgress[$criterion->subCrit->sc_pyp_id]) && $studentProgress[$criterion->subCrit->sc_pyp_id]->description == 'Achieving' ? 'selected' : '' }}>Achieving</option>
+                            <option value="Exceeding" {{ isset($studentProgress[$criterion->subCrit->sc_pyp_id]) && $studentProgress[$criterion->subCrit->sc_pyp_id]->description == 'Exceeding' ? 'selected' : '' }}>Exceeding</option>
+                        </select>  
+                    </div>      
+                </div>
         @endforeach
+
     </div>
 </form>
 

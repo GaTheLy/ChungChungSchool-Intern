@@ -6,7 +6,9 @@ use App\Models\ATLPYP;
 use App\Models\LinesOfInquiry;
 use App\Models\SubjectClass;
 use App\Models\StudentPyp;
+use App\Models\SubTeachCrit;
 use App\Models\TeacherPyp;
+use App\Models\PYPCriteria;
 use App\Models\Homeroom;
 use App\Models\User;
 use App\Models\ATLMYP;
@@ -58,10 +60,14 @@ class YearProgramController extends Controller
             $units = Unit::with(['linesOfInquiry', 'keyConcepts'])->get();
             $subjectPYP = SubjectModel::where('subject_level', 'PYP')->get();
             $teacherPYP = TeacherPyp::where('is_pyp', 1)->get();
-            $detailSubPYP = SubjectTeacher::where('level', 'PYP')->with(['subject', 'teacher'])->get();
-        
+            $detailSubPYP = SubjectTeacher::where('level', 'PYP')
+            ->with(['subject', 'teacher', 'classes'])
+            ->get();
+                
             // Fetch PYP details with multiple homeroom teachers
-            $detailClassPYP = DetailClassPYP::with(['class.homerooms.teacher'])->get();
+            // $detailClassPYP = DetailClassPYP::with(['class.homerooms.teacher'])->get();
+            $detailClassPYP = DetailClassPYP::with('class')->get();
+
         
             if ($role == 0) {  // admin
                 return view('/admin/yearProgram/yp-admin', compact(
@@ -288,6 +294,7 @@ class YearProgramController extends Controller
             }
         }
 
+        // addsubpypform
         public function addSubjectPYP(Request $request, $userId,$ypId)
         {
             $authUserId = Auth::id();
@@ -312,23 +319,53 @@ class YearProgramController extends Controller
             $detailSubject->level = "PYP";
             $detailSubject->save();
 
-            $classIds = DetailClassPYP::where('year_program_pyp_id', $ypId)->pluck('class_id');
+            // Save selected criteria
+            $criteriaInputs = $request->all(); // Get all inputs
+            foreach ($criteriaInputs as $key => $value) {
+                if (str_starts_with($key, 'criteria_') && $value == 1) { // Check for criteria checkboxes
+                    $criteriaId = str_replace('criteria_', '', $key); // Extract the criteria ID
 
-            foreach($classIds as $classId){
+                    $selectedCriteria = new SubTeachCrit();
+                    $selectedCriteria->sub_teach_id = $detailSubject->sub_teacher_id;
+                    $selectedCriteria->sub_crit_id = $criteriaId;
+                    $selectedCriteria->save();
+                }
+            }
+
+
+            if($request->input('class') == 'ALL'){
+                $classIds = DetailClassPYP::where('year_program_pyp_id', $ypId)->pluck('class_id');
+
+                foreach($classIds as $classId){
+                    $subClassTeach = new SubjectClass();
+                    $subClassTeach->class_id = $classId;
+                    $subClassTeach->subject_teacher_id = $detailSubject->sub_teacher_id;
+                    $subClassTeach->save();
+                }
+            } else {
                 $subClassTeach = new SubjectClass();
-                $subClassTeach->class_id = $classId;
+                $subClassTeach->class_id = $request->input('class');
                 $subClassTeach->subject_teacher_id = $detailSubject->sub_teacher_id;
                 $subClassTeach->save();
             }
 
+            
+
             if ( $detailSubject->save() ) {
                 if ($role == 0) { // admin
-                    return redirect()->route('yearProgram', ['userId' => $teacher->user_id])->with('status', 'Year Program added successfully!');
+                    return redirect()->route('yearProgram', ['userId' => $teacher->user_id])->with('status', 'Year Program subject added successfully!');
                 }
             } else {
                 return back()->withInput()->withErrors(['error' => 'Failed to add year program. Please try again.']);
             }
         }
+
+        public function getCriteria($subjectId)
+        {
+            $criteria = PYPCriteria::where('subject_pyp_id', $subjectId)->get(['sc_pyp_id', 'crit_name']);
+            return response()->json($criteria);
+        }
+
 
         public function addClass(Request $request, $userId,$ypId)
         {

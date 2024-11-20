@@ -23,6 +23,29 @@
         .hidden{
             color: white ;
         }
+
+        .checkbox-wrapper {
+            margin: 5px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-wrapper label {
+            font-weight: bold;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .custom-modal-width {
+            max-width: 45vw; 
+        }
+
+
     </style>
     
         <h1>Year Program</h1>
@@ -154,22 +177,27 @@
                                 <tr class="table table-secondary">
                                     <th>Subjects</th>
                                     <th>Teacher</th>
+                                    <th>Class</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($detailSubPYP as $sub)
+                            @foreach ($detailSubPYP as $sub)
                                 @if ($sub->yp_pyp_id == $ypPYP->id)
                                     <tr>
                                         <td>{{ $sub->subject->subject_name }}</td>
-                                        <td>{{ $sub->teacher->first_name }} {{ $sub->teacher->last_name }}</td> <!-- Assuming 'name' is the teacher's name column -->
+                                        <td>{{ $sub->teacher->first_name }} {{ $sub->teacher->last_name }}</td>
+                                        <td>
+                                            {{ $sub->classes->pluck('class_name')->implode(', ') }}
+                                        </td>
                                     </tr>
                                 @endif
-                                @endforeach
+                            @endforeach
+
                             </tbody>
                         </table>
                         <div class="row">
                             <div class="col" style="text-align:right;margin-right:10px;margin-top:10px;">
-                            <button class="btn me-md-2" type="button" id="addSubjectPYP" data-bs-toggle="modal" data-bs-target="#staticAddSubjectPYP" data-bs-ypId = "{{$ypPYP->id}}" data-bs-ypName = "{{$ypPYP->name}}">
+                            <button class="btn me-md-2" type="button" id="addSubjectPYP" data-bs-toggle="modal" data-bs-target="#staticAddSubjectPYP" data-bs-ypId = "{{$ypPYP->id}}" data-bs-ypName = "{{$ypPYP->name}}" data-class-pyp="{{ json_encode($detailClassPYP) }}">
                                 add subject                                 
                                 <i class="lni lni-circle-plus"></i>
                             </button>
@@ -619,8 +647,8 @@
 
         {{-- modal Add Subject for PYP --}}
         <div class="modal fade" id="staticAddSubjectPYP" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticAddSubjectPYPLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
+        <div class="modal-dialog modal-dialog-centered custom-modal-width">
+        <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="modal-titleSubPYP">Add New Subject</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -644,8 +672,8 @@
                         </div>
                     </div>
                     <br>
-                    <div class="row">
-
+                    <div class="row" id="criteria-container">
+                        <!-- Criteria buttons will be dynamically injected here -->
                     </div>
                     <br>
                     <div class="row">
@@ -662,6 +690,21 @@
                         </select>
                         </div>
                     </div>
+                    <br>
+                    {{-- --}}
+                    <div class="row">
+                        <div class="col-4">
+                            <label for="" class="col-form-label"><b>Class</b></label>
+                        </div> 
+
+                        <div class="col-8">
+                            <select name="class" id="class">
+                                <option value="">--Select--</option>
+                                <option value="ALL">All</option>
+                            </select>
+                        </div>
+                    </div>
+
                 
             </div>
             <div class="modal-footer">
@@ -940,6 +983,30 @@
                             // Update the modal title
                             var modalTitle = staticAddSubPYPModal.querySelector('#modal-titleSubPYP');
                             modalTitle.textContent = 'Add New Subject for ' + ypName + ' ' + ypId;
+
+                            // Get the class data passed in data-class-pyp attribute
+                            var classData = JSON.parse(button.getAttribute('data-class-pyp'));
+
+                            // Filter the classes based on the ypId
+                            var selectClass = document.getElementById('class');
+                            selectClass.innerHTML = '<option value="">--Select--</option>'; // Reset the select options
+
+                            classData.forEach(function(detail) {
+                                // Compare the data-bs-ypId with the detail's year_program_pyp_id
+                                if (detail.year_program_pyp_id == ypId && detail.class) {
+                                    var option = document.createElement("option");
+                                    option.value = detail.class.class_id;
+                                    option.text = detail.class.class_name;
+                                    selectClass.appendChild(option);
+                                }
+                            });
+
+
+                            // Add the "All" option at the end
+                            var allOption = document.createElement("option");
+                            allOption.value = "ALL";
+                            allOption.text = "All";
+                            selectClass.appendChild(allOption);
                             
                             // Update the form action URL
                             var form = staticAddSubPYPModal.querySelector('#addSubPYPForm');
@@ -947,6 +1014,54 @@
                             form.action = baseActionUrl.replace('DUMMY_YP_ID', ypId);
                         });
                     }
+
+                    //criteria choose for subject pyp
+                    document.getElementById('subject').addEventListener('change', function() {
+                        const subjectId = this.value;
+                        const criteriaContainer = document.getElementById('criteria-container');
+
+                        // Clear existing criteria
+                        criteriaContainer.innerHTML = '';
+
+                        // Exit if no subject is selected
+                        if (!subjectId) return;
+
+                        // Fetch criteria for the selected subject
+                        fetch(`/get-criteria/${subjectId}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.length === 0) {
+                                    criteriaContainer.innerHTML = '<p>No criteria available for this subject.</p>';
+                                    return;
+                                }
+
+                                // Create checkboxes for each criterion
+                                data.forEach(criteria => {
+                                    const checkboxWrapper = document.createElement('div');
+                                    checkboxWrapper.className = 'checkbox-wrapper';
+
+                                    const label = document.createElement('label');
+                                    label.htmlFor = `criteria_${criteria.sc_pyp_id}`;
+                                    label.innerText = criteria.crit_name;
+
+                                    const checkbox = document.createElement('input');
+                                    checkbox.type = 'checkbox';
+                                    checkbox.id = `criteria_${criteria.sc_pyp_id}`;
+                                    checkbox.name = `criteria_${criteria.sc_pyp_id}`;
+                                    checkbox.value = 1;
+
+                                    // Add elements to the wrapper
+                                    checkboxWrapper.appendChild(checkbox);
+                                    checkboxWrapper.appendChild(label);
+
+                                    // Append the wrapper to the container
+                                    criteriaContainer.appendChild(checkboxWrapper);
+                                });
+                            })
+                            .catch(error => console.error('Error fetching criteria:', error));
+                    });
+
+
 
                     // class pyp
                     var staticAddClassPYPModal = document.getElementById('staticAddPYPClass');
