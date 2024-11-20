@@ -28,5 +28,11 @@ class PYPCriteria extends Model
     {
         return $this->hasMany(PYPCriteriaProgress::class, 'sc_pyp_id', 'sc_pyp_id');
     }
+
+    
+    public function subCrit()
+    {
+        return $this->hasMany(SubTeachCrit::class, 'sub_crit_id', 'sc_pyp_id');
+    }
 }
 

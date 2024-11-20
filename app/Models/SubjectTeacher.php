@@ -59,4 +59,12 @@ class SubjectTeacher extends Model
 
         return $formattedCriteria;
     }
+
+
+    public function subTeach()
+    {
+        return $this->hasMany(SubTeachCrit::class, 'sub_teach_id', 'sub_teacher_id');
+    }
+
 }
+

@@ -19,11 +19,23 @@
                 <tr>
                     <td>{{ $student->first_name }} {{ $student->last_name }}</td>
                     <td> 
-                        @foreach ($comments as $comment )
-                            @if($student->nim_pyp == $comment->student_id)
-                            <textarea name="comments[{{ $student->nim_pyp }}]" id="comment-{{ $student->nim_pyp }}" style="width: 90%; height: 150px; overflow: auto; word-wrap: break-word;" >{{$comment->description}}</textarea>  
-                            @endif
-                        @endforeach
+                    @if (isset($comments) && $comments->where('student_id', $student->nim_pyp)->isNotEmpty())
+                        @php
+                            $comment = $comments->firstWhere('student_id', $student->nim_pyp);
+                        @endphp
+                        <textarea 
+                            name="comments[{{ $student->nim_pyp }}]" 
+                            id="comment-{{ $student->nim_pyp }}" 
+                            style="width: 90%; height: 150px; overflow: auto; word-wrap: break-word;">
+                            {{ $comment->description }}
+                        </textarea>
+                    @else
+                        <textarea 
+                            name="comments[{{ $student->nim_pyp }}]" 
+                            id="comment-{{ $student->nim_pyp }}" 
+                            style="width: 90%; height: 150px; overflow: auto; word-wrap: break-word;">
+                        </textarea>
+                    @endif
                     </td>
                 </tr>
                 @endforeach

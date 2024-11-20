@@ -71,6 +71,8 @@
                     data-bs-whatever="{{ $student->first_name }} {{ $student->last_name }}"
                     data-student-id="{{ $student->nim_pyp }}">
                         Fill Attendance
+                        <br>
+                        Present Late Absent Excused
                 </td>
             </tr>
             @endforeach

@@ -340,7 +340,6 @@
                     <span class="attendance-box" style="background-color: #ff4d4d;">{{$attendance->total_absent}} Absent</span>
                     <span class="attendance-box" style="background-color: #4caf50;">{{$attendance->total_present}} Present</span>
                     <span class="attendance-box" style="background-color: #ffa726;">{{$attendance->total_late}} Late</span>
-                    <span class="attendance-box" style="background-color: #ffeb3b;">{{$attendance->total_sick}} Sick</span>
                     <span class="attendance-box" style="background-color: #ba68c8;">{{$attendance->total_excused}} Excused</span>
                 </div>
             </div>
