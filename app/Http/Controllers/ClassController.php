@@ -152,9 +152,9 @@ class ClassController extends Controller
 
         $teacher = $user->teacher;
         
-        $assignedTeacherIds = Homeroom::pluck('teacher_pyp_id')->toArray();
-        $teachers = TeacherPyp::whereNotIn('nip_pyp', $assignedTeacherIds)->get();
-        // $teachers = TeacherPyp::get();
+        // $assignedTeacherIds = Homeroom::pluck('teacher_pyp_id')->toArray();
+        // $teachers = TeacherPyp::whereNotIn('nip_pyp', $assignedTeacherIds)->get();
+        $teachers = TeacherPyp::get();
         // $students = StudentPyp::get();
         $assignedStudentIds = StudentClass::pluck('nim_pyp')->toArray();
         $students = StudentPyp::whereNotIn('nim_pyp', $assignedStudentIds)->get();
@@ -303,8 +303,9 @@ class ClassController extends Controller
             ->groupBy('role');  // Group by role (main, co, subs)
     
         // Fetch all available teachers who are not yet assigned to a homeroom
-        $assignedTeacherIds = Homeroom::pluck('teacher_pyp_id')->toArray();
-        $teachers = TeacherPyp::whereNotIn('nip_pyp', $assignedTeacherIds)->get();
+        // $assignedTeacherIds = Homeroom::pluck('teacher_pyp_id')->toArray();
+        // $teachers = TeacherPyp::whereNotIn('nip_pyp', $assignedTeacherIds)->get();
+        $teachers = TeacherPyp::get();
     
         // Fetch available students who are not yet assigned to the class
         $assignedStudentIds = StudentClass::pluck('nim_pyp')->toArray();

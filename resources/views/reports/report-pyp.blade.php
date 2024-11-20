@@ -453,7 +453,7 @@
                 @endforeach
             </div>   
             @endif
-
+x`
             <hr>
 
             @if ($custom->homeroom_comments==1)
