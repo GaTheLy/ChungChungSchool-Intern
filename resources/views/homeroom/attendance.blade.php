@@ -43,7 +43,7 @@
             <tr>
                 <th>Name</th>
                 <th>Attendance</th>
-                <th>24 July - 11 November Attendance</th>
+                <th>Total Attendance</th>
             </tr>
         </thead>
         <tbody>
@@ -72,7 +72,6 @@
                     data-student-id="{{ $student->nim_pyp }}">
                         Fill Attendance
                         <br>
-                        Present Late Absent Excused
                 </td>
             </tr>
             @endforeach
@@ -81,7 +80,7 @@
             <tr>
                 <th>Name</th>
                 <th>Attendance</th>
-                <td>24 July - 11 November attendance</td>
+                <td>Total Attendance</td>
             </tr>
         </tfoot>
     </table>
