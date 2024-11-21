@@ -71,21 +71,36 @@ class ClassController extends Controller
         $student->attendance = $attendance; // Assigning attendance data to each student
         }
 
+        foreach ($students as $student) {
+            $attendance = DB::table('attendance_pyp')
+                ->where('student_id', $student->nim_pyp)
+                ->whereDate('date', '2024-11-11') // Filter by date
+                ->get();
+    
+            $student->attendance_count = [
+                'present' => $attendance->where('status', 'present')->count(),
+                'late' => $attendance->where('status', 'late')->count(),
+                'absent' => $attendance->where('status', 'absent')->count(),
+                'excused' => $attendance->where('status', 'excused')->count(),
+            ];
+        }
+
+
         $comments = HomeroomComments::get();
         // dd($comments);
         $homeroom = Homeroom::with('teacher')
         ->where('class_id', $class->class_id)
-        ->where('role', 'main') // role 0 = homeroom
+        ->where('role', 'main') 
         ->first();
 
         $coHomeroom = Homeroom::with('teacher')
             ->where('class_id', $class->class_id)
-            ->where('role', 'co') // role 1 = co-homeroom
+            ->where('role', 'co') 
             ->first();
 
         $substituteHomeroom = Homeroom::with('teacher')
             ->where('class_id', $class->class_id)
-            ->where('role', 'subs') // role 2 = substitute homeroom
+            ->where('role', 'subs') 
             ->first();
 
         // if not main homeroom, return a var that is a homeroom....

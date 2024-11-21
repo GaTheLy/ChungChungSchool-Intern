@@ -22,11 +22,16 @@
         background-color: #0d6efd;
         border-color: #0d6efd;
     }
+
+    ul li{
+        padding-right:10px;
+    }
 </style>
 
 <script>
     $(document).ready(function() {
         $('#attendance').DataTable();
+
     });
 </script>
 
@@ -37,53 +42,91 @@
         <label for="attendance-date" class="form-label">Select Date:</label>
         <input type="date" id="attendance-date" class="form-control d-inline-block w-auto">
     </div>
+    
+<div class="row">
 
-    <table class="table table-striped" style="width:100%" id="attendance">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Attendance</th>
-                <th>Total Attendance</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($students as $student)
-            <tr>
-                <td>{{ $student->first_name }} {{ $student->last_name }}</td>
-                <td>
-                    <div class="btn-group" role="group" aria-label="Attendance">
-                        <input type="radio" class="btn-check" name="attendance_{{ $student->nim_pyp }}" id="present-{{ $student->nim_pyp }}" autocomplete="off">
-                        <label class="btn btn-outline-primary" for="present-{{ $student->nim_pyp }}">PRESENT</label>
+    <div class="col">
+        <table class="table table-striped table-bordered" style="width:100%" id="attendance">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Attendance</th>
+                    <th>Fill All</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($students as $student)
+                <tr>
+                    <td>{{ $student->first_name }} {{ $student->last_name }}</td>
+                    <td>
+                        <div class="btn-group" role="group" aria-label="Attendance">
+                            <input type="radio" class="btn-check" name="attendance_{{ $student->nim_pyp }}" id="present-{{ $student->nim_pyp }}" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="present-{{ $student->nim_pyp }}">PRESENT</label>
 
-                        <input type="radio" class="btn-check" name="attendance_{{ $student->nim_pyp }}" id="late-{{ $student->nim_pyp }}" autocomplete="off">
-                        <label class="btn btn-outline-primary" for="late-{{ $student->nim_pyp }}">LATE</label>
+                            <input type="radio" class="btn-check" name="attendance_{{ $student->nim_pyp }}" id="late-{{ $student->nim_pyp }}" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="late-{{ $student->nim_pyp }}">LATE</label>
 
-                        <input type="radio" class="btn-check" name="attendance_{{ $student->nim_pyp }}" id="absent-{{ $student->nim_pyp }}" autocomplete="off">
-                        <label class="btn btn-outline-primary" for="absent-{{ $student->nim_pyp }}">ABSENT</label>
+                            <input type="radio" class="btn-check" name="attendance_{{ $student->nim_pyp }}" id="absent-{{ $student->nim_pyp }}" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="absent-{{ $student->nim_pyp }}">ABSENT</label>
 
-                        <input type="radio" class="btn-check" name="attendance_{{ $student->nim_pyp }}" id="excused-{{ $student->nim_pyp }}" autocomplete="off">
-                        <label class="btn btn-outline-primary" for="excused-{{ $student->nim_pyp }}">EXCUSED</label>
-                    </div>
-                </td>
-                <td 
-                    data-bs-toggle="modal"
-                    data-bs-target="#fillAttendance"
-                    data-bs-whatever="{{ $student->first_name }} {{ $student->last_name }}"
-                    data-student-id="{{ $student->nim_pyp }}">
-                        Fill Attendance
-                        <br>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-        <tfoot>
-            <tr>
-                <th>Name</th>
-                <th>Attendance</th>
-                <td>Total Attendance</td>
-            </tr>
-        </tfoot>
-    </table>
+                            <input type="radio" class="btn-check" name="attendance_{{ $student->nim_pyp }}" id="excused-{{ $student->nim_pyp }}" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="excused-{{ $student->nim_pyp }}">EXCUSED</label>
+                        </div>
+                    </td>
+                    <td 
+                        data-bs-toggle="modal"
+                        data-bs-target="#fillAttendance"
+                        data-bs-whatever="{{ $student->first_name }} {{ $student->last_name }}"
+                        data-student-id="{{ $student->nim_pyp }}">
+                            Fill Attendance        
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="col-4">
+        <table class="table table-striped table-bordered" id="total-att" style="margin-top:55px;">
+            <thead>
+                <tr>
+                    <th>NIM</th>
+                    <th>Total Attendance</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                @foreach($students as $student)
+                @php
+                $attendance = DB::table('attendance_pyp')
+                ->where('student_id', $student->nim_pyp)
+                ->whereDate('date', '2024-11-11') // Filter by date
+                ->get();
+                @endphp
+                <tr>
+                    <td>{{ $student->nim_pyp}}</td>
+                    <td>
+                    <ul style="display:flex;">
+                        <li>Present: {{ $student->attendance->present }}</li>
+                        <li>Late: {{ $student->attendance->late }}</li>
+                        <li>Absent: {{ $student->attendance->absent }}</li>
+                        <li>Excused: {{ $student->attendance->excused }}</li>
+                    </ul>
+                    </td>
+                </tr>
+                    
+                @endforeach
+                
+            </tbody>
+        </table>
+        <span>
+            note: the total attendance showed only from data filled in the Fill Attendance Form
+        </span>
+
+    </div>
+
+    </div>
+            
 
     <div class="text-end mt-3">
         <button type="button" class="btn btn-primary" id="save-attendance-btn">Save</button>

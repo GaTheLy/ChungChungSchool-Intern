@@ -47,6 +47,8 @@ class HomeroomController extends Controller
             ->get();
         }
 
+        
+
         // dd($attendanceRecords);
         return response()->json($attendanceRecords);
     }
