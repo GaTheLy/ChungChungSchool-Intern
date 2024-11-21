@@ -63,16 +63,30 @@ class YearProgramController extends Controller
             $detailSubPYP = SubjectTeacher::where('level', 'PYP')
             ->with(['subject', 'teacher', 'classes'])
             ->get();
-                
             // Fetch PYP details with multiple homeroom teachers
             // $detailClassPYP = DetailClassPYP::with(['class.homerooms.teacher'])->get();
             $detailClassPYP = DetailClassPYP::with('class')->get();
+            // Get the subject criteria related to the subject teacher, year program, and class
+            // $subjectTeacherCriteria = SubTeachCrit::with(['subTeach' => function($query) {
+            //     $query->whereHas('classes', function($query) {
+            //         $query->where('class_id', $classId); // Add the classId to filter the class
+            //     })
+            //     ->whereHas('yearProgramPYP', function($query) {
+            //         $query->where('yp_pyp_id', $ypPYPId); // Filter by Year Program
+            //     });
+            // }])->get();
 
+            // Get criteria selected by class, year program, and subject teacher
+            $selectedCriteria = SubTeachCrit::with(['subTeach.subject', 'subTeach.classes', 'subCrit'])
+            ->whereHas('subTeach', function ($query) {
+                $query->where('level', 'PYP'); // Ensure it's for PYP level
+            })
+            ->get();
         
             if ($role == 0) {  // admin
                 return view('/admin/yearProgram/yp-admin', compact(
                     'teacher', 'yearProgramMYP', 'subjectMYP', 'teacherMYP', 'class', 'detailSubMYP', 'detailClassMYP',
-                    'boundaries', 'units', 'yearProgramPYP', 'subjectPYP', 'teacherPYP', 'detailSubPYP', 'detailClassPYP'
+                    'boundaries', 'units', 'yearProgramPYP', 'subjectPYP', 'teacherPYP', 'detailSubPYP', 'detailClassPYP', 'selectedCriteria'
                 ));
             }
         }
@@ -366,6 +380,75 @@ class YearProgramController extends Controller
             return response()->json($criteria);
         }
 
+//edit subjectpyp
+        //fetch previous criteria
+        public function fetchCriteria($subjectId)
+            {
+                // Fetch the subject teacher record with criteria
+                $subjectTeacher = SubjectTeacher::with('criteria.subCrit')->find($subjectId);
+
+                if (!$subjectTeacher) {
+                    return response()->json([], 404);
+                }
+
+                // Get all criteria for the subject
+                $criteria = PYPCriteria::where('subject_pyp_id', $subjectTeacher->subject_pyp_id)->get();
+
+                // Prepare the response
+                $response = $criteria->map(function ($criterion) use ($subjectTeacher) {
+                    return [
+                        'sc_pyp_id' => $criterion->sc_pyp_id,
+                        'crit_name' => $criterion->crit_name,
+                        'is_checked' => $subjectTeacher->criteria->contains('sub_crit_id', $criterion->sc_pyp_id),
+                    ];
+                });
+
+                return response()->json($response);
+            }
+
+        public function editSubjectPYP(Request $request, $subjectId)
+        {
+            // Fetch the subject teacher record
+            $subjectTeacher = SubjectTeacher::find($subjectId);
+
+            if (!$subjectTeacher) {
+                return back()->withErrors(['error' => 'Subject not found.']);
+            }
+
+            // Delete old criteria
+            SubTeachCrit::where('sub_teach_id', $subjectId)->delete();
+
+            // Add new criteria
+            foreach ($request->all() as $key => $value) {
+                if (str_starts_with($key, 'criteria_') && $value == 1) {
+                    SubTeachCrit::create([
+                        'sub_teach_id' => $subjectId,
+                        'sub_crit_id' => str_replace('criteria_', '', $key),
+                    ]);
+                }
+            }
+
+            // Update assigned class
+            if ($request->class == 'ALL') {
+                $classIds = DetailClassPYP::where('year_program_pyp_id', $subjectTeacher->yp_pyp_id)->pluck('class_id');
+                SubjectClass::where('subject_teacher_id', $subjectId)->delete();
+
+                foreach ($classIds as $classId) {
+                    SubjectClass::create([
+                        'subject_teacher_id' => $subjectId,
+                        'class_id' => $classId,
+                    ]);
+                }
+            } else {
+                SubjectClass::where('subject_teacher_id', $subjectId)->delete();
+                SubjectClass::create([
+                    'subject_teacher_id' => $subjectId,
+                    'class_id' => $request->class,
+                ]);
+            }
+
+            return redirect()->route('yearProgram', ['userId' => Auth::id()])->with('status', 'Subject updated successfully!');
+        }
 
         public function addClass(Request $request, $userId,$ypId)
         {

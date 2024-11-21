@@ -147,6 +147,14 @@ Route::post('/year-program-add-subject/{userId}/{ypId}', [YearProgramController:
 Route::post('/year-program-add-subjectPYP/{userId}/{ypId}', [YearProgramController::class, 'addSubjectPYP'])
 ->middleware(['auth', 'verified'])->name('yearProgram-add.subjectPYP');
 
+//edit subject pyp
+Route::get('/criteria/{subjectId}', [YearProgramController::class, 'fetchCriteria']);
+Route::post('/year-program-edit-subjectPYP/{subjectId}', [YearProgramController::class, 'editSubjectPYP'])
+    ->middleware(['auth', 'verified'])
+    ->name('yearProgram-edit.subjectPYP');
+
+
+
 Route::get('/get-criteria/{subjectId}', [YearProgramController::class, 'getCriteria'])->name('get.criteria');
 
 

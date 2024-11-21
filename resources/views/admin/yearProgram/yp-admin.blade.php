@@ -176,8 +176,10 @@
                             <thead>
                                 <tr class="table table-secondary">
                                     <th>Subjects</th>
+                                    <th>Criteria</th>
                                     <th>Teacher</th>
                                     <th>Class</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -185,9 +187,21 @@
                                 @if ($sub->yp_pyp_id == $ypPYP->id)
                                     <tr>
                                         <td>{{ $sub->subject->subject_name }}</td>
+                                        <td>
+                                            @foreach ($sub->criteria as $criterion)
+                                                {{ $criterion->subCrit->crit_name }}<br>
+                                            @endforeach 
+                                        </td>
                                         <td>{{ $sub->teacher->first_name }} {{ $sub->teacher->last_name }}</td>
                                         <td>
                                             {{ $sub->classes->pluck('class_name')->implode(', ') }}
+                                        </td>
+                                        <td>
+                                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editSubjectModal" 
+                                            data-subject-id="{{ $sub->sub_teacher_id }}"
+                                            data-class-info="{{ json_encode($sub->classes->pluck('class_name', 'class_id')->toArray()) }}">
+                                            Edit
+                                        </button>
                                         </td>
                                     </tr>
                                 @endif
@@ -715,6 +729,10 @@
             </div>
         </div>
         </div>
+
+        {{-- modal edit Subject for PYP --}}
+        @include('admin.yearProgram.yp-edit-subject-pyp')
+
 
         {{-- modal Add Class for PYP --}}
         <div class="modal fade" id="staticAddPYPClass" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticAddPYPClassLabel" aria-hidden="true">
