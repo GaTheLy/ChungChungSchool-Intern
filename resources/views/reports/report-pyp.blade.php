@@ -466,6 +466,30 @@
                         </div>
                     </div>
                     @endif
+                @else
+                    <div class="subject">
+                        <div class="subject-header">
+                            <img src="path/to/subject-icon.png" alt="Subject Icon">
+                            <h3>{{ $sub_teacher->subject->subject_name }}</h3>
+                            <h5 style='text-align:right;'>Student Progress</h5>
+                        </div>
+                        <div class="subject-body">
+                                @foreach($sub_teacher->subject->pypCriteria as $criterion)
+                                @php
+                                    $grade = $criterion->pypCriteriaProgress->first();
+                                @endphp
+
+                                @if($grade && $grade->description != 'Criteria Not Used')
+                                    <div class="subject-row">
+                                        <span class="subject-title">• {{$criterion->crit_name}}</span>
+                                        <span class="student-progress">{{$grade->description}}</span>
+                                    </div>
+                                @endif
+
+                                @endforeach
+                        </div>
+                    </div>
+
                 @endif
                 @endforeach
             </div>   
