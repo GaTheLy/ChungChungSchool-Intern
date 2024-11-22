@@ -195,9 +195,14 @@ class ReportController extends Controller
             ->get();
 
         // Attendance
+        // $attendance = DB::table('attendance_pyp')
+        //     ->where('student_id', $student->nim_pyp) // Nambah where buat date jadi date yang dicount between year_prog start date & end date
+        //     ->selectRaw('SUM(present) as total_present, SUM(late) as total_late, SUM(absent) as total_absent, SUM(sick) as total_sick, SUM(excused) as total_excused')
+        //     ->first();
+
         $attendance = DB::table('attendance_pyp')
             ->where('student_id', $student->nim_pyp) // Nambah where buat date jadi date yang dicount between year_prog start date & end date
-            ->selectRaw('SUM(present) as total_present, SUM(late) as total_late, SUM(absent) as total_absent, SUM(sick) as total_sick, SUM(excused) as total_excused')
+            ->where('date', '2024-11-11')
             ->first();
 
         // Teacher Comment

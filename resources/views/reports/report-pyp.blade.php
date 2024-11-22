@@ -333,6 +333,7 @@
                     PYP Principal
                 </div>
             </div>
+{{--  
             @if ($custom->attendance==1)
             <div class="section">
                 <h3>Attendance</h3>
@@ -341,6 +342,18 @@
                     <span class="attendance-box" style="background-color: #4caf50;">{{$attendance->total_present}} Present</span>
                     <span class="attendance-box" style="background-color: #ffa726;">{{$attendance->total_late}} Late</span>
                     <span class="attendance-box" style="background-color: #ba68c8;">{{$attendance->total_excused}} Excused</span>
+                </div>
+            </div>
+            @endif
+--}}
+            @if ($custom->attendance==1)
+            <div class="section">
+                <h3>Attendance</h3>
+                <div class="attendance-summary">
+                    <span class="attendance-box" style="background-color: #ff4d4d;">{{$attendance->absent}} Absent</span>
+                    <span class="attendance-box" style="background-color: #4caf50;">{{$attendance->present}} Present</span>
+                    <span class="attendance-box" style="background-color: #ffa726;">{{$attendance->late}} Late</span>
+                    <span class="attendance-box" style="background-color: #ba68c8;">{{$attendance->excused}} Excused</span>
                 </div>
             </div>
             @endif
@@ -427,6 +440,9 @@
             <div class="subjects-section">
                 <h3 style='font-size: 20px;margin: 5px 0;color: #0056b3;'>Subjects</h3>
                 @foreach($subject_teacher_s as $sub_teacher)
+                @if ($student->class->first()->homerooms->where('role', 'co')->isNotEmpty())
+                    @if ($sub_teacher->teacher_id != $student->class->first()->homerooms->where('role', 'co')->first()->teacher->nip_pyp )
+                    
                     <div class="subject">
                         <div class="subject-header">
                             <img src="path/to/subject-icon.png" alt="Subject Icon">
@@ -449,6 +465,8 @@
                                 @endforeach
                         </div>
                     </div>
+                    @endif
+                @endif
                 @endforeach
             </div>   
             @endif
