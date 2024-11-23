@@ -438,63 +438,93 @@
 
             @if ($custom->subjects==1)
             <div class="subjects-section">
-                <h3 style='font-size: 20px;margin: 5px 0;color: #0056b3;'>Subjects</h3>
-                @foreach($subject_teacher_s as $sub_teacher)
-                @if ($student->class->first()->homerooms->where('role', 'co')->isNotEmpty())
-                    @if ($sub_teacher->teacher_id != $student->class->first()->homerooms->where('role', 'co')->first()->teacher->nip_pyp )
-                    
-                    <div class="subject">
-                        <div class="subject-header">
-                            <img src="path/to/subject-icon.png" alt="Subject Icon">
-                            <h3>{{ $sub_teacher->subject->subject_name }}</h3>
-                            <h5 style='text-align:right;'>Student Progress</h5>
-                        </div>
-                        <div class="subject-body">
-                                @foreach($sub_teacher->subject->pypCriteria as $criterion)
-                                @php
-                                    $grade = $criterion->pypCriteriaProgress->first();
-                                @endphp
+    <h3 style='font-size: 20px;margin: 5px 0;color: #0056b3;'>Subjects</h3>
+    @foreach($subject_teacher_s as $sub_teacher)
+        @php
+            // Retrieve homerooms
+            $mainHomeroom = $student->class->first()->homerooms->where('role', 'main')->first();
+            $coHomeroom = $student->class->first()->homerooms->where('role', 'co')->first();
 
-                                @if($grade && $grade->description != 'Criteria Not Used')
-                                    <div class="subject-row">
-                                        <span class="subject-title">• {{$criterion->crit_name}}</span>
-                                        <span class="student-progress">{{$grade->description}}</span>
-                                    </div>
-                                @endif
+            // Check if the subject is taught by main or co homerooms
+            $isMainHomeroomSubject = $mainHomeroom && $sub_teacher->teacher_id == $mainHomeroom->teacher->nip_pyp;
+            $isCoHomeroomSubject = $coHomeroom && $sub_teacher->teacher_id == $coHomeroom->teacher->nip_pyp;
+        @endphp
 
-                                @endforeach
-                        </div>
-                    </div>
-                    @endif
-                @else
-                    <div class="subject">
-                        <div class="subject-header">
-                            <img src="path/to/subject-icon.png" alt="Subject Icon">
-                            <h3>{{ $sub_teacher->subject->subject_name }}</h3>
-                            <h5 style='text-align:right;'>Student Progress</h5>
-                        </div>
-                        <div class="subject-body">
-                                @foreach($sub_teacher->subject->pypCriteria as $criterion)
-                                @php
-                                    $grade = $criterion->pypCriteriaProgress->first();
-                                @endphp
+        @if($isMainHomeroomSubject)
+            {{-- Show the subject taught by the main homeroom --}}
+            <div class="subject">
+                <div class="subject-header">
+                    <img src="path/to/subject-icon.png" alt="Subject Icon">
+                    <h3>{{ $sub_teacher->subject->subject_name }}</h3>
+                    <h5 style='text-align:right;'>Student Progress</h5>
+                </div>
+                <div class="subject-body">
+                    @foreach($sub_teacher->subject->pypCriteria as $criterion)
+                        @php
+                            $grade = $criterion->pypCriteriaProgress->first();
+                        @endphp
 
-                                @if($grade && $grade->description != 'Criteria Not Used')
-                                    <div class="subject-row">
-                                        <span class="subject-title">• {{$criterion->crit_name}}</span>
-                                        <span class="student-progress">{{$grade->description}}</span>
-                                    </div>
-                                @endif
+                        @if($grade && $grade->description != 'Criteria Not Used')
+                            <div class="subject-row">
+                                <span class="subject-title">• {{$criterion->crit_name}}</span>
+                                <span class="student-progress">{{$grade->description}}</span>
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+            </div>
+        @elseif(!$isMainHomeroomSubject && $isCoHomeroomSubject)
+            {{-- Show the subject taught only by the co homeroom --}}
+            <div class="subject">
+                <div class="subject-header">
+                    <img src="path/to/subject-icon.png" alt="Subject Icon">
+                    <h3>{{ $sub_teacher->subject->subject_name }}</h3>
+                    <h5 style='text-align:right;'>Student Progress</h5>
+                </div>
+                <div class="subject-body">
+                    @foreach($sub_teacher->subject->pypCriteria as $criterion)
+                        @php
+                            $grade = $criterion->pypCriteriaProgress->first();
+                        @endphp
 
-                                @endforeach
-                        </div>
-                    </div>
+                        @if($grade && $grade->description != 'Criteria Not Used')
+                            <div class="subject-row">
+                                <span class="subject-title">• {{$criterion->crit_name}}</span>
+                                <span class="student-progress">{{$grade->description}}</span>
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+            </div>
+        @elseif(!$isMainHomeroomSubject && !$isCoHomeroomSubject)
+            {{-- Show other subjects not taught by both main and co homerooms --}}
+            <div class="subject">
+                <div class="subject-header">
+                    <img src="path/to/subject-icon.png" alt="Subject Icon">
+                    <h3>{{ $sub_teacher->subject->subject_name }}</h3>
+                    <h5 style='text-align:right;'>Student Progress</h5>
+                </div>
+                <div class="subject-body">
+                    @foreach($sub_teacher->subject->pypCriteria as $criterion)
+                        @php
+                            $grade = $criterion->pypCriteriaProgress->first();
+                        @endphp
 
-                @endif
-                @endforeach
-            </div>   
+                        @if($grade && $grade->description != 'Criteria Not Used')
+                            <div class="subject-row">
+                                <span class="subject-title">• {{$criterion->crit_name}}</span>
+                                <span class="student-progress">{{$grade->description}}</span>
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+            </div>
+        @endif
+    @endforeach
+</div>
+
             @endif
-x`
+
             <hr>
 
             @if ($custom->homeroom_comments==1)
