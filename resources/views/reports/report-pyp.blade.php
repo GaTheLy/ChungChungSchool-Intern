@@ -200,8 +200,7 @@
         }
 
         .programme-inquiry h2 {
-            font-size: 24px;
-            color: #0056b3;
+            font-size: 20px;
             margin: 0 0 10px;
         }
 
@@ -270,6 +269,13 @@
             font-size: 14px;
         }
 
+        .student-progress-descriptor {
+            width: 100%;
+            margin: 10px 0;
+            padding: 5px;
+            border: 1px solid #ddd;
+        }
+
 
     </style>
 </head>
@@ -284,38 +290,54 @@
                 <p>Prepared: {{ \Carbon\Carbon::today()->format('d/m/Y') }}</p>
             </div>
         </div>
-
+<br/>
         <div class="report-body">
+
             <div class="teacher-info">
-                <div>
-                    <strong>{{ $student->first_name }} {{ $student->last_name }}</strong><br>
-                    Grade<br>
-                    {{ $student->class->first()->class_name }}
-                </div>
-                
-                <div>
-                    <h5>Homeroom Teachers</h5>
+                <table>
+                    <tbody>
+                        <tr style="line-height:0;">
+                            <td colspan="2">
+                            <strong>{{ $student->first_name }} {{ $student->last_name }}</strong>
 
-                    @if ($student->class->first()->homerooms->where('role', 'main')->isNotEmpty())
-                        <div>
-                            <b>Homeroom:</b>
-                            {{ $student->class->first()->homerooms->where('role', 'main')->first()->teacher->first_name }}
-                            {{ $student->class->first()->homerooms->where('role', 'main')->first()->teacher->last_name }}
-                        </div>
-                    @endif
+                            </td>
+                        </tr>
+                        <tr style="line-height:0;">
+                            <td>
+                            <h5> Grade</h5>
+                            </td>
+                            <td margin-right="5px"></td>
+                            <td>
+                            <h5>Homeroom Teachers</h5>
+                            </td>
+                        </tr>
+                        <tr style="line-height:0;">
+                            <td style="vertical-align: top;">
+                            {{ $student->class->first()->class_name }}
+                            </td>
+                            <td margin-right="5px"></td>
+                            <td>
+                            @if ($student->class->first()->homerooms->where('role', 'main')->isNotEmpty())
+                                <div style="margin-bottom:24px;">
+                                    {{ $student->class->first()->homerooms->where('role', 'main')->first()->teacher->first_name }}
+                                    {{ $student->class->first()->homerooms->where('role', 'main')->first()->teacher->last_name }}
+                                </div>
+                            @endif
 
-                    @if ($student->class->first()->homerooms->where('role', 'co')->isNotEmpty())
-                        <div>
-                            <b>Co-Homeroom:</b>
-                            {{ $student->class->first()->homerooms->where('role', 'co')->first()->teacher->first_name }}
-                            {{ $student->class->first()->homerooms->where('role', 'co')->first()->teacher->last_name }}
-                        </div>
-                    @endif
-                </div>
+                            @if ($student->class->first()->homerooms->where('role', 'co')->isNotEmpty())
+                                <div>
+                                    {{ $student->class->first()->homerooms->where('role', 'co')->first()->teacher->first_name }}
+                                    {{ $student->class->first()->homerooms->where('role', 'co')->first()->teacher->last_name }} 
+                                </div>
+                            @endif
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
 
             </div>
-
+ 
             <div class="message mt-4">
                 <p>Dear Parents,</p>
                 {{ $greetings }}
@@ -358,30 +380,77 @@
             </div>
             @endif
 
+            <div class="page-break"></div>
+  
+            <div class="student-progress-descriptor">
+            <img src="{{ asset('assets-image/'. $progressDesc) }}" alt="progress-descriptor" style="max-height:100vh;width:100%;">
+            </div>
 
             <div class="page-break"></div>
 
+
+            <div class="ib-learner-profile">
+            <img src="{{ asset('assets-image/'. $ibProfile) }}" alt="learner-profile" style="max-height:100vh;width:100%;">
+            </div>
+
+            <div class="page-break"></div>
+{{----}}
+
             <div class="programme-inquiry">
-                <h2>Programme of Inquiry</h2>
+                <table>
+                <tr>
+                    <td>
+                    <img src="{{ asset('assets-image/'. 'poi_logo.jpg') }}" alt="logo" width="32px;" > 
+                    </td>
+                    <td>
+                    <h2 style="margin-top:8px;">Programme of Inquiry</h2>
+                    </td>
+                </tr>
+                </table>
+
+                @php
+                $index = 1;
+                @endphp
+                
+
                 @foreach($units as $unit)
                 <div class="unit">
                     <div class="unit-header">
-                        <h3>{{$unit->name}}</h3>
+                        <h3>Unit {{ $index }} - {{ $unit->name}}</h3>
                         <div class="student-progress-unit"><strong>{{$unit->description}}</strong> <br>Student Progress</div>
                     </div>
                     @if ($custom->central_idea==1)
+        
                     <div class="central-idea">
-                        <h4>The Central Idea</h4>
-                        <p>{{$unit->central_idea}}</p>
+                    <table>
+                    <tr>
+                        <td>
+                        <img src="{{ asset('assets-image/'. 'ci_logo.jpg') }}" alt="logo" width="20px;"  > 
+                        </td>
+                        <td>
+                        <h4 style="margin-top:8px;">The Central Idea</h4>
+                        </td>
+                    </tr>
+                    </table>
+                    <p>{{$unit->central_idea}}</p>
                     </div>
                      @endif
 
                     @if ($custom->lines_of_inquiry==1)
                     <div class="lines-of-inquiry">
-                        <h4>Lines of Inquiry</h4>
+                    <table>
+                    <tr>
+                        <td>
+                        <img src="{{ asset('assets-image/'. 'loi_logo.jpg') }}" alt="logo" width="20px;"  > 
+                        </td>
+                        <td>
+                        <h4 style="margin-top:4px;">Lines Of Inquiry</h4>
+                        </td>
+                    </tr>
+                    </table>                        
                         <ul>
                             @foreach($unit->line_of_inquiries as $loa)
-                                <li>{{$loa->description}}</li>
+                                <li>• {{$loa->description}}</li>
                             @endforeach
                         </ul>
                     </div>
@@ -389,7 +458,10 @@
 
                     @if ($custom->key_concepts==1)
                     <div class="key-concepts">
-                        <h4>Key Concepts</h4>
+                            <img src="{{ asset('assets-image/'. 'kc_logo.jpg') }}" alt="logo" width="20px;"  > 
+                            
+                            <h4 style="margin-top:4px;">Key Concepts</h4>
+
                         <table>
                             <thead>
                                 <tr>
@@ -400,7 +472,11 @@
                             <tbody>
                                 @foreach($unit->key_concepts as $key_concept)
                                 <tr>
-                                    <td>{{$key_concept->topic}}</td>
+                                    <td style="text-align:center;">
+                                    <img src="{{ asset('key-concepts/'. $key_concept->icon)}}" alt="logo" width="48px;"  > 
+                                    <br/>
+                                    {{$key_concept->topic}}
+                                    </td>
                                     <td><strong>{{$key_concept->question}}</strong>  <br>
                                     {{$key_concept->definition}}</td>
                                 </tr>
@@ -410,6 +486,9 @@
                     </div>
                     @endif  
                 </div>
+                @php
+                $index+=1;
+                @endphp
                 @endforeach
             </div>
 
@@ -417,7 +496,16 @@
             <div class="page-break"></div>
             @if ($custom->atl==1)
             <div class="atl-section">
-                <h3>Approaches to Learning</h3>
+                <table>
+                    <tr>
+                        <td>
+                        <img src="{{ asset('atls/'. 'atl_icon.jpg') }}" alt="logo" width="32px;"  > 
+                        </td>
+                        <td>
+                        <h3 style="margin-top:4px;">Approaches to Learning</h3>
+                        </td>
+                    </tr>
+                </table>   
                     <div class="atl">
                         <div class="atl-header">
                             <h5 style='text-align:right;'>Student Progress</h5>
@@ -438,7 +526,16 @@
 
             @if ($custom->subjects==1)
             <div class="subjects-section">
-    <h3 style='font-size: 20px;margin: 5px 0;color: #0056b3;'>Subjects</h3>
+                <table>
+                    <tr>
+                        <td>
+                        <img src="{{ asset('subjects/'. 'subjects_icon.jpg') }}" alt="logo" width="32px;"  > 
+                        </td>
+                        <td>
+                        <h3 style='font-size: 20px;margin: 5px 0;'>Subjects</h3>
+                        </td>
+                    </tr>
+                </table>   
     @foreach($subject_teacher_s as $sub_teacher)
         @php
             // Retrieve homerooms
@@ -454,8 +551,16 @@
             {{-- Show the subject taught by the main homeroom --}}
             <div class="subject">
                 <div class="subject-header">
-                    <img src="path/to/subject-icon.png" alt="Subject Icon">
-                    <h3>{{ $sub_teacher->subject->subject_name }}</h3>
+                    <table>
+                        <tr>
+                            <td>
+                            <img src="{{ asset('subjects/'. 'unknown_subject.jpg') }}" alt="logo" width="20px;" >
+                            </td>
+                            <td>
+                            <h3>{{ $sub_teacher->subject->subject_name }}</h3>
+                            </td>
+                        </tr>
+                    </table>
                     <h5 style='text-align:right;'>Student Progress</h5>
                 </div>
                 <div class="subject-body">
@@ -477,8 +582,16 @@
             {{-- Show the subject taught only by the co homeroom --}}
             <div class="subject">
                 <div class="subject-header">
-                    <img src="path/to/subject-icon.png" alt="Subject Icon">
-                    <h3>{{ $sub_teacher->subject->subject_name }}</h3>
+                    <table>
+                        <tr>
+                            <td>
+                            <img src="{{ asset('subjects/'. 'unknown_subject.jpg') }}" alt="logo" width="20px;" >
+                            </td>
+                            <td>
+                            <h3>{{ $sub_teacher->subject->subject_name }}</h3>
+                            </td>
+                        </tr>
+                    </table>
                     <h5 style='text-align:right;'>Student Progress</h5>
                 </div>
                 <div class="subject-body">
@@ -500,9 +613,18 @@
             {{-- Show other subjects not taught by both main and co homerooms --}}
             <div class="subject">
                 <div class="subject-header">
-                    <img src="path/to/subject-icon.png" alt="Subject Icon">
-                    <h3>{{ $sub_teacher->subject->subject_name }}</h3>
+                    <table>
+                        <tr>
+                            <td>
+                            <img src="{{ asset('subjects/'. 'unknown_subject.jpg') }}" alt="logo" width="20px;" >
+                            </td>
+                            <td>
+                            <h3>{{ $sub_teacher->subject->subject_name }}</h3>
+                            </td>
+                        </tr>
+                    </table>
                     <h5 style='text-align:right;'>Student Progress</h5>
+
                 </div>
                 <div class="subject-body">
                     @foreach($sub_teacher->subject->pypCriteria as $criterion)

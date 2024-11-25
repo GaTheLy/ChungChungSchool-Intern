@@ -78,6 +78,7 @@ class ReportController extends Controller
 
         $filenameSign = $custom ? $custom->signpath : 'ccs-logo.jpg'; // default to 'ccs-logo.jpg' if not set
 
+
         $html = view('reports.report-myp', compact('student', 'subject_teacher_s', 'attendance', 'comment', 'filename', 'greetings','filenameSign', 'custom'));
 
         $pdf = PDF::loadHtml($html);
@@ -245,14 +246,18 @@ class ReportController extends Controller
         $greetings = $custom->greetings;
 
         $filenameSign = $custom ? $custom->signpath : 'ccs-logo.jpg'; // default to 'ccs-logo.jpg' if not set
+        
+        $ibProfile = $custom ? $custom->ib_profile_path : 'ccs-logo.jpg'; // default to 'ccs-logo.jpg' if not set
 
-        $html = view('reports.report-pyp', compact('student', 'subject_teacher_s', 'attendance', 'comment', 'units', 'filename', 'greetings', 'filenameSign', 'custom', 'atls', 'homerooms'));
+        $progressDesc = $custom ? $custom->prog_desc_path : 'ccs-logo.jpg'; // default to 'ccs-logo.jpg' if not set
+
+        $html = view('reports.report-pyp', compact('student', 'subject_teacher_s', 'attendance', 'comment', 'units', 'filename', 'greetings', 'filenameSign', 'custom', 'atls', 'homerooms','ibProfile', 'progressDesc'));
 
         $pdf = PDF::loadHtml($html);
 
-        // return $pdf->stream('report.pdf');
+        return $pdf->stream('report.pdf');
 		
-		return $html;
+		// return $html;
 
     }
 
