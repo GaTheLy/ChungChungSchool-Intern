@@ -410,10 +410,7 @@
 
                 @php
                 $index = 1;
-                @endphp
-
-                {{ var_dump($units) }}
-                
+                @endphp                
 
                 @foreach($units as $unit)
                 <div class="unit">
