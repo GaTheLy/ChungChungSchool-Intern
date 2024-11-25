@@ -87,8 +87,8 @@ class ReportController extends Controller
 
         // dd($subject_teacher_s);
 
-        // return $pdf->stream('report.pdf');
         return $pdf->stream('report.pdf');
+        // return $pdf->stream('report.pdf');
     }
 
     public function previewReportConversionMYP($id){
@@ -255,9 +255,9 @@ class ReportController extends Controller
 
         $pdf = PDF::loadHtml($html);
 
-        // return $pdf->stream('report.pdf');
+        return $pdf->stream('report.pdf');
 		
-		return $html;
+		// return $html;
 
     }
 
