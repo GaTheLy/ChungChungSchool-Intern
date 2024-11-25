@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Collection;
-use PDF;
+use PDF;        
+
 
 use App\Models\User;
 use App\Models\StudentPyp;
@@ -255,9 +256,9 @@ class ReportController extends Controller
 
         $pdf = PDF::loadHtml($html);
 
-        return $pdf->stream('report.pdf');
-		
-		// return $html;
+        // return $pdf->stream('report.pdf');
+        
+		return $html;
 
     }
 
