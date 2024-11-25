@@ -411,6 +411,8 @@
                 @php
                 $index = 1;
                 @endphp
+
+                {{ var_dump($units) }}
                 
 
                 @foreach($units as $unit)
