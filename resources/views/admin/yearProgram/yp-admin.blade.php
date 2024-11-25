@@ -93,7 +93,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{$index}}PYP" aria-expanded="false" aria-controls="collapse{{$index}}PYP">
-                    <b>{{ $ypPYP->name .' '. $ypPYP->id }}</b>
+                    <b>{{ $ypPYP->name }}</b>
                 </button>
                 </h2>
                 <div id="collapse{{$index}}PYP" class="accordion-collapse collapse">
@@ -125,7 +125,7 @@
                                         <ul>
                                             @foreach ($unit->keyConcepts as $kc)
                                                 <li>
-                                                    <strong>Topic:</strong> {{ $kc->topic }}<br>
+                                                    <strong>Key:</strong> {{ $kc->topic }}<br>
                                                     <strong>Question:</strong> {{ $kc->question }}<br>
                                                     <strong>Definition:</strong> {{ $kc->definition }}<br>
                                                     {{--  

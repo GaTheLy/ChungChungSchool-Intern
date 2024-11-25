@@ -556,7 +556,7 @@
                             <img src="{{ asset('subjects/'. 'unknown_subject.jpg') }}" alt="logo" width="20px;" >
                             </td>
                             <td>
-                            <h3>{{ $sub_teacher->subject->subject_name }} - {{ $sub_teacher->teacher->first_name }}</h3>
+                            <h3>{{ $sub_teacher->subject->subject_name }}</h3>
                             </td>
                         </tr>
                     </table>
@@ -579,6 +579,40 @@
             </div>
         @elseif(!$isMainHomeroomSubject && !$isCoHomeroomSubject)
             {{-- Show other subjects not taught by both main and co homerooms --}}
+            @if($sub_teacher->subject->id == 28)
+                @if( $sub_teacher->yp_pyp_id == 14 && $sub_teacher->teacher_id == 22005)
+                    {{-- Show Chinese subject --}}
+                    <div class="subject">
+                        <div class="subject-header">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <img src="{{ asset('subjects/'. 'unknown_subject.jpg') }}" alt="logo" width="20px;">
+                                    </td>
+                                    <td>
+                                        <h3>{{ $sub_teacher->subject->subject_name }}</h3>
+                                    </td>
+                                </tr>
+                            </table>
+                            <h5 style='text-align:right;'>Student Progress</h5>
+                        </div>
+                        <div class="subject-body">
+                            @foreach($sub_teacher->subject->pypCriteria as $criterion)
+                                @php
+                                    $grade = $criterion->pypCriteriaProgress->first();
+                                @endphp
+
+                                @if($grade && $grade->description != 'Criteria Not Used')
+                                    <div class="subject-row">
+                                        <span class="subject-title">• {{ $criterion->crit_name }}</span>
+                                        <span class="student-progress">{{ $grade->description }}</span>
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+            @else
             <div class="subject">
                 <div class="subject-header">
                     <table>
@@ -587,7 +621,7 @@
                             <img src="{{ asset('subjects/'. 'unknown_subject.jpg') }}" alt="logo" width="20px;" >
                             </td>
                             <td>
-                            <h3>{{ $sub_teacher->subject->subject_name }} - {{ $sub_teacher->teacher->first_name }}</h3>
+                            <h3>{{ $sub_teacher->subject->subject_name }}</h3>
                             </td>
                         </tr>
                     </table>
@@ -609,6 +643,8 @@
                     @endforeach
                 </div>
             </div>
+            @endif
+            
         @endif
     @endforeach
 </div>
