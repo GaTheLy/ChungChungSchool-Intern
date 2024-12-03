@@ -49,10 +49,13 @@ class TeachController extends Controller
         ->where('teacher_id', $teacher->nip_pyp)
         ->get();
 
+        $homeroomView = Homeroom::with(['teacher', 'class'])
+        ->get();
+
         $role = User::find($authUserId)->role;
 
         if ($role == 0){  //admin
-            return view('dash-admin', compact('teacher','homerooms', 'subjects','role'));
+            return view('dash-admin', compact('teacher','homerooms', 'subjects','role', 'homeroomView'));
         }else if ($role == 1 || $role == 2) { //myp or pyp
             return view('dash-teacher', compact('teacher', 'homerooms', 'subjects', 'role'));
         }

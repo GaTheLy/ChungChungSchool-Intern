@@ -30,7 +30,10 @@
 
 <script>
     $(document).ready(function() {
-        $('#attendance').DataTable();
+        $('#attendance').DataTable({
+        });
+        $('#total-att').DataTable({
+        });
 
     });
 </script>
