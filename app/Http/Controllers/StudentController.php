@@ -230,6 +230,7 @@ class StudentController extends Controller
         ];
         
         foreach ($tables as $table) {
+            
             if($table == 'student_class'){
                 $column = 'nim_pyp';
             }else{

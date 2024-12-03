@@ -492,7 +492,6 @@
             </div>
 
 
-            <div class="page-break"></div>
             @if ($custom->atl==1)
             <div class="atl-section">
                 <table>
@@ -659,7 +658,7 @@
                 <p>{{ $comment->description }}</p>
             </div>
             @endif
-        </div>
+        </div>  
     </div>
 </body>
 </html>

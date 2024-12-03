@@ -67,7 +67,7 @@
                 <input type="hidden" name="criteria[{{ $criterion->subCrit->sc_pyp_id }}][sc_pyp_id]" value="{{ $criterion->subCrit->sc_pyp_id }}">
                 <div class="row" style="padding-left:50px;">
                     <div class="col-4">
-                        <p style="font-size: 25px;">{{ $criterion->subCrit->crit_name }} {{ $criterion->subCrit->sc_pyp_id }}</p>
+                        <p style="font-size: 25px;">{{ $criterion->subCrit->crit_name }}</p>
                     </div> 
                     <div class="col-2" style="text-align:left;">
                         <select name="criteria[{{ $criterion->subCrit->sc_pyp_id }}][description]" class="form-select">

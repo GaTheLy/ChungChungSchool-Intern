@@ -256,7 +256,7 @@ class ReportController extends Controller
 
         $pdf = PDF::loadHtml($html);
 
-        // return $pdf->stream('report.pdf');
+        //  return $pdf->stream('report.pdf');
         
 		return $html;
 

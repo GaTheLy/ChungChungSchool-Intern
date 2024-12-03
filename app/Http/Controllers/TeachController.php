@@ -261,39 +261,7 @@ class TeachController extends Controller
         ]);
     }
 
-    public function saveGrade(Request $request)
-    {
-        $user = Auth::user();
-        $teacher = $user->teacher;
-
-
-        $studentId = $request->input('student_id');
-        $criteriaData = $request->input('criteria');
-
-        // dd($criteriaData);
-
-        // Iterate through criteria data pairs
-        foreach ($criteriaData as $data) {
-            // Check if current data is sc_pyp_id
-            if (isset($data['sc_pyp_id'], $data['description'])) {
-                $sc_pyp_id = $data['sc_pyp_id'];
-                $description = $data['description'];
-    
-                // Update or insert the grade for each criterion
-                DB::table('subject_crit_progress')->updateOrInsert(
-                    [
-                        'student_id' => $studentId,
-                        'sc_pyp_id' => $sc_pyp_id,
-                    ],
-                    [
-                        'description' => $description,
-                    ]
-                );
-            }
-        }
-
-        return redirect()->back()->with('success', 'Grades saved successfully.');
-    }
+        
 
     public function gradeStudentMyp($teacherId, $subjectId, $classId, $studentId)
     {

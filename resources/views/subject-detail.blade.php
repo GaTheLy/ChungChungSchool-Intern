@@ -43,7 +43,6 @@
             <tr>
                 <th>Name</th>
                 <th>Action</th>
-                <th>Status</th>
             </tr>
         </thead>
         <tbody>
@@ -58,7 +57,6 @@
                         <a style="text-decoration:none;" href="{{ route('subject.grade.myp', ['teacherId' => $teacher->nip_pyp, 'subjectId' => $subject->id, 'classId' => $class->class_id, 'studentId' => $student->nim_pyp]) }}">Grade</a>
                     @endif
                 </td>
-                <td>graded / not graded</td>
 
             </tr>
             @endforeach
@@ -68,7 +66,6 @@
             <tr>
                 <th>Name</th>
                 <th>Action</th>
-                <th>Status</th>
             </tr>
         </tfoot>
     </table>
