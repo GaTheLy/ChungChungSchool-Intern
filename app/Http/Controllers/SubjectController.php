@@ -212,14 +212,10 @@ class SubjectController extends Controller
                     } else {
                         return back()->withErrors(['error' => "Criteria with ID {$criteriaId} not found."]);
                     }
-
-                    if ($request->input('criteriaNew')) {
-                        $this->savePYPCriteria($request->input('criteriaNew'), $subject->id);
-                    }
                 }
-
-
-
+                if ($request->input('criteriaNew')) {
+                    $this->savePYPCriteria($request->input('criteriaNew'), $subject->id);
+                }
             } else if ($subject->subject_level == 'MYP') {
                 foreach ($request->input('criteria') as $criteriaId => $criteriaData) {
                     $criteria = MYPCriteria::find($criteriaId);
