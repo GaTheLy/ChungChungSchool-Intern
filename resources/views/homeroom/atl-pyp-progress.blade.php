@@ -93,12 +93,12 @@
 
         // Function to fetch and display existing ATL progress for selected ATL
         function fetchAtlProgress(atlId, classId) {
-            console.log(`Fetching ATL progress for ATL ID: ${atlId}, Class ID: ${classId}`);
+            // console.log(`Fetching ATL progress for ATL ID: ${atlId}, Class ID: ${classId}`);
             
             fetch(`/atl-progress/${atlId}/${classId}`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Fetched ATL progress data:', data);
+                    // console.log('Fetched ATL progress data:', data);
                     updateProgressTable(data);
                 })
                 .catch(error => {
@@ -110,18 +110,27 @@
         function updateProgressTable(data) {
             const tbody = document.querySelector('#atl-pyp-content tbody');
 
-            // Iterate over each row and update the progress if it exists
-            document.querySelectorAll('#atl-pyp-content tbody tr').forEach(row => {
-                const studentId = row.querySelector('input[type="radio"]').name.split('_')[1];
+                // Iterate over each row and update the progress if it exists
+                document.querySelectorAll('#atl-pyp-content tbody tr').forEach(row => {
+                    const studentId = row.querySelector('input[type="radio"]').name.split('_')[1];
+                    const value = row.querySelector('input[type="radio"]');
 
-                // Find the student's progress data
-                const studentProgress = data.find(record => record.student_id == studentId);
+                    // Find the student's progress data
+                    const studentProgress = data.find(record => record.student_id == studentId);
 
-                if (studentProgress) {
-                    // Update the radio button based on the performance
-                    row.querySelector(`input[name="progress_${studentId}"][value="${studentProgress.description}"]`).checked = true;
-                }
+                    if (studentProgress) {
+                        // console.log('update ATL progress table: prog.desc exist');
+
+                        // Update the radio button based on the performance
+                        row.querySelector(`input[name="progress_${studentId}"][value="${studentProgress.description}"]`).checked = true;
+                    }else{
+                        // console.log('update ATL progress table: prog.desc do not exist');
+
+                        row.querySelector(`input[name="progress_${studentId}"][value="${value}"]`);
+                    }
             });
+
+            
         }
 
         // Handle ATL dropdown change
