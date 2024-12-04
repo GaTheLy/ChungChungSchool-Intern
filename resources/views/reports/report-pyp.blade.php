@@ -511,9 +511,9 @@
                         <div class="atl-body">
                                @foreach($atls as $atl)
                                     <div class="atl-row">
-                                        <img src="{{ asset('atls/'. $atl->icon) }}" alt="atl icon">
-                                        <span class="atl-title">{{ $atl->description }}</span>
-                                        <span class="atl-progress">{{ $atl->atl_progress_description }}</span>
+                                        <img src="{{ asset('atls/'. $atl->icon) }}" alt="atl icon" width="32px;" style="margin-bottom:4px;">
+                                        <span class="atl-title" style="margin-top:4px;">{{ $atl->description }}</span>
+                                        <span class="atl-progress" style="margin-bottom:4px;">{{ $atl->atl_progress_description }}</span>
                                     </div>
                                 @endforeach 
                         </div>
