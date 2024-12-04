@@ -371,12 +371,16 @@
             @if ($custom->attendance==1)
             <div class="section">
                 <h3>Attendance</h3>
+                @if($attendance)
                 <div class="attendance-summary">
                     <span class="attendance-box" style="background-color: #ff4d4d;">{{$attendance->absent}} Absent</span>
                     <span class="attendance-box" style="background-color: #4caf50;">{{$attendance->present}} Present</span>
                     <span class="attendance-box" style="background-color: #ffa726;">{{$attendance->late}} Late</span>
                     <span class="attendance-box" style="background-color: #ba68c8;">{{$attendance->excused}} Excused</span>
                 </div>
+                @else
+                <span>Overall attendance has not been filled.</span>
+                @endif
             </div>
             @endif
 
@@ -655,7 +659,11 @@
             @if ($custom->homeroom_comments==1)
             <div class="teacher-comment">
                 <h3>Homeroom Teacher's Comment</h3>
+                @if ($comment)
                 <p>{{ $comment->description }}</p>
+                @else
+                <p>No Comment Yet.</p>
+                @endif
             </div>
             @endif
         </div>  
