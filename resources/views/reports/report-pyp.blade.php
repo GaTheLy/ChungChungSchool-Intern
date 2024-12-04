@@ -601,8 +601,8 @@
             </div>
         @elseif(!$isMainHomeroomSubject && !$isCoHomeroomSubject)
             {{-- Show other subjects not taught by both main and co homerooms --}}
-            @if($sub_teacher->subject->id == 28)
-                @if( $sub_teacher->yp_pyp_id == 14 && $sub_teacher->teacher_id == 22005)
+            @if($sub_teacher->yp_pyp_id == 14)
+                @if( $sub_teacher->subject->id == 28 && $sub_teacher->teacher_id == 22005)
                     {{-- Show Chinese subject --}}
                     <div class="subject">
                         <div class="subject-header">
