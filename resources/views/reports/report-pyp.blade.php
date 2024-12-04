@@ -78,6 +78,22 @@
             text-align: center;
         }
 
+        .attendance-box.absent {
+            background-color: #ff4d4d;
+        }
+
+        .attendance-box.present {
+            background-color: #4caf50;
+        }
+
+        .attendance-box.late {
+            background-color: #ffa726;
+        }
+
+        .attendance-box.excused {
+            background-color: #ba68c8;
+        }
+
         /* Subject onwards */
         .subjects-section {
             width: 100%;
@@ -140,7 +156,7 @@
         .atl-section h3 {
             font-size: 20px;
             margin: 5px 0;
-            color: #0056b3;
+            color: black;
         }
 
         .atl {
@@ -234,7 +250,7 @@
 
         .central-idea h4, .lines-of-inquiry h4, .key-concepts h4 {
             font-size: 18px;
-            color: #007bff;
+            color: black;
             margin: 0 0 5px;
         }
 
@@ -373,11 +389,12 @@
                 <h3>Attendance</h3>
                 @if($attendance)
                 <div class="attendance-summary">
-                    <span class="attendance-box" style="background-color: #ff4d4d;">{{$attendance->absent}} Absent</span>
-                    <span class="attendance-box" style="background-color: #4caf50;">{{$attendance->present}} Present</span>
-                    <span class="attendance-box" style="background-color: #ffa726;">{{$attendance->late}} Late</span>
-                    <span class="attendance-box" style="background-color: #ba68c8;">{{$attendance->excused}} Excused</span>
+                    <span class="attendance-box absent">{{$attendance->absent}} Absent</span>
+                    <span class="attendance-box present">{{$attendance->present}} Present</span>
+                    <span class="attendance-box late">{{$attendance->late}} Late</span>
+                    <span class="attendance-box excused">{{$attendance->excused}} Excused</span>
                 </div>
+
                 @else
                 <span>Overall attendance has not been filled.</span>
                 @endif
@@ -553,26 +570,28 @@
             {{-- Show the subject taught by the main homeroom --}}
             <div class="subject">
                 <div class="subject-header">
-                    <table>
+                    <table width="100%">
                         <tr>
-                            <td>
+                            <td width="5%">
                             <img src="{{ asset('subjects/'. 'unknown_subject.jpg') }}" alt="logo" width="20px;" >
                             </td>
-                            <td>
+                            <td style="text-align: left;">
                             <h3>{{ $sub_teacher->subject->subject_name }}</h3>
+                            </td>
+                            <td style="text-align: right;">
+                            <h5>Student Progress</h5>
                             </td>
                         </tr>
                     </table>
-                    <h5 style='text-align:right;'>Student Progress</h5>
                 </div>
-                <div class="subject-body">
+                <div class="subject-body" style="margin-top:-24px;">
                     @foreach($sub_teacher->subject->pypCriteria as $criterion)
                         @php
                             $grade = $criterion->pypCriteriaProgress->first();
                         @endphp
 
                         @if($grade && $grade->description != 'Criteria Not Used')
-                            <div class="subject-row">
+                            <div class="subject-row" style="margin-left:16px;">
                                 <span class="subject-title">• {{$criterion->crit_name}}</span>
                                 <span class="student-progress">{{$grade->description}}</span>
                             </div>
@@ -587,17 +606,19 @@
                     {{-- Show Chinese subject --}}
                     <div class="subject">
                         <div class="subject-header">
-                            <table>
+                            <table width="100%">
                                 <tr>
-                                    <td>
+                                    <td width="5%">
                                         <img src="{{ asset('subjects/'. 'unknown_subject.jpg') }}" alt="logo" width="20px;">
                                     </td>
                                     <td>
                                         <h3>{{ $sub_teacher->subject->subject_name }}</h3>
                                     </td>
+                                    <td style="text-align: right;">
+                                    <h5>Student Progress</h5>
+                                    </td>
                                 </tr>
                             </table>
-                            <h5 style='text-align:right;'>Student Progress</h5>
                         </div>
                         <div class="subject-body">
                             @foreach($sub_teacher->subject->pypCriteria as $criterion)
@@ -618,17 +639,19 @@
             @else
             <div class="subject">
                 <div class="subject-header">
-                    <table>
+                    <table width="100%">
                         <tr>
-                            <td>
+                            <td width="5%">
                             <img src="{{ asset('subjects/'. 'unknown_subject.jpg') }}" alt="logo" width="20px;" >
                             </td>
                             <td>
                             <h3>{{ $sub_teacher->subject->subject_name }}</h3>
                             </td>
+                            <td style="text-align: right;">
+                            <h5>Student Progress</h5>
+                            </td>
                         </tr>
                     </table>
-                    <h5 style='text-align:right;'>Student Progress</h5>
 
                 </div>
                 <div class="subject-body">
