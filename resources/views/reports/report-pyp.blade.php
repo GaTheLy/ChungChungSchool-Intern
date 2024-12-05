@@ -599,6 +599,44 @@
                     @endforeach
                 </div>
             </div>
+            @elseif($isCoHomeroomSubject)
+            {{-- Show the subject taught by the main homeroom --}}
+            @if($sub_teacher->yp_pyp_id == 20)
+                 @if( $sub_teacher->subject->id == 28)
+
+            <div class="subject">
+                <div class="subject-header">
+                    <table width="100%">
+                        <tr>
+                            <td width="5%">
+                            <img src="{{ asset('subjects/'. 'unknown_subject.jpg') }}" alt="logo" width="20px;" >
+                            </td>
+                            <td style="text-align: left;">
+                            <h3>{{ $sub_teacher->subject->subject_name }}</h3>
+                            </td>
+                            <td style="text-align: right;">
+                            <h5>Student Progress</h5>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="subject-body" style="margin-top:-24px;">
+                    @foreach($sub_teacher->subject->pypCriteria as $criterion)
+                        @php
+                            $grade = $criterion->pypCriteriaProgress->first();
+                        @endphp
+
+                        @if($grade && $grade->description != 'Criteria Not Used')
+                            <div class="subject-row" style="margin-left:16px;">
+                                <span class="subject-title">• {{$criterion->crit_name}}</span>
+                                <span class="student-progress">{{$grade->description}}</span>
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+            </div>
+            @endif
+            @endif
         @elseif(!$isMainHomeroomSubject && !$isCoHomeroomSubject)
             {{-- Show other subjects not taught by both main and co homerooms --}}
             @if($sub_teacher->yp_pyp_id == 14)
