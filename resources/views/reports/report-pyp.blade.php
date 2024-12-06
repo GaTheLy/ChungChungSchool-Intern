@@ -331,17 +331,17 @@
                             <td style="vertical-align: top;">
                             {{ $student->class->first()->class_name }}
                             </td>
-                            <td margin-right="5px"></td>
+                            <td margin-right="15px"></td>
                             <td>
                             @if ($student->class->first()->homerooms->where('role', 'main')->isNotEmpty())
-                                <div style="margin-bottom:24px;">
+                                <div style="margin-bottom:24px;text-align: left;">
                                     {{ $student->class->first()->homerooms->where('role', 'main')->first()->teacher->first_name }}
                                     {{ $student->class->first()->homerooms->where('role', 'main')->first()->teacher->last_name }}
                                 </div>
                             @endif
 
                             @if ($student->class->first()->homerooms->where('role', 'co')->isNotEmpty())
-                                <div>
+                                <div style="text-align:left;">
                                     {{ $student->class->first()->homerooms->where('role', 'co')->first()->teacher->first_name }}
                                     {{ $student->class->first()->homerooms->where('role', 'co')->first()->teacher->last_name }} 
                                 </div>

@@ -124,7 +124,7 @@
         </table>
         <span>
             note: the total attendance showed only from data filled in the Fill Attendance Form
-        </span>z
+        </span>
 
     </div>
 
