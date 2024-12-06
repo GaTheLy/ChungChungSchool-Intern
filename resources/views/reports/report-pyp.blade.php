@@ -324,7 +324,11 @@
                             </td>
                             <td margin-right="5px"></td>
                             <td>
+                            @if ($student->class->first()->homerooms->where('role', 'co')->isNotEmpty())
                             <h5>Homeroom Teachers</h5>
+                            @else
+                            <h5>Homeroom Teacher</h5>
+                            @endif
                             </td>
                         </tr>
                         <tr style="line-height:0;">
