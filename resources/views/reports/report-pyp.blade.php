@@ -599,7 +599,7 @@
                     @endforeach
                 </div>
             </div>
-            @elseif($isCoHomeroomSubject)
+        @elseif($isCoHomeroomSubject)
             {{-- Show the subject taught by the main homeroom --}}
             @if($sub_teacher->yp_pyp_id == 20)
                  @if( $sub_teacher->subject->id == 28)
@@ -639,8 +639,8 @@
             @endif
         @elseif(!$isMainHomeroomSubject && !$isCoHomeroomSubject)
             {{-- Show other subjects not taught by both main and co homerooms --}}
-            @if($sub_teacher->yp_pyp_id == 14)
-                @if( $sub_teacher->subject->id == 28 && $sub_teacher->teacher_id == 22005)
+            @if($sub_teacher->subject->id == 28 && $sub_teacher->teacher_id == 22005)
+                @if( $sub_teacher->yp_pyp_id == 14)
                     {{-- Show Chinese subject --}}
                     <div class="subject">
                         <div class="subject-header">
@@ -673,6 +673,9 @@
                             @endforeach
                         </div>
                     </div>
+                @endif
+            @elseif($sub_teacher->subject->id == 27 && $sub_teacher->teacher_id == 23004)
+                @if( $sub_teacher->yp_pyp_id == 15 || $sub_teacher->yp_pyp_id == 16 )
                 @endif
             @else
             <div class="subject">
