@@ -248,21 +248,25 @@
             
         });
 
-        function fetchUnitProgress(unitId, classId){
+        function fetchUnitProgress(unitId, classId) {
             // Fetch progress data for the selected unit
             fetch(`/unit-progress/${unitId}/${classId}`)
                 .then(response => response.json())
-                .then(data => {
-                    if(data.length != 0){
-                        // console.log('Fetched unit progress data:', data);
-                        updateTable(data); // Call your function to update the table with the fetched data
-                    } else {
-                        fetchStudents().then(students => {
-                            // console.log("students: ", students);
-                            updateUnitTableForStudents(students);
+                .then(progressData => {
+                    // Fetch all students in the class
+                    fetchStudents().then(students => {
+                        const mergedData = students.map(student => {
+                            // Find progress for the current student
+                            const progress = progressData.find(p => p.student_id === student.nim_pyp);
+                            return {
+                                ...student,
+                                progress: progress ? progress.description : null, // Assign progress description or null
+                            };
                         });
-                    }
-                    
+
+                        // Update the table with the merged data
+                        updateTable(mergedData);
+                    });
                 })
                 .catch(error => console.error('Error fetching data:', error));
         }
@@ -324,48 +328,50 @@
             });
 
         }
+
         function updateTable(data) {
             // Ensure the table is visible before updating it
             const unitContent = document.getElementById('unit-content');
-            unitContent.style.display = 'block';  // Show the table
+            unitContent.style.display = 'block'; // Show the table
 
             // Get the tbody element
             const tbody = document.querySelector('#unit-content tbody#progress');
-            
+
             // Check if the tbody exists
             if (!tbody) {
                 console.error('Error: tbody element not found.');
                 return;
             }
-            
+
             // Clear the existing table rows
             tbody.innerHTML = '';
 
-                // Populate the table with new data
-                data.forEach(progress => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${progress.first_name} ${progress.last_name}</td>
-                        <td>
-                        
-                            <input type="radio" id="nonApplicable_${progress.student_id}" name="performance_${progress.student_id}" value="Non Applicable" ${progress.description === 'Non Applicable' ? 'checked' : ''}>
-                            <label for="nonApplicable_${progress.student_id}">Non Applicable</label>
+            // Populate the table with new data
+            data.forEach(student => {
+                const { nim_pyp, first_name, last_name, progress } = student;
 
-                            <input type="radio" id="exceeding_${progress.student_id}" name="performance_${progress.student_id}" value="EXCEEDING" ${progress.description === 'EXCEEDING' ? 'checked' : ''}>
-                            <label for="exceeding_${progress.student_id}">EXCEEDING</label>
-                            
-                            <input type="radio" id="achieving_${progress.student_id}" name="performance_${progress.student_id}" value="ACHIEVING" ${progress.description === 'ACHIEVING' ? 'checked' : ''}>
-                            <label for="achieving_${progress.student_id}">ACHIEVING</label>
-                            
-                            <input type="radio" id="developing_${progress.student_id}" name="performance_${progress.student_id}" value="DEVELOPING" ${progress.description === 'DEVELOPING' ? 'checked' : ''}>
-                            <label for="developing_${progress.student_id}">DEVELOPING</label>
-                            
-                            <input type="radio" id="beginning_${progress.student_id}" name="performance_${progress.student_id}" value="BEGINNING" ${progress.description === 'BEGINNING' ? 'checked' : ''}>
-                            <label for="beginning_${progress.student_id}">BEGINNING</label>
-                        </td>
-                    `;
-                    tbody.appendChild(row);
-                });   
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${first_name} ${last_name}</td>
+                    <td>
+                        <input type="radio" id="nonApplicable_${nim_pyp}" name="performance_${nim_pyp}" value="Non Applicable" ${progress === 'Non Applicable' ? 'checked' : ''}>
+                        <label for="nonApplicable_${nim_pyp}">Non Applicable</label>
+
+                        <input type="radio" id="exceeding_${nim_pyp}" name="performance_${nim_pyp}" value="EXCEEDING" ${progress === 'EXCEEDING' ? 'checked' : ''}>
+                        <label for="exceeding_${nim_pyp}">EXCEEDING</label>
+                        
+                        <input type="radio" id="achieving_${nim_pyp}" name="performance_${nim_pyp}" value="ACHIEVING" ${progress === 'ACHIEVING' ? 'checked' : ''}>
+                        <label for="achieving_${nim_pyp}">ACHIEVING</label>
+                        
+                        <input type="radio" id="developing_${nim_pyp}" name="performance_${nim_pyp}" value="DEVELOPING" ${progress === 'DEVELOPING' ? 'checked' : ''}>
+                        <label for="developing_${nim_pyp}">DEVELOPING</label>
+                        
+                        <input type="radio" id="beginning_${nim_pyp}" name="performance_${nim_pyp}" value="BEGINNING" ${progress === 'BEGINNING' ? 'checked' : ''}>
+                        <label for="beginning_${nim_pyp}">BEGINNING</label>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
         }
 
     });
