@@ -91,17 +91,19 @@ class HomeroomController extends Controller
 
     public function getStudentsByClass($classId)
     {
-        // Fetch students based on classId
+        // Fetch and sort students by a specific column (e.g., 'name')
         $students = DB::table('student_pyp')
             ->join('student_class', 'student_pyp.nim_pyp', '=', 'student_class.nim_pyp')
             ->where('class_id', $classId)
-            ->get(); // Modify fields as needed
-        
-            logger()->info('Fetched students:', ['students' => $students]);
-
+            ->orderBy('student_pyp.first_name', 'asc') // Sort by 'name' in ascending order
+            ->get();
+    
+        // Log the fetched students
+        logger()->info('Fetched students:', ['students' => $students]);
+    
         return response()->json($students);
     }
-
+    
     // Homeroom Teacher's Comment
     public function saveComments(Request $request)
     {

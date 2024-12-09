@@ -29,13 +29,13 @@
 </style>
 
 <script>
-    $(document).ready(function() {
-        $('#attendance').DataTable({
-        });
-        $('#total-att').DataTable({
-        });
+    // $(document).ready(function() {
+    //     $('#attendance').DataTable({
+    //     });
+    //     $('#total-att').DataTable({
+    //     });
 
-    });
+    // });
 </script>
 
 <div class="container mt-4" id="attendance-content" style="display: none;">
@@ -160,7 +160,7 @@
             return fetch(`/students-by-class/${classId}`)
                 .then(response => response.json()) // This needs to be awaited or chained correctly
                 .then(data => {
-                    console.log("fetch students by class: ", data); // Fix: Log `data`, not `response`
+                    // console.log("fetch students by class: ", data); // Fix: Log `data`, not `response`
                     return data; // Return parsed JSON data
                 })
                 .catch(error => {
@@ -172,7 +172,7 @@
 
         // Function to fetch attendance data and update the table
         function fetchAttendanceData(date) {
-            console.log(date);
+            // console.log(date);
             if (!date) {
                 // If no date, clear the table or show a message if needed
                 updateAttendanceTable([]);
@@ -192,7 +192,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.length != 0) {
-                    console.log('attendance data =', data);
+                    // console.log('attendance data =', data);
                     updateAttendanceTable(data);
                 } else {
                     // fetchStudents().then(students => {
@@ -200,7 +200,7 @@
                     //     updateAttendanceTableForAllStudents(students);
                     // });
                     fetchStudents().then(students => {
-                        console.log("students: ", students); 
+                        // console.log("students: ", students); 
                         updateAttendanceTableForAllStudents(students);
                     });
 
@@ -255,7 +255,7 @@ function updateAttendanceTableForAllStudents(students) {
 
     students.forEach(student => {
         const studentId = student.nim_pyp;
-        console.log(studentId);
+        // console.log(studentId);
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${student.first_name} ${student.last_name}</td>
@@ -315,7 +315,7 @@ function updateAttendanceTableForAllStudents(students) {
                 attendanceData.push(attendance);
             });
 
-            console.log('Sending attendance data to the server:', attendanceData);
+            // console.log('Sending attendance data to the server:', attendanceData);
 
             // Forward data to the controller
             fetch('/new-attendance/save', {

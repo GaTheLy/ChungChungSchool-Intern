@@ -59,8 +59,11 @@ class ClassController extends Controller
 
         // Assuming you have related models like students or subjects
         // Assuming $students is already fetched
-        $students = $class->students;
-        
+        // $students = $class->students->sortBy('name');
+        $students = $class->students->sortBy(function ($student) {
+            return $student->first_name; // Replace 'name' with your desired attribute
+        });
+
         // $subjects = $class->subjects;
         foreach ($students as $student) {
             // Fetch existing attendance data for the student

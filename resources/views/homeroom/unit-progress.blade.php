@@ -38,9 +38,9 @@
 </style>
 
 <script>
-    $(document).ready(function() {
-        $('#unit').DataTable();
-    });
+    // $(document).ready(function() {
+    //     $('#unit').DataTable();
+    // });
 </script>
 
 
@@ -165,7 +165,7 @@
                 });
             });
 
-            console.log('Sending unit progress data to the server:', unitProgressData);
+            // console.log('Sending unit progress data to the server:', unitProgressData);
 
             // Send data to the server
             fetch('{{ route("homeroom.saveUnitProg") }}', {
@@ -254,11 +254,11 @@
                 .then(response => response.json())
                 .then(data => {
                     if(data.length != 0){
-                        console.log('Fetched unit progress data:', data);
+                        // console.log('Fetched unit progress data:', data);
                         updateTable(data); // Call your function to update the table with the fetched data
                     } else {
                         fetchStudents().then(students => {
-                            console.log("students: ", students);
+                            // console.log("students: ", students);
                             updateUnitTableForStudents(students);
                         });
                     }
@@ -271,7 +271,7 @@
             return fetch(`/students-by-class/${classId}`)
                 .then(response => response.json()) // This needs to be awaited or chained correctly
                 .then(data => {
-                    console.log("fetch students by class: ", data); // Fix: Log `data`, not `response`
+                    // console.log("fetch students by class: ", data); // Fix: Log `data`, not `response`
                     return data; // Return parsed JSON data
                 })
                 .catch(error => {

@@ -1,7 +1,7 @@
 <script>
-    $(document).ready(function() {
-        $('#comments').DataTable();
-    });
+    // $(document).ready(function() {
+    //     $('#comments').DataTable();
+    // });
 </script>
 
 <div class="container" name="table-comments" style="display:none;" id="comments-content">

@@ -26,9 +26,9 @@
 </style>
 
 <script>
-    $(document).ready(function() {
-        $('#atl-pyp').DataTable();
-    });
+    // $(document).ready(function() {
+    //     $('#atl-pyp').DataTable();
+    // });
 </script>
 
 <div class="container" name="table-atl-pyp" style="display:none;" id="atl-pyp-content">
@@ -39,7 +39,7 @@
         <select name="atl" id="atl-select">
             <option value="" selected="selected" hidden="hidden">Choose here</option>
             @foreach($atls as $atl)
-                <option value="{{ $atl->atl_id }}"> {{ $atl->description }} id:{{ $atl->atl_id }}</option>
+                <option value="{{ $atl->atl_id }}"> {{ $atl->description }}</option>
             @endforeach
         </select>
     </div>
@@ -121,14 +121,14 @@
 
                     // Find the student's progress data
                     const studentProgress = data.find(record => record.student_id == studentId);
-                    console.log(studentProgress);
+                    // console.log(studentProgress);
                     if (studentProgress) {
-                        console.log('update ATL progress table: prog.desc exist');
+                        // console.log('update ATL progress table: prog.desc exist');
 
                         // Update the radio button based on the performance
                         row.querySelector(`input[name="progress_${studentId}"][value="${studentProgress.description}"]`).checked = true;
                     }else{
-                        console.log('update ATL progress table: prog.desc do not exist');
+                        // console.log('update ATL progress table: prog.desc do not exist');
 
                         row.querySelectorAll(`input[name="progress_${studentId}"]`).forEach(radio => {
                             radio.checked = false;
@@ -160,7 +160,7 @@
                 atlProgressData.push(progress);
             });
 
-            console.log('Sending ATL progress data to the server:', atlProgressData);
+            // console.log('Sending ATL progress data to the server:', atlProgressData);
 
             // Forward data to the controller
             fetch('/new-atl-progress/save', {
