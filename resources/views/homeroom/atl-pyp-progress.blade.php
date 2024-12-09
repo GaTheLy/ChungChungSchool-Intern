@@ -57,6 +57,10 @@
                 <td>{{ $student->first_name }} {{ $student->last_name }}</td>
                 <td>
                     <div class="btn-group" role="group" aria-label="Progress">
+                        
+                        <input type="radio" class="btn-check" name="progress_{{ $student->nim_pyp }}" id="Non Applicable-{{ $student->nim_pyp }}" value="Non Applicable" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="Non Applicable-{{ $student->nim_pyp }}">Non Applicable</label>
+
                         <input type="radio" class="btn-check" name="progress_{{ $student->nim_pyp }}" id="exceeding-{{ $student->nim_pyp }}" value="Exceeding" autocomplete="off">
                         <label class="btn btn-outline-primary" for="exceeding-{{ $student->nim_pyp }}">Exceeding</label>
 
@@ -117,14 +121,14 @@
 
                     // Find the student's progress data
                     const studentProgress = data.find(record => record.student_id == studentId);
-
+                    console.log(studentProgress);
                     if (studentProgress) {
-                        // console.log('update ATL progress table: prog.desc exist');
+                        console.log('update ATL progress table: prog.desc exist');
 
                         // Update the radio button based on the performance
                         row.querySelector(`input[name="progress_${studentId}"][value="${studentProgress.description}"]`).checked = true;
                     }else{
-                        // console.log('update ATL progress table: prog.desc do not exist');
+                        console.log('update ATL progress table: prog.desc do not exist');
 
                         row.querySelector(`input[name="progress_${studentId}"][value="${value}"]`);
                     }

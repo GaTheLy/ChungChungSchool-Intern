@@ -97,6 +97,9 @@
             <tr>
                 <td>{{ $student->first_name }} {{ $student->last_name }}</td>
                 <td>
+                    <input type="radio" id="nonApplicable_{{ $student->nim_pyp }}" name="performance_{{ $student->nim_pyp }}" value="Non Applicable">
+                    <label for="nonApplicable_{{ $student->nim_pyp }}">Non Applicable</label>
+
                     <input type="radio" id="exceeding_{{ $student->nim_pyp }}" name="performance_{{ $student->nim_pyp }}" value="EXCEEDING">
                     <label for="exceeding_{{ $student->nim_pyp }}">EXCEEDING</label>
                     
@@ -301,6 +304,9 @@
                     <td>${student.first_name} ${student.last_name}</td>
 
                     <td>
+                        <input type="radio" id="nonApplicable_${studentId}" name="performance_${studentId}" value="Non Applicable">
+                        <label for="nonApplicable_${studentId}">Non Applicable</label>
+
                         <input type="radio" id="exceeding_${studentId}" name="performance_${studentId}" value="EXCEEDING">
                         <label for="exceeding_${studentId}">EXCEEDING</label>
                             
@@ -341,6 +347,10 @@
                     row.innerHTML = `
                         <td>${progress.first_name} ${progress.last_name}</td>
                         <td>
+                        
+                            <input type="radio" id="nonApplicable_${progress.student_id}" name="performance_${progress.student_id}" value="Non Applicable" ${progress.description === 'Non Applicable' ? 'checked' : ''}>
+                            <label for="nonApplicable_${progress.student_id}">Non Applicable</label>
+
                             <input type="radio" id="exceeding_${progress.student_id}" name="performance_${progress.student_id}" value="EXCEEDING" ${progress.description === 'EXCEEDING' ? 'checked' : ''}>
                             <label for="exceeding_${progress.student_id}">EXCEEDING</label>
                             
