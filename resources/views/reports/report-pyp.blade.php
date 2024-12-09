@@ -668,8 +668,6 @@
         {{-- Show other subjects not taught by both main and co homerooms --}}
         @if($sub_teacher->subject->id == 28 && $sub_teacher->teacher_id == 22005)
         @if( $sub_teacher->yp_pyp_id == 15 || $sub_teacher->yp_pyp_id == 16)
-        {{ var_dump($sub_teacher->teacher_id) }}
-
         <div class="subject">
             <div class="subject-header">
                 <table width="100%">
