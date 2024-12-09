@@ -130,7 +130,7 @@
                     }else{
                         console.log('update ATL progress table: prog.desc do not exist');
 
-                        row.querySelector(`input[name="progress_${studentId}"][value="${value}"]`);
+                        row.querySelector(`input[name="progress_${studentId}"][value="${value}"]`).checked = false;
                     }
             });
 
