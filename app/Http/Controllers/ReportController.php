@@ -217,7 +217,7 @@ class ReportController extends Controller
         ->join('unit_progress', 'unit.unit_id', '=', 'unit_progress.unit_id')
         ->where('student_id', $student->nim_pyp)
         ->select('unit.*', 'unit_progress.*')
-        ->get();
+        ->get()->sortBy('unit.year_program_pyp_id');
 
         foreach ($units as $unit) {
             $unit->key_concepts = DB::table('key_concept')

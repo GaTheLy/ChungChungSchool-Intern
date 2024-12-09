@@ -194,12 +194,15 @@ class TeachController extends Controller
         // Fetch the classes taught by this subject teacher
         $class = ClassModel::where('class_id', $class_id)->firstOrFail();
 
+        $students = $class->students->sortBy(function ($student) {
+            return $student->first_name; // Replace 'name' with your desired attribute
+        });
 
         return view('subject-detail', [
             'teacher' => $teacher,
             'subject' => $subject,
             'class' => $class,
-            'students' => $class->students,
+            'students' => $students,
         ]);
     }
 
