@@ -130,11 +130,11 @@
                     }else{
                         console.log('update ATL progress table: prog.desc do not exist');
 
-                        row.querySelector(`input[name="progress_${studentId}"][value="${value}"]`).checked = false;
+                        row.querySelectorAll(`input[name="progress_${studentId}"]`).forEach(radio => {
+                            radio.checked = false;
+                        });
                     }
             });
-
-            
         }
 
         // Handle ATL dropdown change
