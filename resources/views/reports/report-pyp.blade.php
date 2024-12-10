@@ -13,6 +13,8 @@
 
         body {
             font-family: Arial, sans-serif;
+            /* font-family: 'DejaVu Sans', sans-serif; */
+
             margin: 0;
             padding: 0;
             background-color: white;
@@ -314,6 +316,25 @@
             padding: 5px;
             border: 1px solid #ddd;
         }
+
+        .central-idea, 
+.lines-of-inquiry, 
+.key-concepts, 
+.atl-section, 
+.subject, 
+.teacher-comment {
+    page-break-inside: avoid; /* Avoid breaking the page inside these elements */
+}
+
+.central-idea, 
+.lines-of-inquiry, 
+.key-concepts, 
+.atl-section, 
+.subject, 
+.teacher-comment {
+    page-break-before: auto; /* Let the browser decide page breaks naturally */
+    page-break-after: auto; /* Default behavior after elements */
+}
     </style>
 </head>
 
@@ -355,7 +376,7 @@
                         </tr>
                         <tr style="line-height:0;">
                             <td style="vertical-align: top;">
-                                {{ $student->class->first()->class_name }}
+                                {{ str_replace('2425PYP-', '', $student->class->first()->class_name) }}
                             </td>
                             <td margin-right="15px"></td>
                             <td>
@@ -751,7 +772,7 @@
     <div class="teacher-comment">
         <h3>Homeroom Teacher's Comment</h3>
         @if ($comment)
-        <p>{{ $comment->description }}</p>
+        <p style="font-family: 'DejaVu Sans';">{{ $comment->description }}</p>
         @else
         <p>No Comment Yet.</p>
         @endif

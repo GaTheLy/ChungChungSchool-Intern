@@ -194,7 +194,8 @@ class ReportController extends Controller
             ->with(['subject.pypCriteria.pypCriteriaProgress' => function ($query) use ($id) {
                 $query->where('student_id', $id);
             }])
-            ->get();
+            ->get()->sortBy('subject.subject_name');
+
 
         // Attendance
         // $attendance = DB::table('attendance_pyp')
@@ -216,9 +217,10 @@ class ReportController extends Controller
         $units = DB::table('unit')
         ->join('unit_progress', 'unit.unit_id', '=', 'unit_progress.unit_id')
         ->where('student_id', $student->nim_pyp)
-        ->select('unit.*', 'unit_progress.*')
-        ->get()->sortBy('unit.year_program_pyp_id');
-
+        ->select('unit.*', 'unit_progress.*', 'unit.unit_id as unit_id_alias')
+        ->get()
+        ->sortBy('unit_id_alias');
+    
         foreach ($units as $unit) {
             $unit->key_concepts = DB::table('key_concept')
                 ->where('unit_id', $unit->unit_id)
@@ -256,9 +258,14 @@ class ReportController extends Controller
 
         $pdf = PDF::loadHtml($html);
 
+        // $html = $html->render();
+        // $pdf = PDF::loadHtml(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
+            
+
         //  return $pdf->stream('report.pdf');
         
 		return $html;
+        
 
     }
 
